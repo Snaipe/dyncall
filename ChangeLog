@@ -27,6 +27,8 @@ buildsys:
   o Sun make fixes for C++ code in test suite
 bindings:
   o erldc: Erlang binding (thanks Erik!)
+infrastructure:
+  o moved to hg
 
 Version 0.8
 buildsys:
