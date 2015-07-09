@@ -100,6 +100,9 @@ nice to have:
 
 bugs:
 -----
+- callconv set specifically for platform that has only one (default) excepts for some
+  platforms, eg. setting X64_sysv on amd64/Linux - keeping cdecl which is the same in
+  this case, works
 - callbacks on ppc32 only work on linux and apple (osx abi), but not BSD
 - vararg function calls don't work for ARM THUMB mode (Daniel's new interface for modesetting for varag
   args should be used); adapt test/ellipsis and/or retest
