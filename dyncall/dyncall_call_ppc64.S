@@ -23,7 +23,7 @@
 */
 
 
-#include "../portasm/portasm-ppc.S"
+#include "../portasm/portasm-ppc64.S"
 
 /*
   Call Kernel Implementations for PowerPC64.
@@ -37,6 +37,7 @@
      dcCall_ppc64(DCpointer target, struct DCRegData* pRegData, DCsize stacksize, DCptr stackdata);
    
   ChangeLog:
+  2015-07-08: Added support for system calls
   2014-08-07: Initial Support
 
 */
@@ -59,7 +60,6 @@
    - No support for Vector Parameters so far. 
    - Parameter Area (min. v1:64 Bytes v2:0 Byte)
    - Frame Header Area (v1:48 Bytes v2:32 Bytes)
-
 
    Frame structure:
 
@@ -92,25 +92,9 @@ PARAM_SAVE = 32
 #endif
 
 .text
-	.global dcCall_ppc64
-	.type dcCall_ppc64, @function
-#if DC__ABI_PPC64_ELF_V != 2
-	.section .opd, "aw"
-	.align 3
-#endif
-
-dcCall_ppc64:
-#if DC__ABI_PPC64_ELF_V != 2
-	.quad .dcCall_ppc64, .TOC.@tocbase, 0
-	.previous
-	.global .dcCall_ppc64
-
-.dcCall_ppc64:
-#else
-0:	addis r2, r12,.TOC.-0b@ha
-	addi  r2, r2,.TOC.-0b@l
-	.localentry dcCall_ppc64,.-dcCall_ppc64
-#endif
+.align 2
+GLOBAL_C(dcCall_ppc64)
+ENTRY_C(dcCall_ppc64)
 	mflr r0                 /* r0 = return address */
 	std  r0,16(r1)          /* store r0 to link-area */
 	std  r31,-8(r1)
@@ -195,3 +179,32 @@ dcCall_ppc64:
 	mtlr r0                 /* setup link register */
 	blr                     /* return */
 
+.align 2
+GLOBAL_C(dcCall_ppc64_syscall)
+ENTRY_C(dcCall_ppc64_syscall)
+	mflr r0                 /* r0 = return address */
+	std  r0,16(r1)          /* store r0 to link-area */
+	std  r31,-8(r1)
+	li   r0, -STACK_MIN
+	stdux r1,r1,r0          /* store r1 and decrement */
+
+	mr   r0, r3             /* r0 = syscall number ( passed as 'target function' ) */
+	mr   r11, r4            /* r11 = reg data */
+
+	/* load 5 integer registers */
+	ld  r3 , 0(r11)
+	ld  r4 , 8(r11)
+	ld  r5 ,16(r11)
+	ld  r6 ,24(r11)
+	ld  r7 ,32(r11)
+	
+	sc                    /* system call */
+
+	/* epilog */
+
+	ld   r2,TOC_SAVE(r1)
+	ld   r1, 0(r1)          /* restore stack */
+	ld   r31,-8(r1)
+	ld   r0,16(r1)          /* r0 = return address */
+	mtlr r0                 /* setup link register */
+	blr                     /* return */

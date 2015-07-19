@@ -29,6 +29,7 @@
   dyncall C API
 
   REVISION
+  2015/07/08 added SYS_PPC64 system call
   2015/01/16 added SYS_PPC32 system call
   2007/12/11 initial
   
@@ -83,6 +84,7 @@ typedef struct DCstruct_    DCstruct;
 #define DC_CALL_SYS_X86_INT80H_LINUX  201
 #define DC_CALL_SYS_X86_INT80H_BSD    202
 #define DC_CALL_SYS_PPC32             210
+#define DC_CALL_SYS_PPC64             211
 
 /* Error codes. */
 

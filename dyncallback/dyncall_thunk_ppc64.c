@@ -31,9 +31,34 @@
 
 void dcbInitThunk(DCThunk* p, void (*entry)())
 {
-#if DC__ABI_PPC64_ELF_V == 2
+#if DC__ABI_PPC64_ELF_V != 2
   /*
-    ppc64 thunk code:
+    ppc64 thunk code:                (v1)
+      oris   r11, r2, HI16(p)
+      ori    r11,r11, LO16(p)
+      ld     r12,48(r11)
+      ld     r2,56(r11)
+      mtctr r12
+      bctr
+  */
+
+  p->thunk_entry  = (void *)&(p->code_load_hi);
+  p->toc_thunk    = ((long)(p->thunk_entry) & 0xffffffff00000000UL);
+
+  p->code_load_hi = 0x644bU;     /* oris  r11, r2, HI16(p) */
+  p->addr_self_hi = HI16(p);
+  p->code_load_lo = 0x616bU; 	 /* ori   r11,r11, LO16(p) */
+  p->addr_self_lo = LO16(p);
+  p->code_jump[0] = 0xe98b0030U; /* ld    r12,48(r11) */
+  p->code_jump[1] = 0xe84b0038U; /* ld    r2,56(r11) */
+  p->code_jump[2] = 0x7d8903a6U; /* mtclr r12 */
+  p->code_jump[3] = 0x4e800420U; /* bctr */
+  p->addr_entry   = (void *)*((long *)entry);
+  p->toc_entry    = *((long *)(entry + 8));
+
+#else
+  /*
+    ppc64 thunk code:                (v2)
       lis    r11, HIST16(p)
       ori    r11,r11, HIER16(p)
       rldicr r11,r11,32,31
@@ -57,31 +82,6 @@ void dcbInitThunk(DCThunk* p, void (*entry)())
   p->code_jump[1]   = 0x7d8903a6U; /* mtclr  r12 */
   p->code_jump[2]   = 0x4e800420U; /* bctr */
   p->addr_entry     = (void *)(entry);
-
-#else
-  /*
-    ppc64 thunk code:
-      oris   r11, r2, HI16(p)
-      ori    r11,r11, LO16(p)
-      ld     r12,48(r11)
-      ld     r2,56(r11)
-      mtctr r12
-      bctr
-  */
-
-  p->thunk_entry  = (void *)&(p->code_load_hi);
-  p->toc_thunk    = ((long)(p->thunk_entry) & 0xffffffff00000000UL);
-
-  p->code_load_hi = 0x644bU;     /* oris  r11, r2, HI16(p) */
-  p->addr_self_hi = HI16(p);
-  p->code_load_lo = 0x616bU; 	 /* ori   r11,r11, LO16(p) */
-  p->addr_self_lo = LO16(p);
-  p->code_jump[0] = 0xe98b0030U; /* ld    r12,48(r11) */
-  p->code_jump[1] = 0xe84b0038U; /* ld    r2,56(r11) */
-  p->code_jump[2] = 0x7d8903a6U; /* mtclr r12 */
-  p->code_jump[3] = 0x4e800420U; /* bctr */
-  p->addr_entry   = (void *)*((long *)entry);
-  p->toc_entry    = *((long *)(entry + 8));
 #endif
 }
 

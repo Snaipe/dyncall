@@ -25,20 +25,8 @@
 #ifndef DYNCALL_THUNK_PPC64_H
 #define DYNCALL_THUNK_PPC64_H
 
-#if DC__ABI_PPC64_ELF_V == 2
-struct DCThunk_
-{
-  unsigned short addr_self_hist, code_load_hist;  /* offset:  0 */
-  unsigned short addr_self_hier, code_load_hier;  /* offset:  4 */
-  unsigned int   code_rot;                        /* offset:  8 */
-  unsigned short addr_self_hi, code_load_hi;      /* offset: 12 */
-  unsigned short addr_self_lo, code_load_lo;      /* offset: 16 */
-  unsigned int   code_jump[5];                    /* offset: 20 */
-  void          (*addr_entry)();                  /* offset: 40 */
-};
-#define DCTHUNK_SIZE_PPC64 48
-#else
-struct DCThunk_
+#if DC__ABI_PPC64_ELF_V != 2
+struct DCThunk_              /* v1 */
 {
   void          (*thunk_entry)();                 /* offset:  0 */
   long           toc_thunk;                       /* offset:  8 */
@@ -49,6 +37,18 @@ struct DCThunk_
   long           toc_entry;                       /* offset: 56 */
 };
 #define DCTHUNK_SIZE_PPC64 64
+#else
+struct DCThunk_              /* v2 */
+{
+  unsigned short addr_self_hist, code_load_hist;  /* offset:  0 */
+  unsigned short addr_self_hier, code_load_hier;  /* offset:  4 */
+  unsigned int   code_rot;                        /* offset:  8 */
+  unsigned short addr_self_hi, code_load_hi;      /* offset: 12 */
+  unsigned short addr_self_lo, code_load_lo;      /* offset: 16 */
+  unsigned int   code_jump[5];                    /* offset: 20 */
+  void          (*addr_entry)();                  /* offset: 40 */
+};
+#define DCTHUNK_SIZE_PPC64 48
 #endif
 
 #endif /* DYNCALL_THUNK_PPC64_H */

@@ -10,7 +10,7 @@ It comprises three independent components, available as C libraries, namely:
  - 'dynload' for loading code.
 
 The package provides abstractions to the Application Binary Interface 
-of various hardware platforms such as x86, AMD64, ARM32/64, PowerPCC32/64,
+of various hardware platforms such as x86, AMD64, ARM32/64, PowerPC32/64,
 MIPS32/64 and SPARC32/64.
 
 Our releases are thoroughly tested across all supported platforms using a

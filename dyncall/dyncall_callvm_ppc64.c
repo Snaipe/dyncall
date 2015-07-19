@@ -29,8 +29,10 @@
 
   SUPPORTED CALLING CONVENTIONS
   ppc64/linux
+  ppc64/syscall
 
   REVISION
+  2015/07/08 added syscall
   2014/08/07 initial support
 
 */
@@ -209,6 +211,12 @@ void dc_callvm_call_ppc64(DCCallVM* in_self, DCpointer target)
   dcCall_ppc64( target, &self->mRegData, dcVecSize(&self->mVecHead) , dcVecData(&self->mVecHead));
 }
 
+void dc_callvm_call_ppc64_syscall(DCCallVM* in_self, DCpointer target)
+{
+  DCCallVM_ppc64* self = (DCCallVM_ppc64*) in_self;
+  dcCall_ppc64_syscall( target, &self->mRegData, dcVecSize(&self->mVecHead) , dcVecData(&self->mVecHead));
+}
+
 void dc_callvm_mode_ppc64(DCCallVM* in_self, DCint mode);
 
 DCCallVM_vt gVT_ppc64 =
@@ -269,6 +277,34 @@ DCCallVM_vt gVT_ppc64_ellipsis =
 };
 #endif
 
+DCCallVM_vt gVT_ppc64_syscall =
+{
+  &dc_callvm_free_ppc64
+, &dc_callvm_reset_ppc64
+, &dc_callvm_mode_ppc64
+, &dc_callvm_argBool_ppc64
+, &dc_callvm_argChar_ppc64
+, &dc_callvm_argShort_ppc64
+, &dc_callvm_argInt_ppc64
+, &dc_callvm_argLong_ppc64
+, &dc_callvm_argLongLong_ppc64
+, &dc_callvm_argFloat_ppc64
+, &dc_callvm_argDouble_ppc64
+, &dc_callvm_argPointer_ppc64
+, NULL /* argStruct */
+, (DCvoidvmfunc*)       &dc_callvm_call_ppc64_syscall
+, (DCboolvmfunc*)       &dc_callvm_call_ppc64_syscall
+, (DCcharvmfunc*)       &dc_callvm_call_ppc64_syscall
+, (DCshortvmfunc*)      &dc_callvm_call_ppc64_syscall
+, (DCintvmfunc*)        &dc_callvm_call_ppc64_syscall
+, (DClongvmfunc*)       &dc_callvm_call_ppc64_syscall
+, (DClonglongvmfunc*)   &dc_callvm_call_ppc64_syscall
+, (DCfloatvmfunc*)      &dc_callvm_call_ppc64_syscall
+, (DCdoublevmfunc*)     &dc_callvm_call_ppc64_syscall
+, (DCpointervmfunc*)    &dc_callvm_call_ppc64_syscall
+, NULL /* callStruct */
+};
+
 void dc_callvm_mode_ppc64(DCCallVM* in_self, DCint mode)
 {
   DCCallVM_ppc64* self = (DCCallVM_ppc64*) in_self;
@@ -289,6 +325,11 @@ void dc_callvm_mode_ppc64(DCCallVM* in_self, DCint mode)
       vt = &gVT_ppc64;
       break;
 #endif
+
+    case DC_CALL_SYS_DEFAULT:
+    case DC_CALL_SYS_PPC64:
+      vt = &gVT_ppc64_syscall;
+      break;
 
     default: 
       self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 

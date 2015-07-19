@@ -52,6 +52,7 @@ char cbHandler(DCCallback* cb, DCArgs* args, DCValue* result, void* userdata)
   if(arg3 ==    3) ++*ud;
   if(arg4 == 1.82) ++*ud;
   if(arg5 == 9909) ++*ud;
+
   result->s = 1234;
   return 's';
 }

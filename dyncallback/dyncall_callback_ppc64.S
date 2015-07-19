@@ -22,150 +22,121 @@
 
 */
 
-#include "../portasm/portasm-ppc.S"
+#include "../portasm/portasm-ppc64.S"
 
-/* Callback Thunk Entry code for PowerPC 64-bit. */
-
-/* Stack Frame Layout: 
-
-	296 DCValue ( 8 )
-	112 DCArgs ( 64+104+8+4+4 = 184 )
-	 48 Parameter area ( 8*8 = 64 )
-	  0 Linkage area   ( 48 )
-
-
-*/
-
-/* Constants. */
-INT_REGS    = 8
-FLOAT_REGS  = 13
-SIZEOF_GPR  = 8
-SIZEOF_FPR  = 8
-
-/* Linkage area. */
-LINK_SP     = 0
-LINK_CR     = 8
-LINK_LR     = 16
-LINK_OFFSET = 0
-#if DC__ABI_PPC64_ELF_V == 2
-LINK_TOC    = 24
-LINK_SIZE   = 32
-#else
-LINK_TOC    = 40
-LINK_SIZE   = 48
-#endif
-/* Parameter area. */
-PAR_OFFSET = LINK_SIZE
-#if DC__ABI_PPC64_ELF_V == 2
-PAR_SIZE = 0
-#else
-PAR_SIZE = 64
-#endif 
-/* local struct DCArgs */
-ARGS_OFFSET = (PAR_OFFSET+PAR_SIZE)
-ARGS_SIZE   = (SIZEOF_GPR*INT_REGS)+(SIZEOF_FPR*FLOAT_REGS) + 8 + 4 * 4 
-/* local struct DCValue */
-RESULT_OFFSET = (ARGS_OFFSET+ARGS_SIZE)
-RESULT_SIZE   = 8
-/* additional locals (reg 30/31) */
-LOCALS_OFFSET = (RESULT_OFFSET+RESULT_SIZE)
-LOCALS_SIZE   = 2*SIZEOF_GPR
-/* total */
-FRAME_SIZE = ( (LOCALS_OFFSET+LOCALS_SIZE)+15 & (-16) )
+.text
+.align 2
 
 /* struct DCCallback */
-#if DC__ABI_PPC64_ELF_V == 2
-DCB_THUNK      = 0
-DCB_HANDLER    = 48
-DCB_STACKCLEAN = 56
-DCB_USERDATA   = 64
-#else
-DCB_THUNK      = 0
+
+#if DC__ABI_PPC64_ELF_V != 2
+DCB_THUNK      = 0    /* v1 */
 DCB_HANDLER    = 64
 DCB_STACKCLEAN = 72
 DCB_USERDATA   = 80
+#else
+DCB_THUNK      = 0    /* v2 */
+DCB_HANDLER    = 48
+DCB_STACKCLEAN = 56
+DCB_USERDATA   = 64
 #endif
 
 /* struct DCArgs */
-DCA_IARRAY = 0
-DCA_FARRAY = SIZEOF_GPR*INT_REGS
-DCA_SP     = DCA_FARRAY + SIZEOF_FPR*FLOAT_REGS
-DCA_ICOUNT = DCA_SP + 8
-DCA_FCOUNT = DCA_ICOUNT + 4
+
+ARGS_IREGS     = 0
+ARGS_FREGS     = ARGS_IREGS + 8*8
+ARGS_SP        = ARGS_FREGS + 8*13
+ARGS_ICNT      = ARGS_SP    + 8
+ARGS_FCNT      = ARGS_ICNT  + 4
+ARGS_SIZE      = ARGS_FCNT  + 4
 
 /* struct DCValue */
-DCV_INT   = 0
-DCV_FLOAT = 0
-DCV_SIZE  = 8
 
-iregfile = ARGS_OFFSET+DCA_IARRAY
-fregfile = ARGS_OFFSET+DCA_FARRAY
-save_sp  = ARGS_OFFSET+DCA_SP
-icount   = ARGS_OFFSET+DCA_ICOUNT
-fcount   = ARGS_OFFSET+DCA_FCOUNT
+RESULT_SIZE    = 8
 
-/* 
-  Thunk entry:
-  R2 = DCCallback*
+/* Stack Offsets */
+
+SP_PREV        = 0
+SP_CR          = SP_PREV + 8
+SP_LR          = SP_CR   + 8
+#if DC__ABI_PPC64_ELF_V != 2
+SP_TOC         = 40
+SP_PAR         = 48
+PAR_SZ         = 64
+#else
+SP_TOC         = 24
+SP_PAR         = 32
+PAR_SZ         = 0
+#endif
+SP_ARGS        = SP_PAR    + PAR_SZ
+SP_IREGS       = SP_ARGS   + ARGS_IREGS
+SP_FREGS       = SP_ARGS   + ARGS_FREGS
+SP_SP          = SP_ARGS   + ARGS_SP
+SP_ICNT        = SP_ARGS   + ARGS_ICNT
+SP_FCNT        = SP_ARGS   + ARGS_FCNT
+SP_RESULT      = SP_ARGS   + ARGS_SIZE
+SP_LOCAL       = SP_RESULT + RESULT_SIZE  /* additional locals (reg 30/31) */ 
+SP_SIZE        = SP_LOCAL  + 2*8
+
+#define ALIGN(M,X) ( M+(X-1) & (-X) )
+
+FRAMESIZE = ALIGN(SP_SIZE,16)
+
+GLOBAL_C(dcCallbackThunkEntry)
+ENTRY_C(dcCallbackThunkEntry)
+
+/* --------------------------------------------------------------------------
+
+Input:
+        r1      Stack Pointer            
+        r3-r10  Integer Arguments        
+        f1-f8   Floating-point Arguments 
+        r11     Thunk Pointer            
+
 */
-.text
-	.global dcCallbackThunkEntry
-	.type dcCallbackThunkEntry, @function
-#if DC__ABI_PPC64_ELF_V != 2
-	.section .opd, "aw"
-	.align 3
-#endif
 
-dcCallbackThunkEntry:
-#if DC__ABI_PPC64_ELF_V != 2
-	.quad .dcCallbackThunkEntry, .TOC.@tocbase, 0
-	.previous
-	.global .dcCallbackThunkEntry
-
-.dcCallbackThunkEntry:
-#endif
 	mflr    r0
-	std     r0,  16(r1)           /* store return address */
-	std     r31, -8(r1)           /* store preserved registers (r31) */
-	addi    r12, r1, PAR_OFFSET   /* temporary r12 = parameter area on callers stack frame */
-	stdu    r1, -FRAME_SIZE(r1)   /* save callers stack pointer and make new stack frame. */
+	std     r0,  SP_LR(r1)         /* store return address */
+	std     r31, -8(r1)            /* store preserved registers (r31) */
+	addi    r12, r1, SP_PAR        /* temporary r12 = parameter area on callers stack frame */
+	stdu    r1, -FRAMESIZE(r1)     /* save callers stack pointer and make new stack frame. */
 
-	std     r3, iregfile+0*8(r1)  /* spill 8 integer parameter registers */
-	std     r4, iregfile+1*8(r1)
-	std     r5, iregfile+2*8(r1)
-	std     r6, iregfile+3*8(r1)
-	std     r7, iregfile+4*8(r1)
-	std     r8, iregfile+5*8(r1)
-	std     r9, iregfile+6*8(r1)
-	std     r10,iregfile+7*8(r1)
-	stfd    f1, fregfile+ 0*8(r1) /* spill 13 float parameter registers */
-	stfd    f2, fregfile+ 1*8(r1)
-	stfd    f3, fregfile+ 2*8(r1)
-	stfd    f4, fregfile+ 3*8(r1)
-	stfd    f5, fregfile+ 4*8(r1)
-	stfd    f6, fregfile+ 5*8(r1)
-	stfd    f7, fregfile+ 6*8(r1)
-	stfd    f8, fregfile+ 7*8(r1)
-	stfd    f9, fregfile+ 8*8(r1)
-	stfd    f10,fregfile+ 9*8(r1)
-	stfd    f11,fregfile+10*8(r1)
-	stfd    f12,fregfile+11*8(r1)
-	stfd    f13,fregfile+12*8(r1)
+	std     r3, SP_IREGS + 0*8(r1) /* spill 8 integer parameter registers */
+	std     r4, SP_IREGS + 1*8(r1)
+	std     r5, SP_IREGS + 2*8(r1)
+	std     r6, SP_IREGS + 3*8(r1)
+	std     r7, SP_IREGS + 4*8(r1)
+	std     r8, SP_IREGS + 5*8(r1)
+	std     r9, SP_IREGS + 6*8(r1)
+	std     r10,SP_IREGS + 7*8(r1)
+	stfd    f1, SP_FREGS + 0*8(r1) /* spill 13 float parameter registers */
+	stfd    f2, SP_FREGS + 1*8(r1)
+	stfd    f3, SP_FREGS + 2*8(r1)
+	stfd    f4, SP_FREGS + 3*8(r1)
+	stfd    f5, SP_FREGS + 4*8(r1)
+	stfd    f6, SP_FREGS + 5*8(r1)
+	stfd    f7, SP_FREGS + 6*8(r1)
+	stfd    f8, SP_FREGS + 7*8(r1)
+	stfd    f9, SP_FREGS + 8*8(r1)
+	stfd    f10,SP_FREGS + 9*8(r1)
+	stfd    f11,SP_FREGS +10*8(r1)
+	stfd    f12,SP_FREGS +11*8(r1)
+	stfd    f13,SP_FREGS +12*8(r1)
 	                        /* initialize struct DCCallback */
-	std     r12,save_sp(r1) /* init stack pointer */
+	std     r12,SP_SP(r1)   /* init stack pointer */
 	xor     r0, r0, r0      /* init register counters */
-	std     r0, icount(r1)
-	std     r0, fcount(r1)
-	std     r0, RESULT_OFFSET(r1)
+	std     r0, SP_ICNT(r1)
+	std     r0, SP_FCNT(r1)
+	std     r0, SP_RESULT(r1)      /* init result object */ 
 	                               /* invoke callback handler */
-	mr      r3, r11                /* arg 1: DCCallback* pcb  */
-	addi    r4, r1, ARGS_OFFSET    /* arg 2: DCArgs* args     */
-	addi    r5, r1, RESULT_OFFSET  /* arg 3: DCValue* result  */
+	mr      r3, r11                /* arg 1: DCCallback* pcb (r11 is thunk pointer) */
+	addi    r4, r1, SP_ARGS        /* arg 2: DCArgs* args     */
+	addi    r5, r1, SP_RESULT      /* arg 3: DCValue* result  */
 	ld      r6, DCB_USERDATA(r11)  /* arg 4: void* userdata   */
 
 	/* branch-and-link to DCCallback.handler */
 	ld      r12,  DCB_HANDLER(r11)
-	std     r2, LINK_TOC(r1)
+	std     r2, SP_TOC(r1)
 #if DC__ABI_PPC64_ELF_V != 2
 	ld      r2, 8(r12)
 	ld      r0, 0(r12)
@@ -175,41 +146,25 @@ dcCallbackThunkEntry:
 #endif
 	bctrl
 
-	addi    r0, r1, RESULT_OFFSET /* r0 = DCValue* */
-	                              /* switch on base result type */
-	cmpi    cr0, r3, 'B
-	beq     .i64
-	cmpi    cr0, r3, 'i
-	beq     .i64
-	cmpi    cr0, r3, 'c
-	beq     .i64
-	cmpi    cr0, r3, 's
-	beq     .i64
-	cmpi    cr0, r3, 'l
-	beq     .i64
+	/* check result type */
 	cmpi    cr0, r3, 'f
 	beq     .f32
 	cmpi    cr0, r3, 'd
 	beq     .f64
-	cmpi    cr0, r3, 'p
-	beq     .i64
-.void: /* ignore result (void call) */
-	b       .end
-.i64:  /* result is 64-bit long long result */
-	ld       r3, RESULT_OFFSET + DCV_INT(r1)
-	b       .end
-.f32:  /* result is C float result */
-	lfs       f1, RESULT_OFFSET + DCV_FLOAT(r1)
-	b       .end
-.f64:  /* result is C double result */
-	lfd       f1, RESULT_OFFSET + DCV_FLOAT(r1)
+.i64:
+	ld      r3, SP_RESULT(r1)
 	b       .end
 .end:
 
-	ld     r2,  LINK_TOC(r1)
-	ld     r1,  0(r1)  /* restore stack pointer */
-	ld     r31, -8(r1) /* restore preserved registers */
-	ld     r0,  16(r1) /* load link register with return address */
+	ld     r2,  SP_TOC(r1)
+	ld     r1,  SP_PREV(r1)  /* restore stack pointer */
+	ld     r31, -8(r1)       /* restore preserved registers */
+	ld     r0,  SP_LR(r1)    /* load link register with return address */
 	mtlr   r0
-	blr                /* branch back to link register */
- 
+	blr                      /* branch back to link register */
+.f32:
+	lfs       f1, SP_RESULT(r1)
+	b       .end
+.f64:
+	lfd       f1, SP_RESULT(r1)
+	b       .end
