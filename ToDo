@@ -1,8 +1,8 @@
 1.0:
 ----
 - autovar was never really pushed all the way through and still plays second
-  flute to dyncall_macros.h, clean this all up, eventually (Tassilo: for now, I
-  removed out of sync files to avoid confusion)
+  fiddle to dyncall_macros.h, clean this all up, eventually (Tassilo: for now, I
+  removed out of sync files to avoid confusion; but still probably duped code)
 - ppc32 callback fixes on bsd
 - make install should install manpages
 - mailing list announcements (html email?)
