@@ -71,6 +71,29 @@ static void a_i64(DCCallVM* in_p, DClonglong x)
   }
 }
 
+static void var_i64     (DCCallVM* in_p, DClonglong  x) 
+{ 
+  DCCallVM_arm64* p = (DCCallVM_arm64*)in_p;
+  dcVecAlign(&p->mVecHead, sizeof(DClonglong));
+  dcVecAppend(&p->mVecHead, &x, sizeof(DClonglong));
+}
+static void var_bool    (DCCallVM* in_p, DCbool  x) { var_i64( in_p, ((DClonglong) x) ); }
+static void var_char    (DCCallVM* in_p, DCchar  x) { var_i64( in_p, ((DClonglong) x) ); }
+static void var_short   (DCCallVM* in_p, DCshort x) { var_i64( in_p, ((DClonglong) x) ); }
+static void var_int     (DCCallVM* in_p, DCint   x) { var_i64( in_p, ((DClonglong) x) ); }
+static void var_long    (DCCallVM* in_p, DClong  x) { var_i64( in_p, ((DClonglong) x) ); }
+static void var_double  (DCCallVM* in_p, DCdouble in_x) {
+  DCCallVM_arm64* p = (DCCallVM_arm64*)in_p;
+  dcVecAlign(&p->mVecHead, sizeof(DCdouble));
+  dcVecAppend(&p->mVecHead, &x, sizeof(DCdouble)); 
+}   
+static void var_float   (DCCallVM* in_p, DCfloat x) {   
+  var_double( in_p, (DCdouble) x );
+}
+static void var_pointer (DCCallVM* in_p, DCpointer x) {
+  var_i64(in_p, (DClonglong) x );
+}
+
 static void a_bool    (DCCallVM* in_p, DCbool  x)   
 { 
   DCCallVM_arm64* p = (DCCallVM_arm64*)in_p;
@@ -191,6 +214,35 @@ DCCallVM_vt vt_arm64 =
 , NULL /* callStruct */
 };
 
+DCCallVM_vt vt_arm64_variadic =
+{
+  &deinit
+, &reset
+, &mode
+, &var_bool
+, &var_char
+, &var_short 
+, &var_int
+, &var_long
+, &var_i64
+, &var_float
+, &var_double
+, &var_pointer
+, NULL /* argStruct */
+, (DCvoidvmfunc*)       &call
+, (DCboolvmfunc*)       &call
+, (DCcharvmfunc*)       &call
+, (DCshortvmfunc*)      &call
+, (DCintvmfunc*)        &call
+, (DClongvmfunc*)       &call
+, (DClonglongvmfunc*)   &call
+, (DCfloatvmfunc*)      &call
+, (DCdoublevmfunc*)     &call
+, (DCpointervmfunc*)    &call
+, NULL /* callStruct */
+};
+
+
 DCCallVM* dcNewCallVM(DCsize size) 
 {
   return dc_callvm_new_arm64(&vt_arm64, size);
@@ -202,10 +254,14 @@ static void mode(DCCallVM* in_self,DCint mode)
   DCCallVM_vt*  vt;
   switch(mode) {
     case DC_CALL_C_DEFAULT:        
-    case DC_CALL_C_ELLIPSIS:
-    case DC_CALL_C_ELLIPSIS_VARARGS:
     case DC_CALL_C_ARM64:        
       vt = &vt_arm64;
+      break;
+    case DC_CALL_C_ELLIPSIS:
+      vt = &vt_arm64;
+      break;
+    case DC_CALL_C_ELLIPSIS_VARARGS:
+      vt = &vt_arm64_variadic;
       break;
     default: 
       in_self->mError = DC_ERROR_UNSUPPORTED_MODE;
