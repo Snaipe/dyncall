@@ -82,7 +82,7 @@ static void var_char    (DCCallVM* in_p, DCchar  x) { var_i64( in_p, ((DClonglon
 static void var_short   (DCCallVM* in_p, DCshort x) { var_i64( in_p, ((DClonglong) x) ); }
 static void var_int     (DCCallVM* in_p, DCint   x) { var_i64( in_p, ((DClonglong) x) ); }
 static void var_long    (DCCallVM* in_p, DClong  x) { var_i64( in_p, ((DClonglong) x) ); }
-static void var_double  (DCCallVM* in_p, DCdouble in_x) {
+static void var_double  (DCCallVM* in_p, DCdouble x) {
   DCCallVM_arm64* p = (DCCallVM_arm64*)in_p;
   dcVecAlign(&p->mVecHead, sizeof(DCdouble));
   dcVecAppend(&p->mVecHead, &x, sizeof(DCdouble)); 
