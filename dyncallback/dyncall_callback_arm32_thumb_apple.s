@@ -28,5 +28,5 @@
 /* into ARM mode, the parameters passed use the same registers/stack spase */
 /* as the ARM mode, and the bx instruction switches back to THUMB mode, if */
 /* the function to be called has a "THUMB function address" (=address+1).  */
-.include "dyncall_callback_arm32_arm_apple.s"
+#include "dyncall_callback_arm32_arm_apple.s"
 
