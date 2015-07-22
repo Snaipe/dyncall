@@ -37,7 +37,6 @@
 */
 
 .text
-
 //
 // DynCall Back-End arm64 
 // 
@@ -49,6 +48,7 @@
 
 GLOBAL_C(dcCall_arm64)
 ENTRY_C(dcCall_arm64)
+.align 2
 
 // input:
 //   x0: target   (address of target)
