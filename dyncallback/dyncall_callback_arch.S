@@ -45,13 +45,13 @@
 #  elif defined(DC__Arch_ARM_ARM)
 #    include "dyncall_callback_arm32_arm_apple.s"
 #  elif defined(DC__Arch_ARM_THUMB)
-#    include "dyncall_callback_arm32_thumb_apple.s"
+#    include "dyncall_callback_arm32_thumb_apple.S"
 #  elif defined(DC__Arch_AMD64)
 #    include "dyncall_callback_x64.S"
 #  elif defined(DC__Arch_Intel_x86)
 #    include "dyncall_callback_x86.S"
 #  elif defined(DC__Arch_ARM64)
-#    include "dyncall_callback_arm64.s"
+#    include "dyncall_callback_arm64.S"
 #  else // e.g. PowerPC G5, which is PPC64, etc.
 #    error Unsupported Architecture on Darwin/OS X.
 #  endif
@@ -67,13 +67,13 @@
 #  elif defined(DC__Arch_ARM_ARM)
 #    include "dyncall_callback_arm32_arm_gas.s"
 #  elif defined(DC__Arch_ARM_THUMB)
-#    include "dyncall_callback_arm32_thumb_gas.s"
+#    include "dyncall_callback_arm32_thumb_gas.S"
 #  elif defined(DC__Arch_Sparc)
 #    include "dyncall_callback_sparc32.s"
 #  elif defined(DC__Arch_Sparcv9)
 #    include "dyncall_callback_sparc64.s"
 #  elif defined(DC__Arch_ARM64)
-#    include "dyncall_callback_arm64.s"
+#    include "dyncall_callback_arm64.S"
 #  endif
 #endif
 

@@ -23,7 +23,7 @@
 
 */
 
-	.globl dcCallbackThunkEntry
+.globl dcCallbackThunkEntry
 dcCallbackThunkEntry:
         jmpl %i7 + 8, %g0			/* Return from proc. */
 	 nop

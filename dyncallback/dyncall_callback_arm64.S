@@ -2,7 +2,7 @@
 
  Package: dyncall
  Library: dyncallback
- File: dyncallback/dyncall_callback_arm64.s
+ File: dyncallback/dyncall_callback_arm64.S
  Description: Callback Thunk - Implementation for ARM64 / ARMv8 / AAPCS64
  License:
 
