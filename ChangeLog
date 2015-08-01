@@ -7,6 +7,7 @@ dyncall:
   o introduced dcArgF and dcVArgF for flexible/convenient argument binding (works like dcCallF/dcVCallF but without the function call)
   o added -fPIC by default for FreeBSD
   o PPC32 linux syscall support
+  o fixed return value errors for arm32 on some platforms (e.g. freebsd/arm32, nintendo ds); arm & thumb mode
 dyncallback:
   o ARM64 support (AAPCS64 on Linux, Apple's derived version on iOS)
   o PPC64 support (thanks Masanori!)
