@@ -144,11 +144,6 @@ static void dc_callvm_argPointer_arm32_thumb(DCCallVM* in_self, DCpointer x)
   dcVecAppend(&self->mVecHead, &x, sizeof(DCpointer));
 }
 
-typedef void       (*call_void)  (DCpointer target, DCpointer data, DCsize size);
-typedef DClong     (*call_word)  (DCpointer target, DCpointer data, DCsize size);
-typedef DClonglong (*call_dword) (DCpointer target, DCpointer data, DCsize size);
-
-
 
 /* Call. */
 void dc_callvm_call_arm32_thumb(DCCallVM* in_self, DCpointer target)
@@ -156,28 +151,10 @@ void dc_callvm_call_arm32_thumb(DCCallVM* in_self, DCpointer target)
   DCCallVM_arm32_thumb* self = (DCCallVM_arm32_thumb*)in_self;
   // This cast is needed in order for the cleanup code in the caller (this very function) to not
   // overwrite and use r0 and r1, as we want to pass them back. On some platforms (FreeBSD/arm, Nintendo DS
-  // the compiler generates cleanup code that writes to those registers by assuming dcCall_arm32_arm didn't
+  // the compiler generates cleanup code that writes to those registers by assuming dcCall_arm32_thumb didn't
   // use them.
   ((DClonglong(*)(DCpointer, DCpointer, DCsize))&dcCall_arm32_thumb)(target, dcVecData(&self->mVecHead), dcVecSize(&self->mVecHead));
 }
-
-
-#if 0
-DClong dc_callvm_call_arm32_thumb_word(DCCallVM* in_self, DCpointer target)
-{
-  DCCallVM_arm32_thumb* self = (DCCallVM_arm32_thumb*)in_self;
-  // return dcCall_arm32_thumb_word(target, dcVecData(&self->mVecHead), dcVecSize(&self->mVecHead));
-  return ( (call_word) dcCall_arm32_thumb) (target, dcVecData(&self->mVecHead), dcVecSize(&self->mVecHead));
-}
-
-
-DClonglong dc_callvm_call_arm32_thumb_dword(DCCallVM* in_self, DCpointer target)
-{
-  DCCallVM_arm32_thumb* self = (DCCallVM_arm32_thumb*)in_self;
-  // return dcCall_arm32_thumb_dword(target, dcVecData(&self->mVecHead), dcVecSize(&self->mVecHead));
-  return ( (call_dword) dcCall_arm32_thumb ) (target, dcVecData(&self->mVecHead), dcVecSize(&self->mVecHead));
-}
-#endif
 
 
 DCCallVM_vt gVT_arm32_thumb =
