@@ -19,11 +19,6 @@
 - armhf callconv manual entry
 - add portable "make install"
 
-build-system:
--------------
-- cmake mac os x universal binary builds with *.S does not build 
-  multiple architectures
-
 portasm:
 --------
 - add solaris support for x64
