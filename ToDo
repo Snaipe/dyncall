@@ -11,7 +11,6 @@
       - callback_plain retval wrong (not only platform)
     * THUMB:
       - ellipsis (might be test itself, not respecting fixed part of args)
-      - retvals of call_suite (maybe all retvals, in general)
       - callback_plain retval
       - callf
 - fix Minix/x86 callbacks (see callback_suite)
@@ -55,7 +54,7 @@ dyncallback:
 ------------
 - callback_plain's return value not correct anymore on NDS (maybe just broken testcode?)
 - add MIPS callbacks for eabi, n32, o32 (thunks are working)
-- finish PPC32 callbacks (see bugs section, below)
+- finish PPC32 callbacks (see bugs section, below, BSD not working)
 
 bindings:
 ---------
@@ -117,6 +116,7 @@ missing implementations (descending priority):
 - superh
 - cell
 - blackfin
+- s/390
 - z80
 - hppa
 - vax
@@ -125,10 +125,4 @@ missing implementations (descending priority):
 - amd29k
 - arc
 - seaforth
-
-available exotic hardware for outstanding ports:
-------------------------------------------------
-- 68k: Tassilo's old Palm m100 (MC68EZ328 (16MHz))
-- sh4: Tassilo's Dreamcast
-- sigmatel stmp3550b: Daniel's iPod Nano
 
