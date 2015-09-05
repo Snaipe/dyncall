@@ -17,6 +17,7 @@
 - fix Linux/rpi callbacks (call_suite)
 - armhf callback support
 - armhf callconv manual entry
+- add portable "make install"
 
 build-system:
 -------------
