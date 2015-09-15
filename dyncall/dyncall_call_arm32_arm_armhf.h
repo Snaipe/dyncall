@@ -35,7 +35,19 @@
 extern "C" {
 #endif
 
-void dcCall_arm32_armhf(DCpointer target, DCpointer stackdata, DCsize size, DCfloat* p_s16);
+/* 
+** arm32 armhf mode calling convention calls 
+**
+** - hybrid return-type call (bool ... pointer)
+**
+** Note the return type of this declaration is intentially of double-word size.
+** On some platforms the compiler generates cleanup code in the caller (dyncall_callvm_arm32_arm_armhf.c's
+** call()) that reuses,thus overwrites r0 and r1.
+** With this "hint", we preserve those registers by letting the compiler assume both
+** registers are used for the return type.
+*/
+
+DClonglong dcCall_arm32_armhf(DCpointer target, DCpointer stackdata, DCsize size, DCfloat* p_s16);
 
 #ifdef __cplusplus
 }

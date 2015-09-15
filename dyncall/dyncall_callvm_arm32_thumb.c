@@ -149,11 +149,7 @@ static void dc_callvm_argPointer_arm32_thumb(DCCallVM* in_self, DCpointer x)
 void dc_callvm_call_arm32_thumb(DCCallVM* in_self, DCpointer target)
 {
   DCCallVM_arm32_thumb* self = (DCCallVM_arm32_thumb*)in_self;
-  // This cast is needed in order for the cleanup code in the caller (this very function) to not
-  // overwrite and use r0 and r1, as we want to pass them back. On some platforms (FreeBSD/arm, Nintendo DS
-  // the compiler generates cleanup code that writes to those registers by assuming dcCall_arm32_thumb didn't
-  // use them.
-  ((DClonglong(*)(DCpointer, DCpointer, DCsize))&dcCall_arm32_thumb)(target, dcVecData(&self->mVecHead), dcVecSize(&self->mVecHead));
+  dcCall_arm32_thumb(target, dcVecData(&self->mVecHead), dcVecSize(&self->mVecHead));
 }
 
 

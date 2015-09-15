@@ -83,19 +83,3 @@ call:
 	mov		%r13, %r7	/* Reset stack ptr. */
 	pop		{%r4-%r7, %r15}	/* Restore permanent registers and program counter. (Force a stay in THUMB in ARMv4, whether ARMv5 can return in ARM or THUMB depending on the bit 0. */
 
-
-
-/* Internally used to avoid compiler overwriting r0 and r1 in call stub */
-.globl dcCall_arm32_thumb_word
-
-.thumb_func
-dcCall_arm32_thumb_word:
-	b	dcCall_arm32_thumb
-
-
-.globl dcCall_arm32_thumb_dword
-
-.thumb_func
-dcCall_arm32_thumb_dword:
-	b	dcCall_arm32_thumb
-

@@ -50,9 +50,14 @@ extern "C" {
 **
 ** - hybrid return-type call (bool ... pointer)
 **
+** Note the return type of this declaration is intentially of double-word size.
+** On some platforms (FreeBSD/arm, Nintendo DS, ...) the compiler generates cleanup code
+** in the caller (dc_callvm_call_arm32_arm) that reuses, thus overwrites r0 and r1.
+** With this "hint", we preserve those registers by letting the compiler assume both
+** registers are used for the return type.
 */
 
-void dcCall_arm32_arm(DCpointer target, DCpointer stackdata, DCsize size);
+DClonglong dcCall_arm32_arm(DCpointer target, DCpointer stackdata, DCsize size);
 
 #ifdef __cplusplus
 }
