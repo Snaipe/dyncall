@@ -46,7 +46,7 @@ if(MSVC)
   #set(CMAKE_ASM_COMPILER_ARG1 "/c")
   #set(CMAKE_ASM_MASM_SOURCE_FILE_EXTENSIONS asm)
   #set(CMAKE_ASM_MASM_COMPILE_OBJECT "<CMAKE_ASM_MASM_COMPILER> <FLAGS> /c /Fo <OBJECT> <SOURCE>")
-elseif(CMAKE_COMPILER_IS_GNUCC)
+elseif(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Intel")
   # when used in shared libraries, -fPIC is required by several architectures
   # and platforms (observed on AMD64, Solaris/Sparc).
   # we enable it per default here.
