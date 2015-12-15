@@ -16,7 +16,7 @@
 - fix Minix/x86 callbacks (see callback_suite)
 - fix Linux/rpi callbacks (call_suite)
 - armhf callback support
-- armhf ellipsis suppor
+- armhf ellipsis support
 - armhf callconv manual entry
 - add portable "make install"
 - support Solaris11 CFLAGS with -D_FILE_OFFSET_BITS=64
