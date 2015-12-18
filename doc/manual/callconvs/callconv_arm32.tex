@@ -305,8 +305,8 @@ Code is little-endian, rest is similar to EABI with an 8-byte aligned stack, etc
 \hline
 Name         & Brief description\\
 \hline
-{\bf R0}     & parameter 0, scratch, return value\\
-{\bf R1}     & parameter 1, scratch, return value\\
+{\bf R0}     & parameter 0, scratch, non floating point return value\\
+{\bf R1}     & parameter 1, scratch, non floating point return value\\
 {\bf R2,R3}  & parameters 2 and 3, scratch\\
 {\bf R4,R5}  & permanent\\
 {\bf R6}     & scratch\\
@@ -319,8 +319,10 @@ Name         & Brief description\\
 {\bf R14}    & link register, permanent\\
 {\bf R15}    & program counter (note: due to pipeline, r15 points to 2 instructions ahead)\\
 {\bf CPSR}   & Program status register\\
-{\bf S0-S15} & floating point arguments, single precision\\
-{\bf D0-D7}  & aliases S0-S15, floating point arguments, double precision\\
+{\bf S0}     & floating point argument, floating point return value, single precision\\
+{\bf D0}     & floating point argument, floating point return value, double precision, aliases S0-S1, \\
+{\bf S1-S15} & floating point arguments, single precision\\
+{\bf D1-D7}  & aliases S2-S15, floating point arguments, double precision\\
 {\bf FPSCR}  & VFP status register.\\
 \hline
 \end{tabular}
@@ -343,8 +345,10 @@ Name         & Brief description\\
 
 \paragraph{Return values}
 \begin{itemize}
-\item return values \textless=\ 32 bits use r0
-\item 64 bit return values use r0 and r1
+\item non floating point return values \textless=\ 32 bits use r0
+\item non floating point 64-bit return values use r0 and r1
+\item single precision floating point return value uses s0
+\item double precision floating point return value uses d0
 \item if return value is a structure, the caller allocates space for the return value on the stack in its frame and passes a pointer to it in r0
 \end{itemize}
 

@@ -74,6 +74,9 @@ dcCallbackThunkEntry:
 
 	/* Return value. */
 	ldmia	%r13, {%r0, %r1}				/* Load return value in r0 and r1. */
+#if defined(DC__ABI_ARM_HF)
+	fldmiad	%r13, {%d0}						/* Same for floating point return value (if any). */
+#endif
 
 	/* Epilog. */
 	ldmdb	%r11, {%r4-%r11, %r13, %r15}	/* Restore permanent registers (restore stack ptr and program counter).@@@db not needed since we rewrite r13? */
