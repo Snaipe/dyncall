@@ -2,7 +2,7 @@
 
  Package: dyncall
  Library: dyncallback
- File: dyncallback/dyncall_callback_arm32_arm_gas.s
+ File: dyncallback/dyncall_callback_arm32_arm_gas.S
  Description: Callback Thunk - Implementation for ARM32 (ARM mode)
  License:
 
@@ -23,6 +23,7 @@
 
 */
 
+#include "../dyncall/dyncall_macros.h"
 
 .text
 .code 32	/* ARM mode */
@@ -30,15 +31,16 @@
 .globl dcCallbackThunkEntry
 
 /* sizes */
-.set DCThunk_size   ,   8
-.set DCArgs_size    ,  24
+/* .set DCThunk_size   ,   8 */
+/* .set DCArgs_size    ,  24 */ /* for EABI/ATPCS/... */
+/* .set DCArgs_size    ,  76 */ /* for armhf          */
+/* .set DCCallback_size,  20 */
 .set DCValue_size   ,   8
 
 /* struct DCCallback offsets and size */
-.set CTX_thunk      ,   0
+/* .set CTX_thunk      ,   0 */
 .set CTX_handler    ,  12
 .set CTX_userdata   ,  16
-.set DCCallback_size,  20
 
 
 /* Called by thunk - thunk stores pointer to DCCallback in r12 */
@@ -51,7 +53,12 @@ dcCallbackThunkEntry:
 
 	/* Grab arguments. */
 	mov		%r4, #0
-	stmdb	%r13!, {%r0-%r4, %r11}			/* Spill first 4 args to DCArgs, along with reg_count and (stack) pointer to remaining args. */
+#if defined(DC__ABI_ARM_HF)
+	stmdb	%r13!, {%r4}					/* Init freg_count and dreg_count to 0 */
+	stmdb	%r13!, {%r4}
+	fstmdbd	%r13!, {d0-d7}					/* Store all fp-registers in DCArgs' f[16] */
+#endif
+	stmdb	%r13!, {%r0-%r4, %r11}			/* Spill first 4 args to DCArgs, along with reg_count (init to 0) and (stack) pointer to remaining args. */
 
 	/* Prepare callback handler call. */
 	mov		%r0, %r12						/* Parameter 0 (r0) = DCCallback pointer (r12, pointer to thunk). */
@@ -62,7 +69,7 @@ dcCallbackThunkEntry:
 
 	/* Call. */
 	ldr		%r4, [%r12, #CTX_handler]		/* Load callback handler pointer into r4. */
-	mov		%r14, %r15						/* Branch return address(r15) -> link register (r14) -- r15 always points to address of current + 2 instructions (= Epilog code). */ 
+	mov		%r14, %r15						/* Branch return address(r15) -> link register (r14) -- r15 always points to address of current + 2 instructions (= Epilog code). */
 	bx		%r4								/* Call. */
 
 	/* Return value. */

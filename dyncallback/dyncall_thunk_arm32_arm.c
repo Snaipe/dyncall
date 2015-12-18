@@ -35,12 +35,11 @@ void dcbInitThunk(DCThunk* p, void (*entry)())
       ldr %r15, [%r15, #-4]
   */
 
-  /* This code loads 'entry+8' into r15. The -4 is needed, because r15 as  */
-  /* program counter points to the current instruction+8, but the pointer  */
-  /* to the code to execute follows the ldr instruction directly. Add 8 to */
-  /* entry for similar reasons. NOTE: Latter seems to be implicit with     */ 
-  /* latest update of arm-eabi tools.                                      */
+  /* This code stores a ptr to DCCallback in r12 (equals ptr to thunk,     */
+  /* which is PC (r15) minus 8, as PC points to current instruction+8.     */
+  /* Then it loads the callback 'entry' into PC. The -4 is needed, also bc */
+  /* of the PC pointing ahead.                                             */
   p->code[0]  = 0xe24fc008UL;  /* sub %r12, %r15, #8 */
   p->code[1]  = 0xe51ff004UL;  /* ldr %r15, [%r15, #-4] */
-  p->entry = entry/*+8*/;
+  p->entry = entry;
 }

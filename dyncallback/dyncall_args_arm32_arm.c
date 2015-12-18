@@ -58,6 +58,22 @@ static void* arm_word(DCArgs* args)
     return (void*)args->stack_ptr++;
 }
 
+static DCfloat arm_float(DCArgs* args)
+{
+#if defined(DC__ABI_ARM_HF)
+  DCfloat f;
+  if(args->freg_count < 16) {
+    f = args->f[args->freg_count++];
+
+    /* if freg_count was odd, sync with dreg_count */
+    if(!(args->freg_count & 1) && (args->freg_count < args->dreg_count))
+      args->freg_count = args->dreg_count;
+
+    return f;
+  }
+#endif
+  return *(DCfloat*)arm_word(args);
+}
 
 static DCdouble arm_double(DCArgs* args)
 {
@@ -65,12 +81,25 @@ static DCdouble arm_double(DCArgs* args)
     DCdouble d;
     DClong   l[2];
   } d;
+#if defined(DC__ABI_ARM_HF)
+  if(args->dreg_count < args->freg_count)
+    args->dreg_count = (args->freg_count+1)&0x1e; /* clear last bit, counter won't be higher than 16, anyways */
+
+  if(args->dreg_count < 16) {
+    d.d = *(DCdouble*)&args->f[args->dreg_count];
+    args->dreg_count += 2;
+
+    /* freg_count is either odd (pointing to a gap), or always the same as dreg_count */
+    if(!(args->freg_count & 1))
+      args->freg_count = args->dreg_count;
+    return d.d;
+  }
+#endif
   arm_align_64(args);
   d.l[0] = *(DClong*)arm_word(args);
   d.l[1] = *(DClong*)arm_word(args);
   return d.d;
 }
-
 
 static DClonglong arm_longlong(DCArgs* args)
 {
@@ -109,5 +138,5 @@ DCulonglong dcbArgULongLong(DCArgs* p) { return (DCulonglong)dcbArgLongLong(p); 
 DCpointer   dcbArgPointer  (DCArgs* p) { return (DCpointer)  dcbArgLong(p); }
 
 DCdouble    dcbArgDouble   (DCArgs* p) { return arm_double(p); }
-DCfloat     dcbArgFloat    (DCArgs* p) { return *(DCfloat*)  arm_word(p); }
+DCfloat     dcbArgFloat    (DCArgs* p) { return arm_float(p); }
 
