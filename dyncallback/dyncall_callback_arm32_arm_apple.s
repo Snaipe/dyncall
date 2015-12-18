@@ -32,13 +32,13 @@
 /* sizes */
 .set DCThunk_size   ,   8
 .set DCArgs_size    ,  24
+.set DCCallback_size,  20
 .set DCValue_size   ,   8
 
 /* struct DCCallback offsets and size */
 .set CTX_thunk      ,   0
 .set CTX_handler    ,  12
 .set CTX_userdata   ,  16
-.set DCCallback_size,  20
 
 
 /* Called by thunk - thunk stores pointer to DCCallback in r12 */
