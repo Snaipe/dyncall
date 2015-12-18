@@ -36,7 +36,7 @@ static void arm_align_64(DCArgs* args)
   /* @@@ check signature string */
 
   int sig =
-#if defined(DC__ABI_ARM_EABI)
+#if defined(DC__ABI_ARM_EABI) || defined(DC__ABI_ARM_HF)
     0; /* EABI */
 #else
     1; /* ATPCS */

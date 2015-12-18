@@ -117,7 +117,7 @@ static void a_double(DCCallVM* in_p, DCdouble x)
     }
   } else {
     p->s = 16;
-    union {
+    union {  /*@@@decl at top, compat*/
       DCdouble d;
       DCchar   b[8];
     } v; // ,w;
