@@ -41,6 +41,12 @@
 .arch armv6
 .fpu  vfp
 
+/*
+  1st arg / r0 = funptr
+  2st arg / r1 = ptr to int args
+  3st arg / r2 = size
+  4st arg / r3 = ptr to float args
+*/
 GLOBAL_C(dcCall_arm32_armhf)
 ENTRY_C(dcCall_arm32_armhf)
 
@@ -53,22 +59,7 @@ ENTRY_C(dcCall_arm32_armhf)
 	mov	r5  , r1	 /* r5 = 'args' (2nd argument is passed in r1). */
 	
 	/* Load 16 single-precision registers (= 8 double-precision registers). */
-	flds	s0,  [r3,#0 ]
-	flds	s1,  [r3,#4 ]
-	flds	s2,  [r3,#8 ]
-	flds	s3,  [r3,#12]
-	flds	s4,  [r3,#16]
-	flds	s5,  [r3,#20]
-	flds	s6,  [r3,#24]
-	flds	s7,  [r3,#28]
-	flds	s8,  [r3,#32]
-	flds	s9,  [r3,#36]
-	flds	s10, [r3,#40]
-	flds	s11, [r3,#44]
-	flds	s12, [r3,#48]
-	flds	s13, [r3,#52]
-	flds	s14, [r3,#56]
-	flds	s15, [r3,#60]
+	fldmiad	r3, {d0-d7}
 
 	sub	r2 , r2 , #16	
 	cmp     r2, #0
