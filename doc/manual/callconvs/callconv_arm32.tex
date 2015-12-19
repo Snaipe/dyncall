@@ -337,7 +337,7 @@ Name         & Brief description\\
 \item first four non-floating-point words are passed using r0-r3
 \item first 16 single-precision, or 8 double-precision arguments are passed via s0-s15 or d0-d7, respectively (note that since s and d registers are aliased, already used ones are skipped)
 \item subsequent parameters are pushed onto the stack (in right to left order, such that the stack pointer points to the first of the remaining parameters)
-\item note that as soon as d7 is used, subsequent single precision floating point parameters are also pushed onto the stack, even if there are still free S* registers
+\item note that as soon one floating point parameter is passed via the stack, subsequent single precision floating point parameters are also pushed onto the stack even if there are still free S* registers
 \item if the callee takes the address of one of the parameters and uses it to address other parameters (e.g. varargs) it has to copy - in its prolog - the first four words to a reserved stack area adjacent to the other parameters on the stack @@@?check spilling of float args, also
 \item parameters \textless=\ 32 bits are passed as 32 bit words
 \item structures and unions are passed by value, with the first four words of the parameters in r0-r3 @@@?check doc

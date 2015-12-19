@@ -105,6 +105,11 @@ static void a_float(DCCallVM* in_p, DCfloat x)
 
 static void a_double(DCCallVM* in_p, DCdouble x)
 {
+  union {
+    DCdouble d;
+    DCchar   b[8];
+  } v;
+
   DCCallVM_arm32_armhf* p = (DCCallVM_arm32_armhf*)in_p;
   if (p->d < 16) {
     * (double*) &p->S[p->d] = x;
@@ -116,22 +121,9 @@ static void a_double(DCCallVM* in_p, DCdouble x)
       p->s = p->d;
     }
   } else {
-    p->s = 16;
-    union {  /*@@@decl at top, compat*/
-      DCdouble d;
-      DCchar   b[8];
-    } v; // ,w;
+    p->s = 16; /* fp registers all full - need to use stack now: stop filling gaps for single precision, also */
     v.d = x;
-#if 0
-    w.b[0] = v.b[7];
-    w.b[1] = v.b[6];
-    w.b[2] = v.b[5];
-    w.b[3] = v.b[4];
-    w.b[4] = v.b[3];
-    w.b[5] = v.b[2];
-    w.b[6] = v.b[1];
-    w.b[7] = v.b[0];
-#endif
+
     /* 64 bit values need to be aligned on 8 byte boundaries */
     dcVecSkip(&p->mVecHead, dcVecSize(&p->mVecHead) & 4);
     dcVecAppend(&p->mVecHead, &v.b[0], sizeof(DCdouble));
