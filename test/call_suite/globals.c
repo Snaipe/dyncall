@@ -38,10 +38,10 @@ double rand_d() { return ( ( (double) rand() )  / ( (double) RAND_MAX ) ); }
 void init_K()
 {
   int i;
-#define X(CH,T,QCH) V_##CH = (T*) malloc(sizeof(T)*G_maxargs); K_##CH = (T*) malloc(sizeof(T)*G_maxargs);
+#define X(CH,T,QCH) V_##CH = (T*) malloc(sizeof(T)*(G_maxargs+1)); K_##CH = (T*) malloc(sizeof(T)*(G_maxargs+1));
 DEF_TYPES
 #undef X
-  for(i=0;i<G_maxargs;++i) {
+  for(i=0;i<G_maxargs+1;++i) {
     K_c[i] = (char)      (((rand_d()-0.5)*2) * (1<<7));
     K_s[i] = (short)     (((rand_d()-0.5)*2) * (1<<(sizeof(short)*8-1)));
     K_i[i] = (int)       (((rand_d()-0.5)*2) * (1<<(sizeof(int)*8-2)));
@@ -56,7 +56,7 @@ DEF_TYPES
 void clear_V()
 {
   int i;
-  for(i=0;i<G_maxargs;++i) {
+  for(i=0;i<G_maxargs+1;++i) {
 #define X(CH,T,QCH) V_##CH[i] = (T) 0;
 DEF_TYPES
 #undef X
