@@ -1,6 +1,6 @@
 -- user config for rand-sig.lua:
 minargs  = 0
-maxargs  = 32
+maxargs  = 64
 ncases   = 100
 types    = "csijlpfd"
 

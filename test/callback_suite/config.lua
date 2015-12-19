@@ -4,7 +4,7 @@
 nsigs     = 400         -- number of test cases
 mode      = "random"    -- generatore mode: 'random' or 'ordered' type sequences
 minargs   = 0           -- minimum num. of supported arguments (>= 0)
-maxargs   = 29          -- maximum num. of supported arguments (>= minargs)
+maxargs   = 64          -- maximum num. of supported arguments (>= minargs)
 
 
 -- section 'types' -------------------------------------------------------------

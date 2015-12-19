@@ -34,10 +34,10 @@ _auto_signatures.txt:
 	${LUA} make-signatures.lua >$@
 
 _auto_invokers.h: _auto_signatures.txt 
-	${LUA} make-invokers.lua <$< >$@
+	${LUA} make-invokers.lua <$> >$@
 
 _auto_sigstrings.h: _auto_signatures.txt
-	${LUA} make-cstrings.lua <$< >$@
+	${LUA} make-cstrings.lua <$> >$@
 
 _auto_config.h: 
 	${LUA} make-config.lua >$@
