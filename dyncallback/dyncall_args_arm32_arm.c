@@ -94,6 +94,7 @@ static DCdouble arm_double(DCArgs* args)
       args->freg_count = args->dreg_count;
     return d.d;
   }
+  args->freg_count = 16; /* float registers all filled up - stop filling gaps for single precision, also */
 #endif
   arm_align_64(args);
   d.l[0] = *(DClong*)arm_word(args);
