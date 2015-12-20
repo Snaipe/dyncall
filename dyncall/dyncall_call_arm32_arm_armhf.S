@@ -61,7 +61,7 @@ ENTRY_C(dcCall_arm32_armhf)
 	/* Load 16 single-precision registers (= 8 double-precision registers). */
 	fldmiad	r3, {d0-d7}
 
-	sub	r2 , r2 , #16	
+	sub	r2 , r2 , #16	/* skip spill area */
 	cmp     r2, #0
 	ble	armhf_call
 

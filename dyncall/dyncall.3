@@ -114,10 +114,12 @@ sense (e.g. using a PowerPC calling convention on a MIPS platform) and are
 silently ignored.
 .Pp
 .Fn dcReset
-resets the internal stack of arguments and prepares it for the selected mode.
+resets the internal stack of arguments and prepares it for a new call.
 This function should be called after setting the call mode (using dcMode), but
 prior to binding arguments to the CallVM. Use it also when reusing a CallVM, as
 arguments don't get flushed automatically after a function call invocation.
+Note: you should also call this function after initial creation of the a CallVM
+object, as dcNewCallVM doesn't do this, implicitly.
 .Pp
 .Fn dcArgBool ,
 .Fn dcArgChar ,

@@ -33,7 +33,7 @@
 /* sizes */
 /* .set DCThunk_size   ,   8 */
 /* .set DCArgs_size    ,  24 */ /* for EABI/ATPCS/... */
-/* .set DCArgs_size    ,  76 */ /* for armhf          */
+/* .set DCArgs_size    ,  96 */ /* for armhf          */
 /* .set DCCallback_size,  20 */
 .set DCValue_size   ,   8
 

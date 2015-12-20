@@ -89,6 +89,7 @@ bool test_ellipsis_case(int x)
   assert( dcGetError(pCall) == DC_ERROR_NONE );
  
   dcMode(pCall, DC_CALL_C_ELLIPSIS);
+  dcReset(pCall);
   
   assert( dcGetError(pCall) == DC_ERROR_NONE );
  
