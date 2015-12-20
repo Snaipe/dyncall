@@ -30,7 +30,7 @@
 
 static DCCallVM* dc_callvm_new_arm32_armhf(DCCallVM_vt* vt, DCsize size)
 {
-  /* Store at least 16 bytes (4 words) for internal spill area. Assembly code depends on it. */
+  /* Store at least 16 bytes (4 words for first 4 int args) for internal spill area. Assembly code depends on it. */
   DCCallVM_arm32_armhf* p = (DCCallVM_arm32_armhf*)dcAllocMem(sizeof(DCCallVM_arm32_armhf)+size+16);
   dc_callvm_base_init(&p->mInterface, vt);
   dcVecInit(&p->mVecHead, size);
@@ -72,6 +72,7 @@ static void a_bool    (DCCallVM* in_self, DCbool  x) { a_int(in_self, (DCint)x);
 static void a_char    (DCCallVM* in_self, DCchar  x) { a_int(in_self, x); }
 static void a_short   (DCCallVM* in_self, DCshort x) { a_int(in_self, x); }
 static void a_long    (DCCallVM* in_self, DClong  x) { a_int(in_self, x); }
+
 static void a_longlong(DCCallVM* in_self, DClonglong x)
 {
   DCCallVM_arm32_armhf* p = (DCCallVM_arm32_armhf*)in_self;
@@ -86,6 +87,7 @@ static void a_longlong(DCCallVM* in_self, DClonglong x)
     dcVecAppend(&p->mVecHead, &x, sizeof(DClonglong));
   }
 }
+
 static void a_pointer(DCCallVM* in_p, DCpointer x) { a_int(in_p, (DCint) x ); }
 
 static void a_float(DCCallVM* in_p, DCfloat x)
@@ -100,7 +102,7 @@ static void a_float(DCCallVM* in_p, DCfloat x)
     }
   } else {
     dcVecAppend(&p->mVecHead, &x, sizeof(DCfloat));
-  } 
+  }
 }
 
 static void a_double(DCCallVM* in_p, DCdouble x)
@@ -115,19 +117,26 @@ static void a_double(DCCallVM* in_p, DCdouble x)
     * (double*) &p->S[p->d] = x;
     p->d += 2;
     if (!(p->s & 1)) {
-      /* if s is even it always equals d. 
-	 otherwise, s points to an odd float register. 
-       */
+      /* if s is even it always equals d. otherwise, s points to an odd float register. */
       p->s = p->d;
     }
   } else {
     p->s = 16; /* fp registers all full - need to use stack now: stop filling gaps for single precision, also */
     v.d = x;
-
     /* 64 bit values need to be aligned on 8 byte boundaries */
     dcVecSkip(&p->mVecHead, dcVecSize(&p->mVecHead) & 4);
     dcVecAppend(&p->mVecHead, &v.b[0], sizeof(DCdouble));
   }
+}
+
+static void a_float_ellipsis(DCCallVM* in_p, DCfloat x)
+{
+  a_int(in_p, *(DCint*)&x);
+}
+
+static void a_double_ellipsis(DCCallVM* in_p, DCdouble x)
+{
+  a_longlong(in_p, *(DClonglong*)&x);
 }
 
 void call(DCCallVM* in_p, DCpointer target)
@@ -143,7 +152,7 @@ DCCallVM_vt vt_armhf =
 , &mode
 , &a_bool
 , &a_char
-, &a_short 
+, &a_short
 , &a_int
 , &a_long
 , &a_longlong
@@ -164,7 +173,35 @@ DCCallVM_vt vt_armhf =
 , NULL /* callStruct */
 };
 
-DCCallVM* dcNewCallVM(DCsize size) 
+DCCallVM_vt vt_armhf_ellipsis =
+{
+  &deinit
+, &reset
+, &mode
+, &a_bool
+, &a_char
+, &a_short
+, &a_int
+, &a_long
+, &a_longlong
+, &a_float_ellipsis
+, &a_double_ellipsis
+, &a_pointer
+, NULL /* argStruct */
+, (DCvoidvmfunc*)       &call
+, (DCboolvmfunc*)       &call
+, (DCcharvmfunc*)       &call
+, (DCshortvmfunc*)      &call
+, (DCintvmfunc*)        &call
+, (DClongvmfunc*)       &call
+, (DClonglongvmfunc*)   &call
+, (DCfloatvmfunc*)      &call
+, (DCdoublevmfunc*)     &call
+, (DCpointervmfunc*)    &call
+, NULL /* callStruct */
+};
+
+DCCallVM* dcNewCallVM(DCsize size)
 {
 #if defined(DC__ABI_ARM_EABI)
   return dc_callvm_new_arm32_arm(&eabi, size);
@@ -180,18 +217,18 @@ DCCallVM* dcNewCallVM(DCsize size)
 static void mode(DCCallVM* in_self,DCint mode)
 {
   DCCallVM_arm32_armhf* self = (DCCallVM_arm32_armhf*) in_self;
-  DCCallVM_vt*  vt;
   switch(mode) {
-    case DC_CALL_C_DEFAULT:        
+    case DC_CALL_C_DEFAULT:
+    case DC_CALL_C_ARM_ARMHF:
+      self->mInterface.mVTpointer = &vt_armhf;
+      break;
     case DC_CALL_C_ELLIPSIS:
     case DC_CALL_C_ELLIPSIS_VARARGS:
-    case DC_CALL_C_ARM_ARMHF:        
-      vt = &vt_armhf;
+      self->mInterface.mVTpointer = &vt_armhf_ellipsis;
       break;
-    default: 
+    default:
       in_self->mError = DC_ERROR_UNSUPPORTED_MODE;
       return;
   }
-  self->mInterface.mVTpointer = vt;
 }
 
