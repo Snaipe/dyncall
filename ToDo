@@ -14,11 +14,11 @@
       - callback_plain retval
       - callf
 - fix Minix/x86 callbacks (see callback_suite)
-- fix Linux/rpi callbacks (call_suite)
-- armhf ellipsis support
+- armhf ellipsis: fix weirdness with long long as first ... arg
 - add portable "make install"
 - support Solaris11 CFLAGS with -D_FILE_OFFSET_BITS=64
 - make sure selinux works (esp. regarding NX bits, asm might need (or similar): .section .note.GNU-stack,"",@progbits)
+  Daniel has a patch for it, if needed, implementing allocwx with two memory blocks, one for w^x, mmaped to one for r|x
 
 portasm:
 --------
