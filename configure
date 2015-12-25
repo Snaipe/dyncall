@@ -85,6 +85,9 @@ case ${TARGET:=`uname`} in
     printf "LDLIBS=-lm\n" >>$C
     printf "RM=rm -f\n" >>$C
     ;;
+  GNU/kFreeBSD)
+    printf "LDLIBS=-lm\n" >>$C
+    ;;
   MacOSX|Darwin)
     # if Apple's libtool (not to be confused with GNU's) is available, which is according to libtool(1) "with -static [...] intended
     # to replace ar(5) and ranlib", use it - if it is shadowed by some install of GNU's libtool assume that a foreign environment is

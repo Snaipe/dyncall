@@ -34,9 +34,9 @@
 #include "../common/platformInit.c" /* Impl. for functions only used in this translation unit */
 
 
-int   getId();
+int       getId();
 DCpointer getFunc(int x);
-DCValue* getArg(int pos);
+DCValue*  getArg(int pos);
 
 DCdouble   valueDouble  [NARGS];
 DCfloat    valueFloat   [NARGS];
