@@ -18,10 +18,12 @@ dyncallback:
   o more intuitive specification of callback return type
 doc:
   o added ARM64 support info and calling convention documentation
+  o added ARM32 armhf section
   o added PPC64 support info
   o cleanup, brought all up to date, etc.
 tests:
   o callf test covers new argf interface
+  o several fixes to some test suites
 buildsys:
   o more flexible testsuite build and 'pack' target for convenience
   o fixes/additions for OS X universal builds
