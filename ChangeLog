@@ -1,5 +1,8 @@
 This file lists bigger/noteworthy changes, only...
 
+Version 1.0 (upcoming)
+  o ...
+
 Version 0.9 (2015/12/31)
 dyncall:
   o ARM64 support (AAPCS64 on Linux & Apple's derived version on iOS)
