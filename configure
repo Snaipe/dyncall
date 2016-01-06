@@ -115,7 +115,7 @@ case ${TARGET:=`uname`} in
         10.6.*)
           ARCHS="-arch i386 -arch x86_64"
           ;;
-        10.10.*)
+        10.1?.*)
           ARCHS="-arch x86_64 -arch i386"
           ;;
         10.[789].*)
