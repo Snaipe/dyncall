@@ -4,18 +4,18 @@
   fiddle to dyncall_macros.h, clean this all up, eventually (Tassilo: for now, I
   removed out of sync files to avoid confusion; but still probably duped code)
 - ppc32 callback fixes on bsd
-- make install should install manpages
+- add portable "make install"
+  * make install should also install manpages
 - mailing list announcements (html email?)
 - fix for NDS:
-    * ARM:
-      - callback_plain retval wrong (not only platform)
-    * THUMB:
-      - ellipsis (might be test itself, not respecting fixed part of args)
-      - callback_plain retval
-      - callf
+  * ARM:
+    - callback_plain retval wrong (not only platform)
+  * THUMB:
+    - ellipsis (might be test itself, not respecting fixed part of args)
+    - callback_plain retval
+    - callf
 - fix Minix/x86 callbacks (see callback_suite)
 - armhf ellipsis: fix weirdness with long long as first ... arg
-- add portable "make install"
 - support Solaris11 CFLAGS with -D_FILE_OFFSET_BITS=64
 - make sure selinux works (esp. regarding NX bits, asm might need (or similar): .section .note.GNU-stack,"",@progbits)
   Daniel has a patch for it, if needed, implementing allocwx with two memory blocks, one for w^x, mmaped to one for r|x

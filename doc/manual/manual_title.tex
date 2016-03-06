@@ -17,18 +17,8 @@
 %
 %//////////////////////////////////////////////////////////////////////////////
 
-\begin{titlepage}
-\begin{center}%
-	{\Huge {\bf \product{dyncall}}}\\%
-        \ \\%
-        Version 0.9\\%
-        \ \\%
-        \ \\%
-	\ \\%
-	Daniel {\sc Adler} \small{\tt{(dadler@uni-goettingen.de)}}\\%
-	Tassilo {\sc Philipp} \small{\tt{(tphilipp@potion-studios.com)}}%
-\end{center}
-%
+\newcommand{\dyncallversion}{0.9}
+\newcommand{\titlelogo}{%
 \begingroup%
 \setlength{\unitlength}{1mm}%
 \begin{picture}(0,0)(-38,110)%
@@ -70,9 +60,34 @@
 %\put(32,10){\circle*{4}}
 %\put(37,12){\circle*{5}}
 %\end{picture}
+}
+
+% Don't output a dedicated title page for html
+\ifnhtml{
+
+\begin{titlepage}
+\begin{center}%
+	{\Huge {\bf \product{dyncall}}}\\%
+        \ \\%
+        Version \dyncallversion\\%
+        \ \\%
+        \ \\%
+	\ \\%
+	Daniel {\sc Adler} \small{\tt{(dadler@uni-goettingen.de)}}\\%
+	Tassilo {\sc Philipp} \small{\tt{(tphilipp@potion-studios.com)}}%
+\end{center}
 %
+\titlelogo
 \begin{center}
 	\today
 \end{center}
 \end{titlepage}
+
+} %ifnhtml
+
+% For html, this will just become a title/date, etc.
+\ifhtml{
+	\HCode{<h1>Manual <small>dyncall \dyncallversion</small></h1>}
+	\today
+}
 

@@ -59,6 +59,7 @@ ABI:
 OSFAMILY: 
   Windows
   Unix
+  GameConsole
 
 CC:
   INTEL
