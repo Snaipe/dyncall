@@ -46,6 +46,13 @@
 		#1%
 	\fi%
 }
+\newcommand{\casehtml}[2]{%
+	\ifx\HCode\Undef%
+		#2%
+	\else%
+		#1%
+	\fi%
+}
 
 
 % Packages.
@@ -67,9 +74,7 @@
 \newcommand{\dc}{\emph{dyncall}}
 \newcommand{\capi}[1]{%
 	\noindent%
-%	\begin{verbatim}%
 		{\tt #1}%
-%	\end{verbatim}%
 }
 \newcommand{\tab}{\indent}
 

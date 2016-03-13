@@ -22,12 +22,12 @@
 \section{Overview}
 
 The \product{dyncall} library encapsulates architecture-, OS- and compiler-specific
-function call semantics in a virtual
-
-\begin{center}
+function call semantics in a virtual %
+%
+\casehtml{\Tg<span clas="marker">}{\begin{center}}%
 \emph{bind argument parameters from left to right and then call}
-\end{center}
- 
+\casehtml{\Tg</span>}{\end{center}}%
+ %
 interface allowing programmers to call C functions 
 in a completely dynamic manner. In other words, instead of calling a function 
 directly, the \product{dyncall} library provides a mechanism to push the function parameters 

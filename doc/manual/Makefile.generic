@@ -2,30 +2,11 @@ all: manual.pdf
 
 sources: *.tex callconvs/*.tex dyncall_logo.* dyncall_watermark.*
 
-manual.pdf: sources
-	# run twice for toc on some tex installs
-	cd "${VPATH}" && for i in 1 2; do pdflatex -output-directory="${PWD}" manual.tex; done
-
-manual_website_menu.html:
-	curl -s http://www.dyncall.org | sed '/<body>/,/<div class="mainDiv">/p;d' | sed 's/^.*<body>//;s/<div class="mainDiv">.*$$//' > $@
-
-html/manual.html: manual_tex4ht.cfg manual_website_menu.html sources
-	# Create tex4ht.env from default one, but with better bitmaps
-	cd "${VPATH}" &&  ( \
-		cp $$(dirname $$(which tex4ht))/../share/texmf-dist/tex4ht/base/unix/tex4ht.env ./custom_tex4ht.env; \
-		sed -E -i '' 's/(Text|Graphics)(AlphaBits)=[1,2,3]([^0-9])/\1\2=4\3/g' custom_tex4ht.env; \
-		mkdir -p ./html/; \
-		htlatex manual.tex manual_tex4ht " -cunihtf -e./custom_tex4ht.env -utf8" -d./html/; \
-		rm ./html/*.css; \
-	)
-	# Inject menu into output html pages.
-	for f in "${VPATH}/html/"*.html; do \
-		sed -i '' '/^<body>/r manual_website_menu.html' "$$f"; \
-	done
-
 pdf: manual.pdf
 
 html:: html/manual.html
+#html-single: html/manual.html
+#html-split: html/manual.html
 
 clean:
 	# pdf
@@ -36,3 +17,29 @@ clean:
 		for i in manual*x.png manual*.html texput.log manual_*.log zzmanual.eps zzmanual.ps custom_tex4ht.env; do rm -f $$i || true; done; \
 		rm -r html || true; \
 	)
+
+
+# Main target dependencies --->
+
+manual_website_menu.html:
+	curl -s http://www.dyncall.org | sed '/<body>/,/<div class="mainDiv">/p;d' | sed 's/^.*<body>//;s/<div class="mainDiv">.*$$//' > $@
+
+html/manual.html: manual_tex4ht.cfg manual_website_menu.html sources
+	# Create tex4ht.env from default one, but with better bitmaps
+	cd "${VPATH}" &&  ( \
+		cp $$(dirname $$(which tex4ht))/../share/texmf-dist/tex4ht/base/unix/tex4ht.env ./custom_tex4ht.env; \
+		sed -E -i '' 's/(Text|Graphics)(AlphaBits)=[1,2,3]([^0-9])/\1\2=4\3/g' custom_tex4ht.env; \
+		mkdir -p ./html/; \
+		htlatex manual.tex manual_tex4ht " -cunihtf -e./custom_tex4ht.env -utf8" "-e./custom_tex4ht.env -d./html/"; \
+		rm ./html/*.css; \
+	)
+	# Postprocessing. Inject menu into output html pages. Replace some pieces, etc..
+	for f in "${VPATH}/html/"*.html; do \
+		sed -i '' '/^<body>/r manual_website_menu.html' "$$f"; \
+		sed -E -i '' $$'s/([[:space:]]class=["\'])lstlisting(["\'])/\\1ttDiv\\2/' "$$f"; \
+	done
+
+manual.pdf: sources
+	# run twice for toc on some tex installs
+	cd "${VPATH}" && for i in 1 2; do pdflatex -output-directory="${PWD}" manual.tex; done
+
