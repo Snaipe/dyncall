@@ -53,15 +53,15 @@ This is a detailed overview of platforms and their build tools that are known to
 
 
 \begin{tabular}{l l l}
-{\bf{\large Platform}}             & Build Tool(s)    & Compiler, SDK                              \\
+\textbf{{\large Platform}}             & Build Tool(s)    & Compiler, SDK                              \\
 \hline
-{\bf{\large Windows}}              & nmake,Visual Studio & cl, cygwin (gcc), mingw (gcc)              \\
-{\bf{\large Unix-like}}            & GNU/BSD/Sun make & gcc, clang, sunc                           \\
-{\bf{\large Plan9}}                & mk               & 8c                                         \\
-{\bf{\large Haiku/BeOS}}           & GNU make         & gcc                                        \\
-{\bf{\large iOS/iPhone}}           & GNU make         & gcc and iPhone SDK on Mac OS X             \\
-{\bf{\large Nintendo DS}}          & nmake            & devkitPro\cite{devkitPro} tools on Windows \\
-{\bf{\large Playstation Portable}} & GNU make         & psptoolchain\cite{psptoolchain} tools      \\
+\textbf{{\large Windows}}              & nmake,Visual Studio & cl, cygwin (gcc), mingw (gcc)              \\
+\textbf{{\large Unix-like}}            & GNU/BSD/Sun make & gcc, clang, sunc                           \\
+\textbf{{\large Plan9}}                & mk               & 8c                                         \\
+\textbf{{\large Haiku/BeOS}}           & GNU make         & gcc                                        \\
+\textbf{{\large iOS/iPhone}}           & GNU make         & gcc and iPhone SDK on Mac OS X             \\
+\textbf{{\large Nintendo DS}}          & nmake            & devkitPro\cite{devkitPro} tools on Windows \\
+\textbf{{\large Playstation Portable}} & GNU make         & psptoolchain\cite{psptoolchain} tools      \\
 
 \end{tabular}\\
 
@@ -81,10 +81,10 @@ This is a detailed overview of platforms and their build tools that are known to
 Available options (omit for defaults):
 
 \begin{tabular}{ll}	
-{\tt --help}                  & display help                             \\
-{\tt --prefix={\it path}}     & specify installation prefix (Unix shell) \\
-{\tt --target={\it platform}} & MacOSX,iOS,iPhoneSimulator,PSP,...       \\
-{\tt --sdk={\it version}}     & SDK version                              \\
+{\tt --help}                     & display help                             \\
+{\tt --prefix=\textit{path}}     & specify installation prefix (Unix shell) \\
+{\tt --target=\textit{platform}} & MacOSX,iOS,iPhoneSimulator,PSP,...       \\
+{\tt --sdk=\textit{version}}     & SDK version                              \\
 \end{tabular}
 
 \paragraph{Windows flavour, and cross-build from Windows (PSP, NDS, etc.)}
@@ -96,21 +96,21 @@ Available options (omit for defaults):
 Available options:
 
 \begin{tabular}{ll}	
-{\tt /?}                    & display help \\
-{\tt /prefix {\it path}}    & set installation prefix (GNU make only) \\
-{\tt /prefix-bd {\it path}} & set build directory prefix (GNU make only) \\
-{\tt /target-x86}           & build for x86 architecture (default) \\
-{\tt /target-x64}           & build for x64 architecture \\
-{\tt /target-psp}           & build for PlayStation Portable (homebrew SDK) \\
-{\tt /target-nds-arm}       & build for Nintendo DS (devkitPro, ARM mode) \\
-{\tt /target-nds-thumb}     & build for Nintendo DS (devkitPro, THUMB mode) \\
-{\tt /tool-msvc}            & use Microsoft Visual C++ compiler (default) \\
-{\tt /tool-gcc}             & use GNU Compiler Collection \\
-{\tt /asm-ml}               & use Microsoft Macro Assembler (default) \\
-{\tt /asm-as}               & use the GNU Assembler \\
-{\tt /asm-nasm}             & use NASM Assembler \\
-{\tt /config-release}       & build release version (default) \\
-{\tt /config-debug}         & build debug version \\
+{\tt /?}                       & display help \\
+{\tt /prefix \textit{path}}    & set installation prefix (GNU make only) \\
+{\tt /prefix-bd \textit{path}} & set build directory prefix (GNU make only) \\
+{\tt /target-x86}              & build for x86 architecture (default) \\
+{\tt /target-x64}              & build for x64 architecture \\
+{\tt /target-psp}              & build for PlayStation Portable (homebrew SDK) \\
+{\tt /target-nds-arm}          & build for Nintendo DS (devkitPro, ARM mode) \\
+{\tt /target-nds-thumb}        & build for Nintendo DS (devkitPro, THUMB mode) \\
+{\tt /tool-msvc}               & use Microsoft Visual C++ compiler (default) \\
+{\tt /tool-gcc}                & use GNU Compiler Collection \\
+{\tt /asm-ml}                  & use Microsoft Macro Assembler (default) \\
+{\tt /asm-as}                  & use the GNU Assembler \\
+{\tt /asm-nasm}                & use NASM Assembler \\
+{\tt /config-release}          & build release version (default) \\
+{\tt /config-debug}            & build debug version \\
 \end{tabular}
 
 
