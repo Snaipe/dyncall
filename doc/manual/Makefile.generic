@@ -21,10 +21,8 @@ clean:
 
 # Main target dependencies --->
 
-manual_website_menu.html:
-	curl -s http://www.dyncall.org | sed '/<body>/,/<div class="mainDiv">/p;d' | sed 's/^.*<body>//;s/<div class="mainDiv">.*$$//' > $@
 
-html/manual.html: manual_tex4ht.cfg manual_website_menu.html sources
+html/manual.html: manual_tex4ht.cfg sources
 	# Create tex4ht.env from default one, but with better bitmaps
 	cd "${VPATH}" &&  ( \
 		cp $$(dirname $$(which tex4ht))/../share/texmf-dist/tex4ht/base/unix/tex4ht.env ./custom_tex4ht.env; \
@@ -35,7 +33,6 @@ html/manual.html: manual_tex4ht.cfg manual_website_menu.html sources
 	)
 	# Postprocessing. Inject menu into output html pages. Replace some pieces, etc..
 	for f in "${VPATH}/html/"*.html; do \
-		sed -i '' '/^<body>/r manual_website_menu.html' "$$f"; \
 		sed -E -i '' $$'s/([[:space:]]class=["\'])lstlisting(["\'])/\\1ttDiv\\2/' "$$f"; \
 	done
 
