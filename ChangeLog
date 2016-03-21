@@ -3,6 +3,7 @@ This file lists bigger/noteworthy changes, only...
 Version 1.0 (upcoming)
 dyncall:
   o better C++ compiler support (for pointer conversions)
+  o fix for PPC64 single-precision floating point args (thanks Masanori!)
 dyncallback:
 doc:
   o working html doc generation from TEX sources
