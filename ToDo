@@ -1,5 +1,10 @@
 1.0:
 ----
+- check all vararg calling conv implementations if they promote correctly
+  (e.g. float to double); we used to not care as it was the user's job to
+  think of that, but we allow users to use ArgFloat, etc. on "..." now,
+  taking care of the promotion; so it should be consistent all across the
+  implementations -> also write testcode specifically for that
 - autovar was never really pushed all the way through and still plays second
   fiddle to dyncall_macros.h, clean this all up, eventually (Tassilo: for now, I
   removed out of sync files to avoid confusion; but still probably duped code)
