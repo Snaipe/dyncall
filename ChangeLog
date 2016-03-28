@@ -3,10 +3,13 @@ This file lists bigger/noteworthy changes, only...
 Version 1.0 (upcoming)
 dyncall:
   o better C++ compiler support (for pointer conversions)
-  o fix for PPC64 single-precision floating point args (thanks Masanori!)
+  o PPC64 single-precision float fixes for more than 13 float args (thanks Masanori!)
 dyncallback:
+  o PPC64 single-precision float fixes for more than 13 float args (thanks Masanori!)
 doc:
   o working html doc generation from TEX sources
+bindings:
+  o python: updated to latest signature format (was still on 0.1), cleanup
 
 Version 0.9 (2015/12/31)
 dyncall:
@@ -42,6 +45,7 @@ bindings:
   o erldc: Erlang binding (thanks Erik!)
 infrastructure:
   o moved to hg
+  o moved bindings to own repository
 
 Version 0.8 (2014/03/24)
 buildsys:

@@ -50,8 +50,8 @@ DCbool      dcbArgBool     (DCArgs* p) { return (DCbool)  dcbArgLongLong(p); }
 
 DCpointer   dcbArgPointer  (DCArgs* p) { return (DCpointer)dcbArgLongLong(p); }
 
-DCdouble    dcbArgDouble   (DCArgs* p) 
-{ 
+DCdouble    dcbArgDouble   (DCArgs* p)
+{
   DCdouble result;
 
   if (p->freg_count < 13) {
@@ -67,5 +67,26 @@ DCdouble    dcbArgDouble   (DCArgs* p)
   return result;
 }
 
-DCfloat     dcbArgFloat    (DCArgs* p) { return (DCfloat)dcbArgDouble(p); }
+DCfloat    dcbArgFloat   (DCArgs* p)
+{
+  DCfloat result;
 
+#if defined(DC__Endian_BIG)
+  struct sf { DCfloat f_pad; DCfloat f; } sf;
+#else /* Endian_LITTLE */
+  struct sf { DCfloat f; DCfloat f_pad; } sf;
+#endif
+
+  if (p->freg_count < 13) {
+    result = (float)p->freg_data[p->freg_count++];
+    if (p->ireg_count < 8) {
+      p->ireg_count++;
+    }
+  } else {
+    sf = * ( (struct sf*) p->stackptr );
+    result = sf.f;
+  }
+
+  p->stackptr += sizeof(double);
+  return result;
+}

@@ -25,6 +25,9 @@
 - make sure selinux works (esp. regarding NX bits, asm might need (or similar): .section .note.GNU-stack,"",@progbits)
   Daniel has a patch for it, if needed, implementing allocwx with two memory blocks, one for w^x, mmaped to one for r|x
 - support /SAFESEH on cl/win32
+- test code functions should be in .so files, optionally, so the suites can directly
+  be used to test dycnall bindings
+- pkg-config support?
 
 portasm:
 --------

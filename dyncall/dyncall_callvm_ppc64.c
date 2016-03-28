@@ -74,7 +74,7 @@ static void dc_callvm_argDouble_ppc64(DCCallVM* in_self, DCdouble d)
 {
   DCCallVM_ppc64* self = (DCCallVM_ppc64*)in_self;
 
-  if (self->mFloatRegs < 13) { 
+  if (self->mFloatRegs < 13) {
     self->mRegData.mFloatData[self->mFloatRegs++] = d;
     if (self->mIntRegs < 8) {
       self->mRegData.mIntData[self->mIntRegs++] = *( (DClonglong*) &d );
@@ -82,7 +82,7 @@ static void dc_callvm_argDouble_ppc64(DCCallVM* in_self, DCdouble d)
       return;
 #endif
     }
-  } 
+  }
 
 #if DC__ABI_PPC64_ELF_V == 2
   if (dcVecSize(&self->mVecHead) == 0) {
@@ -99,10 +99,10 @@ static void dc_callvm_argDouble_ppc64_ellipsis(DCCallVM* in_self, DCdouble d)
 {
   DCCallVM_ppc64* self = (DCCallVM_ppc64*)in_self;
 
-  if (dcVecSize(&self->mVecHead) == 0) 
+  if (dcVecSize(&self->mVecHead) == 0)
     dcVecSkip(&self->mVecHead,(sizeof(DClonglong))*(self->mIntRegs));
 
-  if (self->mFloatRegs < 13) { 
+  if (self->mFloatRegs < 13) {
     self->mRegData.mFloatData[self->mFloatRegs++] = d;
     if (self->mIntRegs < 8) {
       self->mRegData.mIntData[self->mIntRegs++] = *( (DClonglong*) &d );
@@ -116,19 +116,55 @@ static void dc_callvm_argDouble_ppc64_ellipsis(DCCallVM* in_self, DCdouble d)
 
 
 /* Floating-point */
-  
+
 static void dc_callvm_argFloat_ppc64(DCCallVM* in_self, DCfloat f)
+{
+  DCCallVM_ppc64* self = (DCCallVM_ppc64*)in_self;
+
+  DCdouble d;
+#if defined(DC__Endian_BIG)
+  struct { DCfloat f_pad; DCfloat f; } sf;
+#else /* Endian_LITTLE */
+  struct { DCfloat f; DCfloat f_pad; } sf;
+#endif
+
+  if (self->mFloatRegs < 13) {
+    d = (DCdouble)f;
+    self->mRegData.mFloatData[self->mFloatRegs++] = d;
+    if (self->mIntRegs < 8) {
+      self->mRegData.mIntData[self->mIntRegs++] = *( (DClonglong*) &d );
+#if DC__ABI_PPC64_ELF_V == 2
+      return;
+#endif
+    }
+  }
+
+#if DC__ABI_PPC64_ELF_V == 2
+  if (dcVecSize(&self->mVecHead) == 0) {
+    dcVecSkip(&self->mVecHead,sizeof(DClonglong)*8);
+  }
+#endif
+
+  /* push on stack */
+  sf.f = f;
+  dcVecAppend(&self->mVecHead,(DCpointer) &sf,sizeof(DCdouble));
+}
+
+#if DC__ABI_PPC64_ELF_V == 2
+static void dc_callvm_argFloat_ppc64_ellipsis(DCCallVM* in_self, DCfloat f)
 {
   /* promote to double */
   dcArgDouble(in_self, (DCdouble) f );
 }
+#endif
+
 
 /* long long integer */
 
 static void dc_callvm_argLongLong_ppc64(DCCallVM* in_self, DClonglong L)
 {
   DCCallVM_ppc64* self = (DCCallVM_ppc64*)in_self;
-  
+
   /* fillup integer register file */
   if (self->mIntRegs < 8) {
     self->mRegData.mIntData[self->mIntRegs++] = L;
@@ -259,7 +295,7 @@ DCCallVM_vt gVT_ppc64_ellipsis =
 , &dc_callvm_argInt_ppc64
 , &dc_callvm_argLong_ppc64
 , &dc_callvm_argLongLong_ppc64_ellipsis
-, &dc_callvm_argFloat_ppc64
+, &dc_callvm_argFloat_ppc64_ellipsis
 , &dc_callvm_argDouble_ppc64_ellipsis
 , &dc_callvm_argPointer_ppc64
 , NULL /* argStruct */
