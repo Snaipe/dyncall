@@ -31,19 +31,6 @@
 
 void dc_callvm_mode_x86(DCCallVM* in_self, DCint mode);
 
-/* call vm allocator */
-
-static DCCallVM* dc_callvm_new_x86(DCCallVM_vt* vt, DCsize size)
-{
-  DCCallVM_x86* self = (DCCallVM_x86*) dcAllocMem( sizeof(DCCallVM_x86)+size );
-
-  dc_callvm_base_init(&self->mInterface, vt);
-
-  self->mIntRegs              = 0;
-  dcVecInit(&self->mVecHead, size);
-  return (DCCallVM*) self;
-}
-
 /* call vm destructor */
 
 static void dc_callvm_free_x86(DCCallVM* in_self)
@@ -186,11 +173,6 @@ DCCallVM_vt gVT_x86_plan9 =
 , NULL /* callStruct */
 };
 
-DCCallVM* dcNewCallVM_x86_plan9(DCsize size) 
-{ 
-  return dc_callvm_new_x86( &gVT_x86_plan9, size );
-}
-
 
 #else
 
@@ -230,11 +212,6 @@ DCCallVM_vt gVT_x86_cdecl =
 , (DCpointervmfunc*)    &dc_callvm_call_x86_cdecl
 , NULL /* callStruct */
 };
-
-DCCallVM* dcNewCallVM_x86_cdecl(DCsize size) 
-{ 
-  return dc_callvm_new_x86( &gVT_x86_cdecl, size );
-}
 
 
 
@@ -278,12 +255,6 @@ DCCallVM_vt gVT_x86_win32_std =
 , NULL /* callStruct */
 };
 
-/* win32/std callvm allocator */
-
-DCCallVM* dcNewCallVM_x86_win32_std(DCsize size) 
-{ 
-  return dc_callvm_new_x86( &gVT_x86_win32_std, size );
-}
 
 /* --- fastcall common (ms/gnu) -------------------------------------------- */
 
@@ -389,10 +360,6 @@ DCCallVM_vt gVT_x86_win32_fast_ms =
 , NULL /* callStruct */
 };
 
-DCCallVM* dcNewCallVM_x86_win32_fast_ms(DCsize size) 
-{ 
-  return dc_callvm_new_x86( &gVT_x86_win32_fast_ms, size );
-}
 
 /* --- gnu fastcall -------------------------------------------------------- */
 
@@ -487,10 +454,6 @@ DCCallVM_vt gVT_x86_win32_fast_gnu =
 , NULL /* callStruct */
 };
 
-DCCallVM* dcNewCallVM_x86_win32_fast_gnu(DCsize size) 
-{ 
-  return dc_callvm_new_x86( &gVT_x86_win32_fast_gnu, size );
-}
 
 /* --- this ms ------------------------------------------------------------- */
 
@@ -605,13 +568,6 @@ DCCallVM_vt gVT_x86_sys_int80h_bsd =
 };
 
 
-/* win32/this/ms callvm allocator */
-
-DCCallVM* dcNewCallVM_x86_win32_this_ms(DCsize size) 
-{ 
-  return dc_callvm_new_x86( &gVT_x86_win32_this_ms, size );
-}
-
 #endif
 
 
@@ -619,13 +575,15 @@ DCCallVM* dcNewCallVM_x86_win32_this_ms(DCsize size)
 
 void dc_callvm_mode_x86(DCCallVM* in_self, DCint mode)
 {
-  DCCallVM_x86* self = (DCCallVM_x86*) in_self;
-  DCCallVM_vt*  vt;
+  DCCallVM_x86* self = (DCCallVM_x86*)in_self;
+  DCCallVM_vt* vt;
+
   switch(mode) {
+    case DC_CALL_C_DEFAULT:
     case DC_CALL_C_ELLIPSIS:
     case DC_CALL_C_ELLIPSIS_VARARGS:
-    case DC_CALL_C_DEFAULT:
-#if defined(DC_PLAN9) /* Plan9 (and forks) have their own calling convention (and no support for foreign ones). */
+/* Plan9 (and forks) have their own calling convention (and no support for foreign ones). */
+#if defined(DC_PLAN9)
     case DC_CALL_C_X86_PLAN9:          vt = &gVT_x86_plan9;          break;
 #else
     case DC_CALL_C_X86_CDECL:          vt = &gVT_x86_cdecl;          break;
@@ -639,30 +597,31 @@ void dc_callvm_mode_x86(DCCallVM* in_self, DCint mode)
 #   if defined DC__OS_Linux
       vt = &gVT_x86_sys_int80h_linux; break;
 #   else
-      vt = &gVT_x86_sys_int80h_bsd; break;
+      vt = &gVT_x86_sys_int80h_bsd;   break;
 #   endif
 # else
       self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; return;
 # endif
-    case DC_CALL_SYS_X86_INT80H_LINUX:
-      vt = &gVT_x86_sys_int80h_linux; break;
-    case DC_CALL_SYS_X86_INT80H_BSD:
-      vt = &gVT_x86_sys_int80h_bsd; break;
+    case DC_CALL_SYS_X86_INT80H_LINUX: vt = &gVT_x86_sys_int80h_linux; break;
+    case DC_CALL_SYS_X86_INT80H_BSD:   vt = &gVT_x86_sys_int80h_bsd;   break;
 #endif
     default: 
-      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; return;
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE;
+      return;
   }
-  self->mInterface.mVTpointer = vt;
+  dc_callvm_base_init(&self->mInterface, vt);
 }
 
-/* new */
-
+/* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-#if defined(DC__OS_Plan9)
-  return dcNewCallVM_x86_plan9(size);
-#else
-  return dcNewCallVM_x86_cdecl(size);
-#endif
+  DCCallVM_x86* p = (DCCallVM_x86*)dcAllocMem(sizeof(DCCallVM_x86)+size);
+
+  dc_callvm_mode_x86((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead, size);
+  dc_callvm_reset_x86((DCCallVM*)p);
+
+  return (DCCallVM*)p;
 }
 

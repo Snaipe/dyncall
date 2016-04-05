@@ -33,23 +33,6 @@
 #include "dyncall_alloc.h"
 #include "dyncall_struct.h"
 
-static DCCallVM* dc_callvm_new_x64(DCCallVM_vt* vt, DCsize size)
-{
-  DCCallVM_x64* self = (DCCallVM_x64*)dcAllocMem(sizeof(DCCallVM_x64)+size);
-  
-  dc_callvm_base_init(&self->mInterface, vt);
-
-  /* Since we store register parameters in DCCallVM_x64 directly, adjust the stack size. */
-  size -= sizeof(DCRegData_x64);
-  size = (((signed long)size) < 0) ? 0 : size;
-
-
-  self->mRegCount.i = self->mRegCount.f =  0;
-
-  dcVecInit(&self->mVecHead, size);
-  return (DCCallVM*)self;
-}
-
 
 static void dc_callvm_free_x64(DCCallVM* in_self)
 {
@@ -61,20 +44,7 @@ static void dc_callvm_reset_x64(DCCallVM* in_self)
 {
   DCCallVM_x64* self = (DCCallVM_x64*)in_self;
   dcVecReset(&self->mVecHead);
-  self->mRegCount.i = self->mRegCount.f =  0;
-}
-
-
-static void dc_callvm_mode_x64(DCCallVM* self, DCint mode)
-{
-  switch(mode) {
-    case DC_CALL_C_DEFAULT:
-    case DC_CALL_C_ELLIPSIS:
-      break;
-    default:
-      self->mError = DC_ERROR_UNSUPPORTED_MODE;
-      break;
-  }
+  self->mRegCount.i = self->mRegCount.f = 0;
 }
 
 
@@ -188,6 +158,8 @@ void dc_callvm_call_x64(DCCallVM* in_self, DCpointer target)
 }
 
 
+static void dc_callvm_mode_x64(DCCallVM* in_self, DCint mode);
+
 DCCallVM_vt gVT_x64 =
 {
   &dc_callvm_free_x64
@@ -216,14 +188,43 @@ DCCallVM_vt gVT_x64 =
 , NULL /* callStruct */
 };
 
-
-DCCallVM* dcNewCallVM_x64(DCsize size) 
+/* mode: only a single mode available currently. */
+static void dc_callvm_mode_x64(DCCallVM* in_self, DCint mode)
 {
-  return dc_callvm_new_x64(&gVT_x64, size);
+  DCCallVM_x64* self = (DCCallVM_x64*)in_self;
+  DCCallVM_vt* vt;
+
+  switch(mode) {
+    case DC_CALL_C_DEFAULT:
+#if defined(DC_UNIX)
+    case DC_CALL_C_X64_SYSV:
+#else
+    case DC_CALL_C_X64_WIN64:
+#endif
+    case DC_CALL_C_ELLIPSIS:
+    case DC_CALL_C_ELLIPSIS_VARARGS:
+      vt = &gVT_x64;
+      break;
+    default:
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
+      return;
+  }
+  dc_callvm_base_init(&self->mInterface, vt);
 }
 
+/* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-  return dcNewCallVM_x64(size);
+  DCCallVM_x64* p = (DCCallVM_x64*)dcAllocMem(sizeof(DCCallVM_x64)+size);
+
+  dc_callvm_mode_x64((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  /* Since we store register parameters in DCCallVM_x64 directly, adjust the stack size. */
+  size -= sizeof(DCRegData_x64);
+  size = (((signed long)size) < 0) ? 0 : size;
+  dcVecInit(&p->mVecHead, size);
+  dc_callvm_reset_x64((DCCallVM*)p);
+
+  return (DCCallVM*)p;
 }
 

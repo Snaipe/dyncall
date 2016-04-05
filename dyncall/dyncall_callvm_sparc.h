@@ -39,7 +39,5 @@ struct DCCallVM_sparc_
   DCVecHead mVecHead;	/* 8 bytes (max,size)       */
 };
 
-DCCallVM* dcNewCallVM_sparc(DCsize size);
-
 #endif /* DYNCALL_CALLVM_SPARC_H */
 

@@ -45,7 +45,6 @@
 #include "dyncall_callvm.h"
 #include "dyncall_vector.h"
 
-
 typedef struct
 {
   DCCallVM     mInterface;
@@ -56,9 +55,6 @@ typedef struct
   DCpointer    mpCallFunc;
   DCVecHead    mVecHead;
 } DCCallVM_arm32_armhf;
-
-DCCallVM* dcNewCallVM_arm32_armhf(DCsize size);
-
 
 #endif /* DYNCALL_CALLVM_ARM32_ARM_H */
 

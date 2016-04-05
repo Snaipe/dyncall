@@ -157,12 +157,13 @@ DCint dcGetError(DCCallVM *vm)
   return vm->mError;
 }
 
-const char* dcGetErrorString(int mode)
-{
-  switch(mode) {
-    case DC_ERROR_NONE: return "none";
-    case DC_ERROR_UNSUPPORTED_MODE: return "unsupported mode";
-    default: return "(unknown mode id)";
-  }
-}
+//@@@ not used, (re)introduce or cleanup
+//const char* dcGetErrorString(int mode)
+//{
+//  switch(mode) {
+//    case DC_ERROR_NONE: return "none";
+//    case DC_ERROR_UNSUPPORTED_MODE: return "unsupported mode";
+//    default: return "(unknown mode id)";
+//  }
+//}
 

@@ -61,15 +61,6 @@ static void dc_callvm_reset_mips_n32(DCCallVM* in_self)
   self->mRegData.mUseDouble = 0LL;
 }
 
-static DCCallVM* dc_callvm_new_mips_n32(DCCallVM_vt* vt, DCsize size)
-{
-  DCCallVM_mips_n32* self = (DCCallVM_mips_n32*)dcAllocMem(sizeof(DCCallVM_mips_n32)+size);
-  dc_callvm_base_init(&self->mInterface, vt);
-  dcVecInit(&self->mVecHead, size);
-  dc_callvm_reset_mips_n32( (DCCallVM*) self );
-  return (DCCallVM*)self;
-}
-
 
 static void dc_callvm_free_mips_n32(DCCallVM* in_self)
 {
@@ -236,34 +227,37 @@ DCCallVM_vt gVT_mips_n32_ellipsis =
 , NULL /* callStruct */
 };
 
-static void dc_callvm_mode_mips_n32(DCCallVM* self,DCint mode)
+static void dc_callvm_mode_mips_n32(DCCallVM* in_self, DCint mode)
 {
+  DCCallVM_mips_n32* self = (DCCallVM_mips_n32*)in_self;
+  DCCallVM_vt* vt;
+
   switch(mode) {
     case DC_CALL_C_DEFAULT:
-      self->mVTpointer = &gVT_mips_n32;
+    case DC_CALL_C_MIPS64_N32:
+      vt = &gVT_mips_n32;
       break;
     case DC_CALL_C_ELLIPSIS:
-      self->mVTpointer = &gVT_mips_n32_ellipsis;
+    case DC_CALL_C_ELLIPSIS_VARARGS:
+      vt = &gVT_mips_n32_ellipsis;
       break;
     default:
-      self->mError = DC_ERROR_UNSUPPORTED_MODE;
-      break;
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
+      return;
   }
+  dc_callvm_base_init(&self->mInterface, vt);
 }
 
-DCCallVM* dcNewCallVM_mips_n32(DCsize size) 
-{
-  return dc_callvm_new_mips_n32(&gVT_mips_n32, size);
-}
-
-DCCallVM* dcNewCallVM_mips_n32_ellipsis(DCsize size) 
-{
-  return dc_callvm_new_mips_n32(&gVT_mips_n32_ellipsis, size);
-}
-
-
+/* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-  return dcNewCallVM_mips_n32(size);
+  DCCallVM_mips_n32* p = (DCCallVM_mips_n32*)dcAllocMem(sizeof(DCCallVM_mips_n32)+size);
+
+  dc_callvm_mode_mips_n32((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead, size);
+  dc_callvm_reset_mips_n32((DCCallVM*)p);
+
+  return (DCCallVM*)p;
 }
 

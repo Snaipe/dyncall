@@ -60,32 +60,10 @@ static void dc_callvm_reset_mips_o32(DCCallVM* in_self)
   self->mArgCount = 0;
 }
 
-static DCCallVM* dc_callvm_new_mips_o32(DCCallVM_vt* vt, DCsize size)
-{
-  DCCallVM_mips_o32* self = (DCCallVM_mips_o32*)dcAllocMem(sizeof(DCCallVM_mips_o32)+size);
-  dc_callvm_base_init(&self->mInterface, vt);
-  dcVecInit(&self->mVecHead, size);
-  dc_callvm_reset_mips_o32( (DCCallVM*) self );
-  return (DCCallVM*)self;
-}
-
 
 static void dc_callvm_free_mips_o32(DCCallVM* in_self)
 {
   dcFreeMem(in_self);
-}
-
-static void dc_callvm_mode_mips_o32(DCCallVM* self, DCint mode)
-{
-  switch(mode) {
-    case DC_CALL_C_DEFAULT:
-    case DC_CALL_C_ELLIPSIS:
-    case DC_CALL_C_MIPS32_O32:
-      break;
-    default:
-      self->mError = DC_ERROR_UNSUPPORTED_MODE;
-      break;
-  }
 }
 
 /* arg int -- fillup integer register file OR push on stack */
@@ -195,6 +173,8 @@ void dc_callvm_call_mips_o32(DCCallVM* in_self, DCpointer target)
   dcCall_mips_o32(target, &self->mRegData, size, dcVecData(&self->mVecHead));
 }
 
+static void dc_callvm_mode_mips_o32(DCCallVM* in_self, DCint mode);
+
 DCCallVM_vt gVT_mips_o32 =
 {
   &dc_callvm_free_mips_o32
@@ -223,14 +203,36 @@ DCCallVM_vt gVT_mips_o32 =
 , NULL /* callStruct */
 };
 
-DCCallVM* dcNewCallVM_mips_o32(DCsize size) 
+/* mode: only a single mode available currently. */
+static void dc_callvm_mode_mips_o32(DCCallVM* in_self, DCint mode)
 {
-  return dc_callvm_new_mips_o32(&gVT_mips_o32, size);
+  DCCallVM_mips_o32* self = (DCCallVM_mips_o32*)in_self;
+  DCCallVM_vt* vt;
+
+  switch(mode) {
+    case DC_CALL_C_DEFAULT:
+    case DC_CALL_C_MIPS32_O32:
+    case DC_CALL_C_ELLIPSIS:
+    case DC_CALL_C_ELLIPSIS_VARARGS:
+      vt = &gVT_mips_o32;
+      break;
+    default:
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
+      return;
+  }
+  dc_callvm_base_init(&self->mInterface, vt);
 }
 
-
+/* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-  return dcNewCallVM_mips_o32(size);
+  DCCallVM_mips_o32* p = (DCCallVM_mips_o32*)dcAllocMem(sizeof(DCCallVM_mips_o32)+size);
+
+  dc_callvm_mode_mips_o32((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead, size);
+  dc_callvm_reset_mips_o32((DCCallVM*)p);
+
+  return (DCCallVM*)p;
 }
 

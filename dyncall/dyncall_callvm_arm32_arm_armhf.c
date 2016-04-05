@@ -28,20 +28,6 @@
 #include "dyncall_alloc.h"
 
 
-static DCCallVM* dc_callvm_new_arm32_armhf(DCCallVM_vt* vt, DCsize size)
-{
-  /* Store at least 16 bytes (4 words for first 4 int args) for internal spill area. Assembly code depends on it. */
-  DCCallVM_arm32_armhf* p = (DCCallVM_arm32_armhf*)dcAllocMem(sizeof(DCCallVM_arm32_armhf)+size+16);
-  dc_callvm_base_init(&p->mInterface, vt);
-  dcVecInit(&p->mVecHead, size);
-  p->i = 0;
-  p->s = 0;
-  p->d = 0;
-  return (DCCallVM*)p;
-}
-
-static void mode(DCCallVM* in_self,DCint mode);
-
 static void deinit(DCCallVM* in_self)
 {
   dcFreeMem(in_self);
@@ -145,6 +131,8 @@ void call(DCCallVM* in_p, DCpointer target)
   dcCall_arm32_armhf(target, dcVecData(&p->mVecHead), dcVecSize(&p->mVecHead), &p->S[0]);
 }
 
+static void mode(DCCallVM* in_self,DCint mode);
+
 DCCallVM_vt vt_armhf =
 {
   &deinit
@@ -201,34 +189,38 @@ DCCallVM_vt vt_armhf_ellipsis =
 , NULL /* callStruct */
 };
 
-DCCallVM* dcNewCallVM(DCsize size)
+static void mode(DCCallVM* in_self, DCint mode)
 {
-#if defined(DC__ABI_ARM_EABI)
-  return dc_callvm_new_arm32_arm(&eabi, size);
-#elif defined(DC__ABI_ARM_HF)
-  return dc_callvm_new_arm32_armhf(&vt_armhf, size);
-#elif defined(DC__ABI_ARM_OABI)
-  return dc_callvm_new_arm32_arm(&oabi, size);
-#else
-#error unknown ARM abi
-#endif
-}
+  DCCallVM_arm32_armhf* self = (DCCallVM_arm32_armhf*)in_self;
+  DCCallVM_vt* vt;
 
-static void mode(DCCallVM* in_self,DCint mode)
-{
-  DCCallVM_arm32_armhf* self = (DCCallVM_arm32_armhf*) in_self;
   switch(mode) {
     case DC_CALL_C_DEFAULT:
     case DC_CALL_C_ARM_ARMHF:
-      self->mInterface.mVTpointer = &vt_armhf;
+      vt = &vt_armhf;
       break;
     case DC_CALL_C_ELLIPSIS:
     case DC_CALL_C_ELLIPSIS_VARARGS:
-      self->mInterface.mVTpointer = &vt_armhf_ellipsis;
+      vt = &vt_armhf_ellipsis;
       break;
     default:
-      in_self->mError = DC_ERROR_UNSUPPORTED_MODE;
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
       return;
   }
+  dc_callvm_base_init(&self->mInterface, vt);
+}
+
+/* Public API. */
+DCCallVM* dcNewCallVM(DCsize size)
+{
+  /* Store at least 16 bytes (4 words for first 4 int args) for internal spill area. Assembly code depends on it. */
+  DCCallVM_arm32_armhf* p = (DCCallVM_arm32_armhf*)dcAllocMem(sizeof(DCCallVM_arm32_armhf)+size+16);
+
+  mode((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead, size);
+  reset((DCCallVM*)p);
+
+  return (DCCallVM*)p;
 }
 

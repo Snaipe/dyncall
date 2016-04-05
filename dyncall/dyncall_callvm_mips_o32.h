@@ -40,7 +40,5 @@ typedef struct
   DCVecHead          mVecHead;
 } DCCallVM_mips_o32;
 
-DCCallVM* dcNewCallVM_mips_o32(DCsize size);
-
 #endif /* DYNCALL_CALLVM_MIPS_O32_H */
 

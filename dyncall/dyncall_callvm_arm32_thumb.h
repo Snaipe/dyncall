@@ -45,16 +45,12 @@
 #include "dyncall_callvm.h"
 #include "dyncall_vector.h"
 
-
 typedef struct
 {
   DCCallVM  mInterface;
   DCpointer mpCallFunc;
   DCVecHead mVecHead;
 } DCCallVM_arm32_thumb;
-
-DCCallVM* dcNewCallVM_arm32_thumb(DCsize size);
-
 
 #endif /* DYNCALL_CALLVM_ARM32_THUMB_H */
 

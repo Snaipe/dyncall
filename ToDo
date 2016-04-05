@@ -1,5 +1,11 @@
 1.0:
 ----
+- !!! the CallVM-free functions are per VTable, however the latter can be changed out
+      at runtime... which basically changes potentially the deallocator...
+      same goes for functions setting the mode. think about how to make this safer - currently
+      we have a higher flexibility and we need to potentially clean up from the mode we are in,
+      however, this is open to misuse
+- !!! dcGetError flags get set, but not unset after successful calls
 - check all vararg calling conv implementations if they promote correctly
   (e.g. float to double); we used to not care as it was the user's job to
   think of that, but we allow users to use ArgFloat, etc. on "..." now,
@@ -55,6 +61,7 @@ dynload:
 - get rid of Dl_info and friends (_GNU_SOURCE) in dynload/dynload_syms_elf.c
   for implementation of dlSymsNameFromValue(..)
 - check if PSP can support dynload (missing elf.h, dlfcn.h, etc.); fixup readme if successful
+- some functionality like java's System.mapLibraryName('name') might be helpful?
 
 dyncallback:
 ------------
@@ -67,12 +74,10 @@ bindings:
 - release bindings as standalone packages (already done for rbdc as a gem and rdyncall on cran)
   * add note to documentation, where bindings are and that some bindings are svn-only ATM
 - add rdoc documentation to ruby gem
-- bring python up to latest
 - add pydoc for python
 - add manpage for shdc
 - expose callf-convenience functions to go
 - add godoc for godc
-- bring java up to latest
 - add javadoc to java
 - add more bindings
 - add callback support for erlang, go, java, lua, python and ruby (and shell? how?)

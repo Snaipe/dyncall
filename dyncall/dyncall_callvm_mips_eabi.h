@@ -45,7 +45,6 @@
 #include "dyncall_callvm.h"
 #include "dyncall_vector.h"
 
-
 typedef struct
 {
   DCCallVM  mInterface;
@@ -54,9 +53,6 @@ typedef struct
   struct DCRegData_mips_eabi mRegData;
   DCVecHead mVecHead;
 } DCCallVM_mips_eabi;
-
-DCCallVM* dcNewCallVM_mips_eabi(DCsize size);
-
 
 #endif /* DYNCALL_CALLVM_MIPS_EABI_H */
 

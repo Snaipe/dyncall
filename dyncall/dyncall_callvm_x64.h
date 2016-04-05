@@ -105,8 +105,5 @@ typedef struct
   DCVecHead      mVecHead;    /* Parameters to be pushed onto stack.                     */
 } DCCallVM_x64;
 
-DCCallVM* dcNewCallVM_x64(DCsize size);
-
-
 #endif /* DYNCALL_CALLVM_X64_H */
 

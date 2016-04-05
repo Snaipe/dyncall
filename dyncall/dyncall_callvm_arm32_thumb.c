@@ -43,16 +43,6 @@
 
 static void dc_callvm_mode_arm32_thumb(DCCallVM* in_self,DCint mode);
 
-static DCCallVM* dc_callvm_new_arm32_thumb(DCCallVM_vt* vt, DCsize size)
-{
-  /* Store at least 16 bytes (4 words) for internal spill area. Assembly code depends on it. */
-  DCCallVM_arm32_thumb* self = (DCCallVM_arm32_thumb*)dcAllocMem(sizeof(DCCallVM_arm32_thumb)+size+16);
-  dc_callvm_base_init(&self->mInterface, vt);
-  dcVecInit(&self->mVecHead, size);
-  return (DCCallVM*)self;
-}
-
-
 static void dc_callvm_free_arm32_thumb(DCCallVM* in_self)
 {
   dcFreeMem(in_self);
@@ -181,7 +171,6 @@ DCCallVM_vt gVT_arm32_thumb =
 , NULL /* callStruct */
 };
 
-
 DCCallVM_vt gVT_arm32_thumb_eabi =
 {
   &dc_callvm_free_arm32_thumb
@@ -210,40 +199,39 @@ DCCallVM_vt gVT_arm32_thumb_eabi =
 , NULL /* callStruct */
 };
 
-
-DCCallVM* dcNewCallVM_arm32_thumb(DCsize size) 
+static void dc_callvm_mode_arm32_thumb(DCCallVM* in_self, DCint mode)
 {
+  DCCallVM_arm32_thumb* self = (DCCallVM_arm32_thumb*)in_self;
+  DCCallVM_vt* vt;
+
+  switch(mode) {
+    case DC_CALL_C_ELLIPSIS:
+    case DC_CALL_C_ELLIPSIS_VARARGS:
 /* Check OS if we need EABI as default. */
 #if defined(DC__ABI_ARM_EABI)
-  return dc_callvm_new_arm32_thumb(&gVT_arm32_thumb_eabi, size);
+    case DC_CALL_C_DEFAULT:        vt = &gVT_arm32_thumb_eabi; break;
 #else
-  return dc_callvm_new_arm32_thumb(&gVT_arm32_thumb, size);
+    case DC_CALL_C_DEFAULT:        vt = &gVT_arm32_thumb;      break;
 #endif
+    case DC_CALL_C_ARM_THUMB:      vt = &gVT_arm32_thumb;      break;
+    case DC_CALL_C_ARM_THUMB_EABI: vt = &gVT_arm32_thumb_eabi; break;
+    default:
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
+      return;
+  }
+  dc_callvm_base_init(&self->mInterface, vt);
 }
 
-
+/* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-  return dcNewCallVM_arm32_thumb(size);
-}
+  /* Store at least 16 bytes (4 words) for internal spill area. Assembly code depends on it. */
+  DCCallVM_arm32_thumb* p = (DCCallVM_arm32_thumb*)dcAllocMem(sizeof(DCCallVM_arm32_thumb)+size+16);
 
+  dc_callvm_mode_arm32_thumb((DCCallVM*)p, DC_CALL_C_DEFAULT);
 
-static void dc_callvm_mode_arm32_thumb(DCCallVM* in_self,DCint mode)
-{
-  DCCallVM_arm32_thumb* self = (DCCallVM_arm32_thumb*) in_self;
-  DCCallVM_vt*  vt;
-  switch(mode) {
-/* Check OS if we need EABI as default. */
-    case DC_CALL_C_ELLIPSIS:
-#if defined(DC__ABI_ARM_EABI)
-    case DC_CALL_C_DEFAULT:          vt = &gVT_arm32_thumb_eabi; break;
-#else
-    case DC_CALL_C_DEFAULT:          vt = &gVT_arm32_thumb;      break;
-#endif
-    case DC_CALL_C_ARM_THUMB:        vt = &gVT_arm32_thumb;      break;
-    case DC_CALL_C_ARM_THUMB_EABI:   vt = &gVT_arm32_thumb_eabi; break;
-    default: self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; return;
-  }
-  self->mInterface.mVTpointer = vt;
+  dcVecInit(&p->mVecHead, size);
+
+  return (DCCallVM*)p;
 }
 

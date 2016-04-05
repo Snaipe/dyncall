@@ -54,7 +54,5 @@ struct DCCallVM_ppc64_
   DCVecHead mVecHead;
 };
 
-DCCallVM* dcNewCallVM_ppc64(DCsize size);
-
 #endif /* DYNCALL_CALLVM_PPC64_H */
 

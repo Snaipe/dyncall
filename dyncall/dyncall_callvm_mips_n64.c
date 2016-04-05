@@ -61,15 +61,6 @@ static void dc_callvm_reset_mips_n64(DCCallVM* in_self)
   self->mRegData.mUseDouble = 0LL;
 }
 
-static DCCallVM* dc_callvm_new_mips_n64(DCCallVM_vt* vt, DCsize size)
-{
-  DCCallVM_mips_n64* self = (DCCallVM_mips_n64*)dcAllocMem(sizeof(DCCallVM_mips_n64)+size);
-  dc_callvm_base_init(&self->mInterface, vt);
-  dcVecInit(&self->mVecHead, size);
-  dc_callvm_reset_mips_n64( (DCCallVM*) self );
-  return (DCCallVM*)self;
-}
-
 
 static void dc_callvm_free_mips_n64(DCCallVM* in_self)
 {
@@ -177,7 +168,6 @@ void dc_callvm_call_mips_n64(DCCallVM* in_self, DCpointer target)
   dcCall_mips_n64(target, &self->mRegData, size, dcVecData(&self->mVecHead));
 }
 
-/* Forward Declaration. */
 static void dc_callvm_mode_mips_n64(DCCallVM* in_self,DCint mode);
 
 DCCallVM_vt gVT_mips_n64 =
@@ -236,34 +226,37 @@ DCCallVM_vt gVT_mips_n64_ellipsis =
 , NULL /* callStruct */
 };
 
-static void dc_callvm_mode_mips_n64(DCCallVM* self,DCint mode)
+static void dc_callvm_mode_mips_n64(DCCallVM* in_self, DCint mode)
 {
+  DCCallVM_mips_n64* self = (DCCallVM_mips_n64*)in_self;
+  DCCallVM_vt* vt;
+
   switch(mode) {
     case DC_CALL_C_DEFAULT:
-      self->mVTpointer = &gVT_mips_n64;
+    case DC_CALL_C_MIPS64_N64:
+      vt = &gVT_mips_n64;
       break;
     case DC_CALL_C_ELLIPSIS:
-      self->mVTpointer = &gVT_mips_n64_ellipsis;
+    case DC_CALL_C_ELLIPSIS_VARARGS:
+      vt = &gVT_mips_n64_ellipsis;
       break;
     default:
-      self->mError = DC_ERROR_UNSUPPORTED_MODE;
-      break;
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
+      return;
   }
+  dc_callvm_base_init(&self->mInterface, vt);
 }
 
-DCCallVM* dcNewCallVM_mips_n64(DCsize size) 
-{
-  return dc_callvm_new_mips_n64(&gVT_mips_n64, size);
-}
-
-DCCallVM* dcNewCallVM_mips_n64_ellipsis(DCsize size) 
-{
-  return dc_callvm_new_mips_n64(&gVT_mips_n64_ellipsis, size);
-}
-
-
+/* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-  return dcNewCallVM_mips_n64(size);
+  DCCallVM_mips_n64* p = (DCCallVM_mips_n64*)dcAllocMem(sizeof(DCCallVM_mips_n64)+size);
+
+  dc_callvm_mode_mips_n64((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead, size);
+  dc_callvm_reset_mips_n64((DCCallVM*)p);
+
+  return (DCCallVM*)p;
 }
 

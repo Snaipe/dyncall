@@ -44,8 +44,6 @@ typedef struct
   DCVecHead mVecHead;
 } DCCallVM_mips_n64;
 
-DCCallVM* dcNewCallVM_mips_n64(DCsize size);
-
 #ifdef __cplusplus
 }
 #endif

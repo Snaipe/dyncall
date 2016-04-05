@@ -37,22 +37,12 @@
 static void dc_callvm_reset_sparc64(DCCallVM* in_self)
 {
   DCCallVM_sparc64* self = (DCCallVM_sparc64*)in_self;
-  dcVecResize(&self->mVecHead,DHEAD);
+  dcVecResize(&self->mVecHead, DHEAD);
   self->mIntRegs        = 0;
   self->mFloatRegs      = 0;
   self->mUseSingleFlags = 0;
 }
 
-/* Construtor. */
-/* the six output registers %o0-%o5 are always loaded, thus we need to ensure the argument buffer has space for at least 24 bytes. */
-static DCCallVM* dc_callvm_new_sparc64(DCCallVM_vt* vt, DCsize size)
-{
-  DCCallVM_sparc64* self = (DCCallVM_sparc64*) dcAllocMem(sizeof(DCCallVM_sparc64)+DHEAD+size);
-  dc_callvm_base_init(&self->mInterface, vt);
-  dcVecInit(&self->mVecHead,DHEAD+size);
-  dc_callvm_reset_sparc64(&self->mInterface);
-  return (DCCallVM*)self;
-}
 
 /* Destructor. */
 static void dc_callvm_free_sparc64(DCCallVM* in_self)
@@ -138,6 +128,21 @@ static void dc_callvm_call_sparc64(DCCallVM* in_self, DCpointer target)
 }
 #endif
 
+#if 0
+/* Load integer 32-bit. */
+static void dc_callvm_argInt_sparc64(DCCallVM* in_self, DCint x)
+{
+  DCCallVM_sparc64* self = (DCCallVM_sparc64*)in_self;
+  dcVecAppend(&self->mVecHead, &x, sizeof(DCint));
+}
+
+/* we propagate Bool,Char,Short,Int to LongLong. */
+
+static void dc_callvm_argBool_sparc64(DCCallVM* in_self, DCbool x)   { dc_callvm_argInt_sparc64(in_self, (DCint)x); }
+static void dc_callvm_argChar_sparc64(DCCallVM* in_self, DCchar x)   { dc_callvm_argInt_sparc64(in_self, (DCint)x); }
+static void dc_callvm_argShort_sparc64(DCCallVM* in_self, DCshort x) { dc_callvm_argInt_sparc64(in_self, (DCint)x); }
+#endif
+
 static void dc_callvm_mode_sparc64(DCCallVM* in_self, DCint mode);
 
 DCCallVM_vt gVT_sparc64_ellipsis = 
@@ -200,40 +205,36 @@ DCCallVM_vt gVT_sparc64 =
 /* mode: only a single mode available currently. */
 static void dc_callvm_mode_sparc64(DCCallVM* in_self, DCint mode)
 {
+  DCCallVM_sparc64* self = (DCCallVM_sparc64*)in_self;
+  DCCallVM_vt* vt;
+
   switch(mode) {
     case DC_CALL_C_DEFAULT:
-    case DC_CALL_C_ELLIPSIS:
     case DC_CALL_C_SPARC64:
-      in_self->mVTpointer = &gVT_sparc64; 
+    case DC_CALL_C_ELLIPSIS:
+      vt = &gVT_sparc64;
       break;
     case DC_CALL_C_ELLIPSIS_VARARGS:
-      in_self->mVTpointer = &gVT_sparc64_ellipsis; 
+      vt = &gVT_sparc64_ellipsis;
       break;
     default:
-      in_self->mError = DC_ERROR_UNSUPPORTED_MODE;
-      break; 
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
+      return;
   }
+  dc_callvm_base_init(&self->mInterface, vt);
 }
-
 
 /* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-  return dc_callvm_new_sparc64(&gVT_sparc64,size);
+  /* output registers %o0-%o5 are always loaded, thus we need to ensure the argument buffer has space for at least DHEAD bytes. */
+  DCCallVM_sparc64* p = (DCCallVM_sparc64*)dcAllocMem(sizeof(DCCallVM_sparc64)+DHEAD+size);
+
+  dc_callvm_mode_sparc64((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead,DHEAD+size);
+  dc_callvm_reset_sparc64(&p->mInterface);
+
+  return (DCCallVM*)p;
 }
-
-#if 0
-/* Load integer 32-bit. */
-static void dc_callvm_argInt_sparc64(DCCallVM* in_self, DCint x)
-{
-  DCCallVM_sparc64* self = (DCCallVM_sparc64*)in_self;
-  dcVecAppend(&self->mVecHead, &x, sizeof(DCint));
-}
-
-/* we propagate Bool,Char,Short,Int to LongLong. */
-
-static void dc_callvm_argBool_sparc64(DCCallVM* in_self, DCbool x)   { dc_callvm_argInt_sparc64(in_self, (DCint)x); }
-static void dc_callvm_argChar_sparc64(DCCallVM* in_self, DCchar x)   { dc_callvm_argInt_sparc64(in_self, (DCint)x); }
-static void dc_callvm_argShort_sparc64(DCCallVM* in_self, DCshort x) { dc_callvm_argInt_sparc64(in_self, (DCint)x); }
-#endif
 

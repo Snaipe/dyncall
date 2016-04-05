@@ -40,9 +40,5 @@ struct DCCallVM_sparc64_
   DCVecHead    mVecHead;        /* 36:16, 28 => 40 */
 };
 
-DCCallVM* dcNewCallVM_sparc64(DCsize size);
-
 #endif /* DYNCALL_CALLVM_SPARC64_H */
-
-
 

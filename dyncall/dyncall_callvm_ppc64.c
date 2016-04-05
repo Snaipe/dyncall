@@ -345,10 +345,10 @@ void dc_callvm_mode_ppc64(DCCallVM* in_self, DCint mode)
 {
   DCCallVM_ppc64* self = (DCCallVM_ppc64*) in_self;
   DCCallVM_vt* vt;
-  switch(mode) {
 
-    case DC_CALL_C_PPC64: 
+  switch(mode) {
     case DC_CALL_C_DEFAULT:
+    case DC_CALL_C_PPC64: 
     case DC_CALL_C_ELLIPSIS:
 #if DC__ABI_PPC64_ELF_V == 2
       vt = &gVT_ppc64;
@@ -375,13 +375,16 @@ void dc_callvm_mode_ppc64(DCCallVM* in_self, DCint mode)
   dc_callvm_base_init(&self->mInterface, vt);
 }
 
+/* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-  DCCallVM_ppc64* self = (DCCallVM_ppc64*)dcAllocMem(sizeof(DCCallVM_ppc64)+size);
-  dcVecInit(&self->mVecHead, size);
-  self->mIntRegs              = 0;
-  self->mFloatRegs            = 0;
-  dc_callvm_mode_ppc64( (DCCallVM*) self, DC_CALL_C_DEFAULT );
-  return (DCCallVM*)self;
+  DCCallVM_ppc64* p = (DCCallVM_ppc64*)dcAllocMem(sizeof(DCCallVM_ppc64)+size);
+
+  dc_callvm_mode_ppc64((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead, size);
+  dc_callvm_reset_ppc64((DCCallVM*)p);
+
+  return (DCCallVM*)p;
 }
 

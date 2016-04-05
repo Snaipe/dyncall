@@ -32,18 +32,9 @@
 static void dc_callvm_reset_v9(DCCallVM* in_self)
 {
   DCCallVM_v9* self = (DCCallVM_v9*)in_self;
-  dcVecResize(&self->mVecHead,0);
+  dcVecResize(&self->mVecHead, 0);
 }
 
-/* Construtor. */
-static DCCallVM* dc_callvm_new_v9(DCCallVM_vt* vt, DCsize size)
-{
-  DCCallVM_v9* self = (DCCallVM_v9*) dcAllocMem(sizeof(DCCallVM_v9)+size);
-  dc_callvm_base_init(&self->mInterface, vt);
-  dcVecInit(&self->mVecHead,size);
-  dc_callvm_reset_v9(&self->mInterface);
-  return (DCCallVM*)self;
-}
 
 /* Destructor. */
 static void dc_callvm_free_v9(DCCallVM* in_self)
@@ -158,25 +149,35 @@ DCCallVM_vt gVT_v9 =
 /* mode: only a single mode available currently. */
 static void dc_callvm_mode_v9(DCCallVM* in_self, DCint mode)
 {
+  DCCallVM_v9* self = (DCCallVM_v9*)in_self;
+  DCCallVM_vt* vt;
+
   switch(mode) {
     case DC_CALL_C_DEFAULT:
-    case DC_CALL_C_ELLIPSIS:
     case DC_CALL_C_SPARC64:
-      in_self->mVTpointer = &gVT_v9; 
+    case DC_CALL_C_ELLIPSIS:
+      vt = &gVT_v9;
       break;
     case DC_CALL_C_ELLIPSIS_VARARGS:
-      in_self->mVTpointer = &gVT_v9_ellipsis; 
+      vt = &gVT_v9_ellipsis;
       break;
     default:
-      in_self->mError = DC_ERROR_UNSUPPORTED_MODE;
-      break; 
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
+      return; 
   }
+  dc_callvm_base_init(&self->mInterface, vt);
 }
-
 
 /* Public API. */
 DCCallVM* dcNewCallVM(DCsize size)
 {
-  return dc_callvm_new_v9(&gVT_v9,size);
+  DCCallVM_v9* p = (DCCallVM_v9*)dcAllocMem(sizeof(DCCallVM_v9)+size);
+
+  dc_callvm_mode_v9((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead,size);
+  dc_callvm_reset_v9(&p->mInterface);
+
+  return (DCCallVM*)p;
 }
 

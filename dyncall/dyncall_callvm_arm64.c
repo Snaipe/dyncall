@@ -27,19 +27,6 @@
 #include "dyncall_callvm_arm64.h"
 #include "dyncall_alloc.h"
 
-static DCCallVM* dc_callvm_new_arm64(DCCallVM_vt* vt, DCsize size)
-{
-  DCCallVM_arm64* p = (DCCallVM_arm64*) dcAllocMem(size);
-
-  dc_callvm_base_init(&p->mInterface, vt);
-
-  dcVecInit(&p->mVecHead, size);
-
-  p->i = 0;
-  p->f = 0;
-
-  return (DCCallVM*)p;
-}
 
 static void reset(DCCallVM* in_p)
 {
@@ -49,8 +36,6 @@ static void reset(DCCallVM* in_p)
   dcVecReset(&p->mVecHead);
 }
 
-
-static void mode(DCCallVM* in_self,DCint mode);
 
 static void deinit(DCCallVM* in_self)
 {
@@ -112,6 +97,8 @@ void call(DCCallVM* in_p, DCpointer target)
   dcCall_arm64(target, dcVecData(&p->mVecHead), ( dcVecSize(&p->mVecHead) + 15 ) & -16, &p->u.S[0]);
 }
 
+static void mode(DCCallVM* in_self, DCint mode);
+
 DCCallVM_vt vt_arm64 =
 {
   &deinit
@@ -140,26 +127,35 @@ DCCallVM_vt vt_arm64 =
 , NULL /* callStruct */
 };
 
-DCCallVM* dcNewCallVM(DCsize size) 
+static void mode(DCCallVM* in_self, DCint mode)
 {
-  return dc_callvm_new_arm64(&vt_arm64, size);
-}
+  DCCallVM_arm64* self = (DCCallVM_arm64*)in_self;
+  DCCallVM_vt* vt;
 
-static void mode(DCCallVM* in_self,DCint mode)
-{
-  DCCallVM_arm64* self = (DCCallVM_arm64*) in_self;
-  DCCallVM_vt*  vt;
   switch(mode) {
     case DC_CALL_C_DEFAULT:        
+    case DC_CALL_C_ARM64:        
     case DC_CALL_C_ELLIPSIS:
     case DC_CALL_C_ELLIPSIS_VARARGS:
-    case DC_CALL_C_ARM64:        
       vt = &vt_arm64;
       break;
     default: 
-      in_self->mError = DC_ERROR_UNSUPPORTED_MODE;
+      self->mInterface.mError = DC_ERROR_UNSUPPORTED_MODE; 
       return;
   }
-  self->mInterface.mVTpointer = vt;
+  dc_callvm_base_init(&self->mInterface, vt);
+}
+
+/* Public API. */
+DCCallVM* dcNewCallVM(DCsize size) 
+{
+  DCCallVM_arm64* p = (DCCallVM_arm64*)dcAllocMem(sizeof(DCCallVM_arm64)+size);
+
+  mode((DCCallVM*)p, DC_CALL_C_DEFAULT);
+
+  dcVecInit(&p->mVecHead, size);
+  reset((DCCallVM*)p);
+
+  return (DCCallVM*)p;
 }
 

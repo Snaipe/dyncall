@@ -30,7 +30,6 @@
 #include "dyncall_callvm.h"
 #include "dyncall_vector.h"
 
-
 typedef struct
 {
   DCCallVM mInterface;
@@ -43,9 +42,6 @@ typedef struct
   unsigned long long I[8]; /* int register buffer */
   DCVecHead mVecHead;	/* argument buffer head */
 } DCCallVM_arm64;
-
-DCCallVM* dcNewCallVM_arm64(DCsize size);
-
 
 #endif /* DYNCALL_CALLVM_ARM64_DEBIAN_H */
 
