@@ -1,10 +1,10 @@
 1.0:
 ----
-- !!! the CallVM-free functions are per VTable, however the latter can be changed out
-      at runtime... which basically changes potentially the deallocator...
-      same goes for functions setting the mode. think about how to make this safer - currently
-      we have a higher flexibility and we need to potentially clean up from the mode we are in,
-      however, this is open to misuse
+- the CallVM-free functions are per VTable, however the latter can be changed out
+  at runtime... which basically changes potentially the deallocator...
+  same goes for functions setting the mode. think about how to make this safer - currently
+  we have a higher flexibility and we need to potentially clean up from the mode we are in,
+  however, this is open to misuse
 - check all vararg calling conv implementations if they promote correctly
   (e.g. float to double); we used to not care as it was the user's job to
   think of that, but we allow users to use ArgFloat, etc. on "..." now,
