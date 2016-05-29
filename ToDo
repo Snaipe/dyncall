@@ -45,7 +45,7 @@ dyncall:
 - varargs for mips (might exist, but test all ABIs)
 - consider automatic type-promotion for arguments passed through DC_CALL_C_ELLIPSIS_VARARGS;
   this would make it easier to just pass arguments instead of having to know about the C
-  type promotions
+  type promotions (this is partly done, see todo-item above under 1.0)
 - syscalls for x64
   * bsd
   * linux
@@ -89,8 +89,8 @@ manual:
   * e.g. enhance manual with a couple of examples (e.g. calling MessageBoxA on windows, etc.)
 - manuals for bindings (as stated in bindings-section, above)
 
-urgent issues:
---------------
+regressions:
+------------
 - finish SPARC/SPARC64 calling conventions in doc's callconv-appendix !!!
 - Haiku/gmake build doesn't build dynload due to the fact, that elf.h is not found
   on default installations (one has to install the system headers)
@@ -110,10 +110,9 @@ nice to have:
 
 bugs:
 -----
-- callconv set specifically for platform that has only one (default) excepts for some
+- setting callconv, specifically for platforms that have only one (default)) excepts on some
   platforms, eg. setting X64_sysv on amd64/Linux - keeping cdecl which is the same in
-  this case, works
-- callbacks on ppc32 only work on linux and apple (osx abi), but not BSD
+  this case, works (this should work now...)
 - vararg function calls don't work for ARM THUMB mode (Daniel's new interface for modesetting for varag
   args should be used); adapt test/ellipsis and/or retest
 
@@ -121,11 +120,13 @@ missing implementations (descending priority):
 ----------------------------------------------
 - riscv
 - itanium
+- superh/j-core
 - 68k, 88k, 6502, etc.
+- arc
 - alpha
-- superh
 - cell
 - blackfin
+- seaforth
 - s/390
 - z80
 - hppa
@@ -133,6 +134,4 @@ missing implementations (descending priority):
 - atmel avr
 - propeller
 - amd29k
-- arc
-- seaforth
 
