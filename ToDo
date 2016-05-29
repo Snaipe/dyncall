@@ -64,6 +64,7 @@ dynload:
 
 dyncallback:
 ------------
+- add SPARC and SPARC64 callback support
 - callback_plain's return value not correct anymore on NDS (maybe just broken testcode?)
 - add MIPS callbacks for eabi, n32, o32 (thunks are working)
 - finish PPC32 callbacks (see bugs section, below, BSD not working)
