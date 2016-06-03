@@ -33,6 +33,7 @@
 - test code functions should be in .so files, optionally, so the suites can directly
   be used to test dycnall bindings
 - pkg-config support?
+- quadmath support (long double)
 
 portasm:
 --------

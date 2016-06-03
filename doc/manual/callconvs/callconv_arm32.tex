@@ -28,12 +28,10 @@ The word size is 32 bits (and the programming model is LLP64).\\
 Basically, this family of microprocessors can be run in 2 major modes:\\
 \\
 \begin{tabular*}{0.95\textwidth}{2 B}
-\hline
 Mode          & Description\\
 \hline
 {\bf ARM}     & 32bit instruction set\\
 {\bf THUMB}   & compressed instruction set using 16bit wide instruction encoding\\
-\hline
 \end{tabular*}
 \\
 \\
@@ -56,7 +54,6 @@ In ARM mode, the ARM32 processor has sixteen 32 bit general purpose registers, n
 \\
 \begin{table}[h]
 \begin{tabular*}{0.95\textwidth}{3 B}
-\hline
 Name         & Brief description\\
 \hline
 {\bf r0}     & parameter 0, scratch, return value\\
@@ -68,7 +65,6 @@ Name         & Brief description\\
 {\bf r13}    & stack pointer, permanent\\
 {\bf r14}    & link register, permanent\\
 {\bf r15}    & program counter (note: due to pipeline, r15 points to 2 instructions ahead)\\
-\hline
 \end{tabular*}
 \caption{Register usage on arm32}
 \end{table}
@@ -147,7 +143,6 @@ In THUMB mode, the ARM32 processor family supports eight 32 bit general purpose 
 \\
 \begin{table}[h]
 \begin{tabular*}{0.95\textwidth}{3 B}
-\hline
 Name         & Brief description\\
 \hline
 {\bf r0}     & parameter 0, scratch, return value\\
@@ -160,7 +155,6 @@ Name         & Brief description\\
 {\bf r13}    & stack pointer, permanent\\
 {\bf r14}    & link register, permanent\\
 {\bf r15}    & program counter (note: due to pipeline, r15 points to 2 instructions ahead)\\
-\hline
 \end{tabular*}
 \caption{Register usage on arm32 thumb mode}
 \end{table}
@@ -256,7 +250,6 @@ Typically code is compiled in Thumb mode.
 
 \begin{table}[h]
 \begin{tabular*}{0.95\textwidth}{3 B}
-\hline
 Name         & Brief description\\
 \hline
 {\bf R0}     & parameter 0, scratch, return value\\
@@ -276,7 +269,6 @@ Name         & Brief description\\
 {\bf D8-D15} & permanent, aliases S16-S31, on ARMv7 also as Q4-A7. Not accesible from Thumb mode on ARMv6.\\
 {\bf D16-D31}& Only available in ARMv7, aliases Q8-Q15.\\
 {\bf FPSCR}  & VFP status register.\\
-\hline
 \end{tabular*}
 \caption{Register usage on ARM Apple iOS}
 \end{table}
@@ -302,7 +294,6 @@ Code is little-endian, rest is similar to EABI with an 8-byte aligned stack, etc
 
 \begin{table}[h]
 \begin{tabular*}{0.95\textwidth}{3 B}
-\hline
 Name         & Brief description\\
 \hline
 {\bf R0}     & parameter 0, scratch, non floating point return value\\
@@ -324,7 +315,6 @@ Name         & Brief description\\
 {\bf S1-S15} & floating point arguments, single precision\\
 {\bf D1-D7}  & aliases S2-S15, floating point arguments, double precision\\
 {\bf FPSCR}  & VFP status register.\\
-\hline
 \end{tabular*}
 \caption{Register usage on armhf}
 \end{table}
@@ -376,17 +366,11 @@ architecture standards, from a calling convention perspective.
 Arch   & Platforms & Details \\
 \hline
 ARMv4  & & \\
-\hline
 ARMv4T & ARM 7, ARM 9, Neo FreeRunner (OpenMoko) & \\
-\hline
 ARMv5  & ARM 9E & BLX instruction available \\
-\hline
 ARMv6  & & No vector registers available in thumb \\
-\hline
 ARMv7  & iPod touch, iPhone 3GS/4, Raspberry Pi 2 & VFP throughout available, armhf calling convention on some platforms \\ 
-\hline
 ARMv8  & iPhone 6 and higher & 64bit support \\ 
-\hline
 \end{tabular*}
 \caption{Overview of ARM Architecture, Platforms and Details}
 \end{table}
