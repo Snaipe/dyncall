@@ -3,7 +3,7 @@
  Package: dyncall
  Library: dyncall
  File: dyncall/dyncall_call_mips_eabi_gas.s
- Description: 
+ Description: mips "eabi" abi call kernel implementation in GNU Assembler
  License:
 
    Copyright (c) 2007-2011 Daniel Adler <dadler@uni-goettingen.de>, 

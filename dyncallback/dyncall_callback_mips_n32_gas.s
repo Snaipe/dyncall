@@ -1,13 +1,12 @@
 /*
 
  Package: dyncall
- Library: dyncall
- File: dyncall/dyncall_call_mips_gas.S
- Description: auto-select (via C preprocessor) mips abi call kernel
+ Library: dyncallback
+ File: dyncallback/dyncall_callback_mips_n32_gas.s
+ Description: Callback Thunk - Implementation for mips n32
  License:
 
-   Copyright (c) 2007-2015 Daniel Adler <dadler@uni-goettingen.de>,
-                           Tassilo Philipp <tphilipp@potion-studios.com>
+   Copyright (c) 2016 Tassilo Philipp <tphilipp@potion-studios.com>
 
    Permission to use, copy, modify, and distribute this software for any
    purpose with or without fee is hereby granted, provided that the above
@@ -23,15 +22,12 @@
 
 */
 
-
-
-#if defined(DC__ABI_MIPS_O32)
-#include "dyncall_call_mips_o32_gas.s"
-#elif defined(DC__ABI_MIPS_N64)
-#include "dyncall_call_mips_n64_gas.s"
-#elif defined(DC__ABI_MIPS_N32)
-#include "dyncall_call_mips_n32_gas.s"
-#else
-#include "dyncall_call_mips_eabi_gas.s"
-#endif
+    .section .mdebug.abiN32
+    .previous
+    .abicalls
+    .text
+    .align  2
+	.globl dcCallbackThunkEntry
+    .ent   dcCallbackThunkEntry
+dcCallbackThunkEntry:
 
