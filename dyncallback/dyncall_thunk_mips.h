@@ -34,5 +34,7 @@ struct DCThunk_
   unsigned short bddt[2];
 };
 
+#define DCTHUNK_MIPS_SIZE	20
+
 #endif /* DYNCALL_THUNK_MIPS_H */
 

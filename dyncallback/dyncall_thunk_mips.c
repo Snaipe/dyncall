@@ -25,8 +25,8 @@
 
 #include "dyncall_thunk.h"
 
-unsigned short hi16(x) { return ( (unsigned short) (((unsigned int)x)>>16UL) ); }
-unsigned short lo16(x) { return ( (unsigned short)  ((unsigned int)x)        ); }
+static unsigned short hi16(x) { return ( (unsigned short) (((unsigned int)x)>>16UL) ); }
+static unsigned short lo16(x) { return ( (unsigned short)  ((unsigned int)x)        ); }
 
 void dcbInitThunk(DCThunk* p, void (*entry)())
 {
@@ -43,7 +43,7 @@ According to o32abi: $t9
       lui $t9,      %hi(entry)
       ori $t9, $t9, %lo(entry)
       jr  $t9
-      ori $t4, $t4, %lo(p)    
+      ori $t4, $t4, %lo(p)        ; branch delay slot
 
 thunk.o:     file format elf32-tradbigmips
 

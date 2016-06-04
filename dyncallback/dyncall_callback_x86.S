@@ -91,7 +91,7 @@ BEGIN_PROC(dcCallbackThunkEntry)
 	CMP(LIT(ASCII_d),AL)
 	JE(LOCAL(return_f64))
 	
-	/* All int cases <= 32 bits (+ pointer & string cases) fall in the 32 bits int case*/
+	/* All int cases (+ pointer & string cases) fall in the return_i64 case, here */
 LOCAL(return_i64):
 	MOVL(DWORD(EDX,0),EAX)
 	MOVL(DWORD(EDX,4),EDX)
