@@ -90,21 +90,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 cdecl calling convention}
@@ -165,21 +165,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 fastcall (MS) calling convention}
@@ -239,21 +239,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 fastcall (GNU) calling convention}
@@ -312,21 +312,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 fastcall (Borland) calling convention}
@@ -383,21 +383,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 fastcall (Watcom) calling convention}
@@ -454,21 +454,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 stdcall calling convention}
@@ -526,21 +526,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 thiscall (MS) calling convention}
@@ -595,21 +595,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 thiscall (GNU) calling convention}
@@ -666,21 +666,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on x86 pascal calling convention}
@@ -738,21 +738,21 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{5}{caller's frame} \\
+local data                        & \hspace{4cm}   &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
+\mrlbrace{3}{parameter area}      & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
+                                  & \ldots         &                                &                              \\
+                                  & \ldots         &                                &                              \\
 \hhline{~-~~}
-                                  & return address             &                                &                              \\
+                                  & return address &                                &                              \\
 \hhline{~=~~}
-local data                        &                            &                                & \mrrbrace{3}{current frame}  \\
+local data                        &                &                                & \mrrbrace{3}{current frame}  \\
 \hhline{~-~~}
-parameter area                    &                            &                                &                              \\
+parameter area                    &                &                                &                              \\
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                  & \vdots         &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \\

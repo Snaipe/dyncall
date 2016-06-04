@@ -89,23 +89,23 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                         & \vdots       &                                &                              \\
+\hhline{~=~~}                            
+register save area                       & \hspace{4cm} &                                & \mrrbrace{5}{caller's frame} \\
+\hhline{~-~~}                            
+local data                               &              &                                &   \\
+\hhline{~-~~}                            
+\mrlbrace{3}{parameter area}             & \ldots       & \mrrbrace{3}{stack parameters} &                              \\
+                                         & \ldots       &                                &                              \\
+                                         & \ldots       &                                &                              \\
 \hhline{~=~~}
-register save area                &                            &                                & \mrrbrace{5}{caller's frame} \\
+register save area (with return address) &              &                                & \mrrbrace{5}{current frame}  \\
 \hhline{~-~~}
-local data                        &                            &                                &   \\
+local data                               &              &                                &                              \\
 \hhline{~-~~}
-\mrlbrace{3}{parameter area}      & \ldots                     & \mrrbrace{3}{stack parameters} &                              \\
-                                  & \ldots                     &                                &                              \\
-                                  & \ldots                     &                                &                              \\
-\hhline{~=~~}
-register save area (with return address) &                            &                                & \mrrbrace{5}{current frame}  \\
+parameter area                           &              &                                &                              \\
 \hhline{~-~~}
-local data                         &                            &                                &                              \\
-\hhline{~-~~}
-parameter area                    &                            &                                &                              \\
-\hhline{~-~~}
-                                  & \vdots                     &                                &                              \\
+                                         & \vdots       &                                &                              \\
 \hhline{~-~~}
 \end{tabular}
 \\

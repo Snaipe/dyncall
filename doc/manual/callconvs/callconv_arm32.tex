@@ -98,26 +98,26 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                         & \vdots &                                      &                              \\
+                                         & \vdots       &                                      &                              \\
 \hhline{~=~~}
-register save area                       &        &                                      & \mrrbrace{5}{caller's frame} \\
+register save area                       & \hspace{4cm} &                                      & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
-local data                               &        &                                      &                              \\
-\hhline{~-~~}
-\mrlbrace{7}{parameter area}             & \ldots & \mrrbrace{3}{stack parameters}       &                              \\
-                                         & \ldots &                                      &                              \\
-                                         & \ldots &                                      &                              \\
-\hhline{~=~~}
-                                         & r3     & \mrrbrace{4}{spill area (if needed)} & \mrrbrace{7}{current frame}  \\
-                                         & r2     &                                      &                              \\
-                                         & r1     &                                      &                              \\
-                                         & r0     &                                      &                              \\
-\hhline{~-~~}
-register save area (with return address) &        &                                      &                              \\
-\hhline{~-~~}
-local data                               &        &                                      &                              \\
-\hhline{~-~~}
-parameter area                           & \vdots &                                      &                              \\
+local data                               &              &                                      &                              \\
+\hhline{~-~~}                                           
+\mrlbrace{7}{parameter area}             & \ldots       & \mrrbrace{3}{stack parameters}       &                              \\
+                                         & \ldots       &                                      &                              \\
+                                         & \ldots       &                                      &                              \\
+\hhline{~=~~}                                           
+                                         & r3           & \mrrbrace{4}{spill area (if needed)} & \mrrbrace{7}{current frame}  \\
+                                         & r2           &                                      &                              \\
+                                         & r1           &                                      &                              \\
+                                         & r0           &                                      &                              \\
+\hhline{~-~~}                                           
+register save area (with return address) &              &                                      &                              \\
+\hhline{~-~~}                                           
+local data                               &              &                                      &                              \\
+\hhline{~-~~}                                           
+parameter area                           & \vdots       &                                      &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on arm32}
@@ -188,26 +188,26 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                         & \vdots &                                      &                              \\
-\hhline{~=~~}
-register save area                       &        &                                      & \mrrbrace{5}{caller's frame} \\
-\hhline{~-~~}
-local data                               &        &                                      &                              \\
-\hhline{~-~~}
-\mrlbrace{7}{parameter area}             & \ldots & \mrrbrace{3}{stack parameters}       &                              \\
-                                         & \ldots &                                      &                              \\
-                                         & \ldots &                                      &                              \\
-\hhline{~=~~}
-                                         & r3     & \mrrbrace{4}{spill area (if needed)} & \mrrbrace{7}{current frame}  \\
-                                         & r2     &                                      &                              \\
-                                         & r1     &                                      &                              \\
-                                         & r0     &                                      &                              \\
-\hhline{~-~~}
-register save area (with return address) &        &                                      &                              \\
-\hhline{~-~~}
-local data                               &        &                                      &                              \\
-\hhline{~-~~}
-parameter area                           & \vdots &                                      &                              \\
+                                         & \vdots       &                                      &                              \\
+\hhline{~=~~}                                           
+register save area                       & \hspace{4cm} &                                      & \mrrbrace{5}{caller's frame} \\
+\hhline{~-~~}                                           
+local data                               &              &                                      &                              \\
+\hhline{~-~~}                                           
+\mrlbrace{7}{parameter area}             & \ldots       & \mrrbrace{3}{stack parameters}       &                              \\
+                                         & \ldots       &                                      &                              \\
+                                         & \ldots       &                                      &                              \\
+\hhline{~=~~}                                           
+                                         & r3           & \mrrbrace{4}{spill area (if needed)} & \mrrbrace{7}{current frame}  \\
+                                         & r2           &                                      &                              \\
+                                         & r1           &                                      &                              \\
+                                         & r0           &                                      &                              \\
+\hhline{~-~~}                                           
+register save area (with return address) &              &                                      &                              \\
+\hhline{~-~~}                                           
+local data                               &              &                                      &                              \\
+\hhline{~-~~}                                           
+parameter area                           & \vdots       &                                      &                              \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on arm32 thumb mode}

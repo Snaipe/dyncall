@@ -55,7 +55,7 @@ Name                                 & Alias                   & Brief descripti
 
 \paragraph{Parameter passing}
 \begin{itemize}
-\item Stack parameter order: right-to-left @@@ really?
+\item Stack parameter order: right-to-left
 \item Caller cleans up the stack @@@ really?
 \item Stack always aligned to 8 bytes.
 \item first 6 integers and floats are passed independently in registers using \%o0-\%o5
@@ -73,7 +73,7 @@ Stack directly after function prolog:\\
 \hhline{~-~~}
                                    & \vdots                      &                                &                               \\
 \hhline{~=~~}
-local data                         &                             &                                & \mrrbrace{10}{caller's frame} \\
+local data                         & \hspace{4cm}                &                                & \mrrbrace{10}{caller's frame} \\
 \hhline{~-~~}
 padding                            &                             &                                &                               \\
 \hhline{~-~~}
