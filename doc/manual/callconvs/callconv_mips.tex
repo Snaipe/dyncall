@@ -34,12 +34,12 @@ Several add-on extensions exist for the MIPS family:
 \end{description}
 
 Unfortunately, there is actually no such thing as "The MIPS Calling Convention".  Many possible conventions are used
-by many different environments such as \emph{32}, \emph{O64}, \emph{N32}, \emph{64} and \emph{EABI}.
+by many different environments such as \emph{O32}, \emph{O64}, \emph{N32}, \emph{N64} and \emph{EABI}.\\
 
 \paragraph{\product{dyncall} support}
 
 Currently, dyncall supports the EABI calling convention which is used on the Homebrew SDK for the Playstation Portable.
-As documentation for this EABI is unofficial, this port is currently experimental.
+As documentation for this EABI is unofficial, this port is currently experimental. It also supports O32, N32 and N64.
 
 \subsubsection{MIPS EABI 32-bit Calling Convention}
 
@@ -113,4 +113,12 @@ parameter area                           &              &                       
 \\
 \caption{Stack layout on mips32 eabi calling convention}
 \end{figure}
+
+\subsubsection{MIPS O32 32-bit Calling Convention}
+
+@@@
+
+\subsubsection{MIPS N32 32-bit Calling Convention}
+
+@@@
 
