@@ -150,7 +150,7 @@ Name                                   & Alias                     & Brief descr
 \item subsequent parameters are passed vie the stack
 \item @@@unsure... 64-bit floats and integers are passed on two integer registers starting at an even register number, probably skipping one odd register.
 \item results are returned in \$v0 (32-bit integer), \$v0 and \$v1 (64-bit integer/float)
-\item note that only the first s0-s? preserved registers that are modified by the function need to be put on the save area
+\item note that only s? registers that are modified by the function are required to be preserved on save area
 \end{itemize}
 
 \paragraph{Stack layout}
