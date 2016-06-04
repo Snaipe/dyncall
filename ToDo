@@ -86,8 +86,11 @@ bindings:
 
 manual:
 -------
-- fix up all the callconv diagrams - the brackets seem to not match the row height, and are sometimes
-  completely off... good idea to review it all, anyways, fix up the frames (from fp to sp), etc.
+- callconv diagrams
+  * for html output, the brackets are completely off... doesn't happen for pdf
+    output, which is weird
+  * good idea to review it all, anyways, if the calling conventions are actually
+    represented correctly
 - provide more examples on how to use dyncall, dynload and dyncallback
   * e.g. enhance manual with a couple of examples (e.g. calling MessageBoxA on windows, etc.)
 - manuals for bindings (as stated in bindings-section, above)
