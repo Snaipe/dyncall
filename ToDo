@@ -86,11 +86,10 @@ bindings:
 
 manual:
 -------
-- callconv diagrams
-  * for html output, the brackets are completely off... doesn't happen for pdf
-    output, which is weird
+- callconv diagrams:
   * good idea to review it all, anyways, if the calling conventions are actually
-    represented correctly
+    represented correctly (and if they are in sync with the .pdf, we used to have
+    problems with multirow.4ht)
 - provide more examples on how to use dyncall, dynload and dyncallback
   * e.g. enhance manual with a couple of examples (e.g. calling MessageBoxA on windows, etc.)
 - manuals for bindings (as stated in bindings-section, above)
