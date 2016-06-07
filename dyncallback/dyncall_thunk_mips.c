@@ -35,8 +35,8 @@ void dcbInitThunk(DCThunk* p, void (*entry)())
 Thunk Register: $t4 ($12)
 According to o32abi: $t9 
 
-'The Linux/MIPS convention is that all PIC calls use t9 to hold the address of the called function.'
-[See MIPS Run, p.413]
+'The Linux/MIPS convention is that all PIC calls use t9 to hold the address of
+the called function.' [See MIPS Run, p.413]
 
     mips thunk code:
       lui $t4,      %hi(p)

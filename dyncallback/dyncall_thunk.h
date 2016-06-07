@@ -47,6 +47,7 @@
  ** ppc:   r2
  ** arm:  r12
  ** arm64: x9
+ ** mips:  t4
  **
  **/
 
@@ -88,3 +89,4 @@ void   dcbInitThunk(DCThunk* p, void (*entry)());
 
 
 #endif /* DYNCALL_THUNK_H */
+

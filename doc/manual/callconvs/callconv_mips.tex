@@ -38,8 +38,8 @@ by many different environments such as \emph{O32}\cite{MIPSo32}, \emph{O64}, \em
 
 \paragraph{\product{dyncall} support}
 
-Currently, dyncall supports the EABI calling convention which is used on the Homebrew SDK for the Playstation Portable.
-As documentation for this EABI is unofficial, this port is currently experimental. It also supports O32, N32 and N64.
+Currently, dyncall supports for MIPS 32-bit architectures the O32 calling convention, as well as EABI (which is used on the Homebrew SDK for
+the Playstation Portable). For MIPS 64-bit machines, dyncall supports the N32 and N64 calling conventions.
 
 \subsubsection{MIPS EABI 32-bit Calling Convention}
 
@@ -124,9 +124,9 @@ Name                                   & Alias                     & Brief descr
 \hline                                                             
 {\bf \$0}                              & {\bf \$zero}              & Hardware zero \\
 {\bf \$1}                              & {\bf \$at}                & Assembler temporary \\
-{\bf \$2-\$3}                          & {\bf \$v0-\$v1}           & Integer results, scratch \\
-{\bf \$4-\$7}                          & {\bf \$a0-\$a3}           & Integer arguments, scratch\\
-{\bf \$8-\$15,\$24,\$25}               & {\bf \$t0-\$t7,\$t8,\$t9} & Integer temporaries, scratch \\
+{\bf \$2-\$3}                          & {\bf \$v0-\$v1}           & return value, scratch \\
+{\bf \$4-\$7}                          & {\bf \$a0-\$a3}           & first four word-arguments, scratch\\
+{\bf \$8-\$15,\$24,\$25}               & {\bf \$t0-\$t7,\$t8,\$t9} & temporaries, scratch \\
 {\bf \$16-\$23}                        & {\bf \$s0-\$s7}           & Preserved \\
 {\bf \$26,\$27}                        & {\bf \$k0,\$k1}           & Reserved for kernel \\
 {\bf \$28}                             & {\bf \$gp}                & Global pointer, preserve \\
@@ -146,10 +146,11 @@ Name                                   & Alias                     & Brief descr
 \item Stack parameter order: right-to-left
 \item Caller cleans up the stack
 \item The different stack areas (e.g. parameter area, register save area, ...) are always aligned to 8 bytes.
-\item first 4 32bit arguments are passed in registers \$a0-\$a3, respectively
+\item first four 32bit arguments are passed in registers \$a0-\$a3, respectively
 \item subsequent parameters are passed vie the stack
-\item @@@unsure... 64-bit floats and integers are passed on two integer registers starting at an even register number, probably skipping one odd register.
-\item results are returned in \$v0 (32-bit integer), \$v0 and \$v1 (64-bit integer/float)
+\item 64-bit params passed via registers are passed using two registers, starting at an even register number (skipping one odd register if necessary)
+\item 64-bit params passed via the stack are always 8-byte aligned
+\item results are returned in \$v0 (32-bit return values), \$v0 and \$v1 (64-bit)
 \item note that only s? registers that are modified by the function are required to be preserved on save area
 \end{itemize}
 

@@ -3,7 +3,7 @@
  Package: dyncall
  Library: dyncallback
  File: dyncallback/dyncall_callback_mips_eabi_gas.s
- Description: Callback Thunk - Implementation for mips eabi
+ Description: Callback Thunk - Implementation for mips32 eabi
  License:
 
    Copyright (c) 2016 Tassilo Philipp <tphilipp@potion-studios.com>

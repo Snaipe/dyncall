@@ -77,8 +77,8 @@ dcCall_mips_o32:
 
 	l.d     $f12, 0($5)
 	l.d     $f14, 8($5)
-	/* prepare call */
 
+	/* prepare call */
 
 	move	$12, $7		/* $12  stack data */
 	move	$25, $4		/* $25  target function */

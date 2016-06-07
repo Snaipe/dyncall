@@ -3,7 +3,7 @@
  Package: dyncall
  Library: dyncallback
  File: dyncallback/dyncall_callback_mips_n32_gas.s
- Description: Callback Thunk - Implementation for mips n32
+ Description: Callback Thunk - Implementation for mips64 n32
  License:
 
    Copyright (c) 2016 Tassilo Philipp <tphilipp@potion-studios.com>
