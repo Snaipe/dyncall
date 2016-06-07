@@ -24,13 +24,15 @@
 
 
 
-#if defined(DC__ABI_MIPS_O32)
-#include "dyncall_callback_mips_o32_gas.s"
+#if defined(DC__ABI_MIPS_EABI)
+#  include "dyncall_callback_mips_eabi_gas.s"
+#elif defined(DC__ABI_MIPS_O32)
+#  include "dyncall_callback_mips_o32_gas.s"
 #elif defined(DC__ABI_MIPS_N64)
-#include "dyncall_callback_mips_n64_gas.s"
+#  include "dyncall_callback_mips_n64_gas.s"
 #elif defined(DC__ABI_MIPS_N32)
-#include "dyncall_callback_mips_n32_gas.s"
+#  include "dyncall_callback_mips_n32_gas.s"
 #else
-#include "dyncall_callback_mips_eabi_gas.s"
+#  error Unknown MIPS ABI.
 #endif
 

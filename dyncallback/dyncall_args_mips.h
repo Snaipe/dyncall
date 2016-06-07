@@ -29,13 +29,20 @@
 
 #include "dyncall_args.h"
 
+#if !defined(DC__ABI_MIPS_O32)
+#  define DCARGS_MIPS_PARAM_REGS 4
+#else
+#  define DCARGS_MIPS_PARAM_REGS 8
+#endif
+
 struct DCArgs
 {
-  int            ireg_data[8];
-  float          freg_data[8];
-  int            ireg_count;
-  int            freg_count;
-  unsigned char* stackptr;
+	/* Don't change order! */
+#if !defined(DC__ABI_MIPS_O32)
+	struct { int i; float f; } reg_data[DCARGS_MIPS_PARAM_REGS];
+	struct { int i; int   f; } reg_count;
+#endif
+	unsigned char* stackptr;
 };
 
 #endif /* DYNCALLBACK_ARGS_MIPS_H */
