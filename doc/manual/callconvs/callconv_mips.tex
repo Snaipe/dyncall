@@ -120,21 +120,24 @@ parameter area                           &              &                       
 
 \begin{table}[h]
 \begin{tabular*}{0.95\textwidth}{lll}
-Name                                   & Alias                     & Brief description\\
+Name                         & Alias                     & Brief description\\
 \hline                                                             
-{\bf \$0}                              & {\bf \$zero}              & Hardware zero \\
-{\bf \$1}                              & {\bf \$at}                & Assembler temporary \\
-{\bf \$2-\$3}                          & {\bf \$v0-\$v1}           & return value, scratch \\
-{\bf \$4-\$7}                          & {\bf \$a0-\$a3}           & first four word-arguments, scratch\\
-{\bf \$8-\$15,\$24,\$25}               & {\bf \$t0-\$t7,\$t8,\$t9} & temporaries, scratch \\
-{\bf \$16-\$23}                        & {\bf \$s0-\$s7}           & Preserved \\
-{\bf \$26,\$27}                        & {\bf \$k0,\$k1}           & Reserved for kernel \\
-{\bf \$28}                             & {\bf \$gp}                & Global pointer, preserve \\
-{\bf \$29}                             & {\bf \$sp}                & Stack pointer, preserve \\
-{\bf \$30}                             & {\bf \$fp}                & Frame pointer, preserve \\
-{\bf \$31}                             & {\bf \$ra}                & Return address \\
-
-
+{\bf \$0}                    & {\bf \$zero}              & hardware zero \\
+{\bf \$1}                    & {\bf \$at}                & assembler temporary \\
+{\bf \$2-\$3}                & {\bf \$v0-\$v1}           & return value, scratch \\
+{\bf \$4-\$7}                & {\bf \$a0-\$a3}           & first integer arguments, scratch\\
+{\bf \$8-\$15,\$24,\$25}     & {\bf \$t0-\$t7,\$t8,\$t9} & temporaries, scratch \\
+{\bf \$16-\$23}              & {\bf \$s0-\$s7}           & preserved \\
+{\bf \$26,\$27}              & {\bf \$k0,\$k1}           & reserved for kernel \\
+{\bf \$28}                   & {\bf \$gp}                & global pointer, preserve \\
+{\bf \$29}                   & {\bf \$sp}                & stack pointer, preserve \\
+{\bf \$30}                   & {\bf \$fp}                & frame pointer, preserve \\
+{\bf \$31}                   & {\bf \$ra}                & return address \\
+{\bf hi, lo}                 &                           & multiply/divide special registers \\
+{\bf \$f0-\$f3}              &                           & float return value, scratch \\
+{\bf \$f4-\$f11,\$f16-\$f19} &                           & float temporaries, scratch \\
+{\bf \$f12-\$f15}            &                           & first floating point arguments, scratch \\
+{\bf \$f20-\$f31}            &                           & preserved \\
 \end{tabular*}
 \caption{Register usage on MIPS O32 calling convention}
 \end{table}
@@ -145,13 +148,14 @@ Name                                   & Alias                     & Brief descr
 \item Stack grows down
 \item Stack parameter order: right-to-left
 \item Caller cleans up the stack
-\item The different stack areas (e.g. parameter area, register save area, ...) are always aligned to 8 bytes.
-\item first four 32bit arguments are passed in registers \$a0-\$a3, respectively
+\item The different stack areas (local data, register save area, parameter area) are each aligned to 8 bytes.
+\item generally, first four 32bit arguments are passed in registers \$a0-\$a3, respectively (see below for exceptions if first arg is a float)
 \item subsequent parameters are passed vie the stack
-\item 64-bit params passed via registers are passed using two registers, starting at an even register number (skipping one odd register if necessary)
-\item 64-bit params passed via the stack are always 8-byte aligned
-\item results are returned in \$v0 (32-bit return values), \$v0 and \$v1 (64-bit)
-\item note that only s? registers that are modified by the function are required to be preserved on save area
+\item 64-bit params passed via registers are passed using either two registers (starting at an even register number, skipping an odd one if necessary), or via the stack using an 8-byte alignment
+\item if the very first call argument is a float, up to 2 floats or doubles can be passed via \$f12 and \$f14, respectively, for first and second argument
+\item if any arguments are passed via float registers, skip \$a0-\$a3 for subsequent arguments as if the values were passed via them
+\item note that if the first argument is not a float, but the second, it'll get passed via the \$a? registers
+\item results are returned in \$v0 (32-bit int return values), \$f0 (32-bit float), \$v0 and \$v1 (64-bit int), \$f0 and \$f3 (64bit float)
 \end{itemize}
 
 \paragraph{Stack layout}

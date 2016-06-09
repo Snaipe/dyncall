@@ -19,10 +19,11 @@
 - mailing list announcements (html email?)
 - fix for NDS:
   * ARM:
-    - callback_plain retval wrong (not only platform)
+    - callback_plain retval wrong (not only platform), area on stack where
+      it's stored is probably not zeroed, so half-words, etc., come with garbage
   * THUMB:
     - ellipsis (might be test itself, not respecting fixed part of args)
-    - callback_plain retval
+    - callback_plain retval, see above under ARM
     - callf
 - fix Minix/x86 callbacks (see callback_suite)
 - armhf ellipsis: fix weirdness with long long as first ... arg
@@ -34,6 +35,7 @@
   be used to test dycnall bindings
 - pkg-config support?
 - quadmath support (long double)
+- MIPS softfloat support? (-msoft-float)
 
 portasm:
 --------
@@ -66,8 +68,10 @@ dynload:
 dyncallback:
 ------------
 - add SPARC and SPARC64 callback support
-- callback_plain's return value not correct anymore on NDS (maybe just broken testcode?)
-- add MIPS callbacks for eabi, n32, o32 (thunks are working)
+- callback_plain's return value not correct anymore on NDS (maybe just broken testcode?),
+  see above under 1.0 items
+  * check other platforms also, if asm stub initializes retval space, correctly
+- add MIPS callbacks for eabi, n32, n64
 - finish PPC32 callbacks (see bugs section, below, BSD not working)
 
 bindings:

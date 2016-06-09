@@ -37,52 +37,62 @@
 	.ent   dcCallbackThunkEntry
 	.type  dcCallbackThunkEntry, @function
 
-/* Called by thunk - thunk stores pointer to DCCallback in $12 ($t4), and pointer to called function in $25 ($t9, required for PIC) */
+/* Called by thunk - thunk stores pointer to DCCallback in $12 ($t4), and */
+/* pointer to called function in $25 ($t9, required for PIC)              */
 dcCallbackThunkEntry:
 	.set    noreorder
 	.set    nomacro
 
-	/* Prolog. Just store the minimum, return address, frame pointer, spill area. */
-	subu  $sp, 32       /* open frame: 32b for 8b aligned frame (retval+ra+fp+spill) */
+	/* Prolog. Just store the minimum, return address, spill area.     */
+	/* Frame size of 48b comes from following areas (each 8b aligned); */
+	/*   local: fpregs:16 + retval:8 + DCArgs:8 */
+	/*   save:  ra:4 (+ pad:4)                  */
+	/*   param: spill:16                        */
+	subu  $sp, 56       /* open frame */
 	sw    $ra, 20($sp)  /* save link register */
 
-	.frame  $fp,32,$31  /* specify our frame: fp,size,lr; creates virt $fp */
+	.frame $fp,56,$31   /* specify our frame: fp,size,lr; creates virt $fp */
 
 	/* Init return value */
-	sw $zero, 24($sp)
-	sw $zero, 28($sp)
+	sw $zero, 32($sp)
+	sw $zero, 36($sp)
 
-	/* If we spill the first four, all arguments will be in one out in consecutive block */
-	/* Caller doesn't and it's up to us to spill, so let's write $4-$7 ($a0-$a3) to the */
-	/* dedicated spill area, first (at end of _caller's_ frame, so $fp points right to it). */
-	sw $7, 12($fp)
-	sw $6,  8($fp)
-	sw $5,  4($fp)
+	/* Store the arguments passed via registers somewhere for dcArg* to access. */
+	/* For $4-$7 ($a0-$a3), use dedicated spill area (caller doesn't spill, but */
+	/* provides it at end of _caller's_ frame, so $fp points right to it).      */
+	/* For $f12 and $f14 use our space (in local data), which is adjacent.      */
+	s.d $f12, 40($sp) /* -16($fp) */
+	s.d $f14, 48($sp) /*  -8($fp) */
 	sw $4,  0($fp)
+	sw $5,  4($fp)
+	sw $6,  8($fp)
+	sw $7, 12($fp)
 
-	/* Init DCArg, which contains stackptr* to the args, which is $fp. Use padding between */
-	/* stored return address and parameter area as place to store it (hacky, but saves 8b) */
-	sw $fp, 16($sp)
+	/* Init DCArg, which contains reg_count and stackptr* to the args. Point  */
+	/* stackptr to the area where the non-float args start (which is at $fp). */
+	sw $zero, 24($sp)
+	sw $fp,   28($sp)
 
 	/* Prepare callback handler call. */
 	move  $4, $12       /* Param 0 = DCCallback*, $12 ($t4) holds pointer to thunk */
-	addiu $5, $sp, 16   /* Param 1 = DCArgs*, pointer to where pointer to args is stored */
-	addiu $6, $sp, 24   /* Param 2 = results pointer to 8b of local data on stack */
+	addiu $5, $sp, 24   /* Param 1 = DCArgs*, pointer to where pointer to args is stored */
+	addiu $6, $sp, 32   /* Param 2 = results pointer to 8b of local data on stack */
 	lw    $7, 24($12)   /* Param 3 = userdata pointer */
 
 	lw    $25, 20($12)  /* store handler entry in $25 ($t9), required for PIC */
 	jalr  $25           /* jump */
-	nop
+	nop                 /* branch delay nop */
 
-	/* Copy result in corresponding registers $2-$3 ($v0-$v1) */
-	lw    $2, 24($sp)
-	lw    $3, 28($sp)
+	/* Copy result in corresponding registers $2-$3 ($v0-$v1) and $f0 */
+	lw     $2, 32($sp)
+	lw     $3, 36($sp)
+	l.d   $f0, 32($sp)
 
 	/* Epilog. Tear down frame and return. */
 	lw    $ra, 20($sp)  /* restore return address */
-	addiu $sp, $sp, 32  /* close frame */
+	addiu $sp, $sp, 56  /* close frame */
 	j     $ra           /* return */
-	nop
+	nop                 /* branch delay nop */
 
 	.set    macro
 	.set    reorder
