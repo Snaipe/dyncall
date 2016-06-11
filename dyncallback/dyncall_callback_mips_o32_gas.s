@@ -52,7 +52,7 @@ dcCallbackThunkEntry:
 	sw    $ra, 20($sp)  /* save link register */
 
 	.frame $fp,56,$31   /* specify our frame: fp,size,lr; creates virt $fp */
-
+	                    /* code below doesn't use $fp though, as n/a with -O1 */
 	/* Init return value */
 	sw $zero, 32($sp)
 	sw $zero, 36($sp)
@@ -63,15 +63,16 @@ dcCallbackThunkEntry:
 	/* For $f12 and $f14 use our space (in local data), which is adjacent.      */
 	s.d $f12, 40($sp) /* -16($fp) */
 	s.d $f14, 48($sp) /*  -8($fp) */
-	sw $4,  0($fp)
-	sw $5,  4($fp)
-	sw $6,  8($fp)
-	sw $7, 12($fp)
+	sw $4,    56($sp) /*   0($fp) */
+	sw $5,    60($sp) /*   4($fp) */
+	sw $6,    64($sp) /*   8($fp) */
+	sw $7,    68($sp) /*  12($fp) */
 
 	/* Init DCArg, which contains reg_count and stackptr* to the args. Point  */
 	/* stackptr to the area where the non-float args start (which is at $fp). */
+	addiu $4, $sp, 56 /* non-$fp replacement for: */
+	sw    $4, 28($sp) /*   sw $fp, 28($sp) */
 	sw $zero, 24($sp)
-	sw $fp,   28($sp)
 
 	/* Prepare callback handler call. */
 	move  $4, $12       /* Param 0 = DCCallback*, $12 ($t4) holds pointer to thunk */
