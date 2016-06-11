@@ -3,7 +3,7 @@
  Package: dyncall
  Library: dyncallback
  File: dyncallback/dyncall_args_mips.c
- Description: Callback's Arguments VM - Implementation for MIPS
+ Description: Callback's Arguments VM - Implementation for non-o32 MIPS
  License:
 
    Copyright (c) 2013-2015 Daniel Adler <dadler@uni-goettingen.de>,
@@ -29,11 +29,11 @@
 DCint dcbArgInt(DCArgs* p)
 {
   DCint value;
-  if(p->reg_count.i < DCARGS_MIPS_PARAM_REGS)
-    value = p->reg_data.i[p->reg_count.i++];
+  if(p->reg_count.i < DCARGS_MIPS_NUM_IREGS)
+    value = p->ireg_data[p->reg_count.i++];
   else {
-    value = *((int*)p->stackptr);
-    p->stackptr += sizeof(int);
+    value = *((DCint*)p->stackptr);
+    p->stackptr += sizeof(DCint);
   }
   return value;
 }
@@ -66,11 +66,11 @@ DCpointer   dcbArgPointer(DCArgs* p) { return (DCpointer)dcbArgUInt(p); }
 DCfloat dcbArgFloat(DCArgs* p)
 {
   DCfloat result;
-  if(p->reg_count.f < DCARGS_MIPS_PARAM_REGS)
-    result = (DCfloat)p->reg_data.f[p->reg_count.f++];
+  if(p->reg_count.f < DCARGS_MIPS_NUM_FREGS)
+    result = (DCfloat)p->freg_data[p->reg_count.f++];
   else {
-    result = *((float*)p->stackptr);
-    p->stackptr += sizeof(float);
+    result = *((DCfloat*)p->stackptr);
+    p->stackptr += sizeof(DCfloat);
   }
   return result;
 }
@@ -78,7 +78,7 @@ DCdouble dcbArgDouble(DCArgs* p)
 {
   union {
     DCdouble result;
-    DCfloat f[2];
+    DCfloat  f[2];
   } d;
   p->reg_count.f += (p->reg_count.f & 1); // Skip one reg if not aligned.
 #if defined(DC__Endian_LITTLE)

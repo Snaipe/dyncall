@@ -43,7 +43,7 @@ dcCallbackThunkEntry:
 	.set    noreorder
 
 	/* Prolog. Just store the minimum, return address, spill area.     */
-	/* Frame size of 48b comes from following areas (each 8b aligned); */
+	/* Frame size of 56b comes from following areas (each 8b aligned): */
 	/*   local: fpregs:16 + retval:8 + DCArgs:8 */
 	/*   save:  ra:4 (+ pad:4)                  */
 	/*   param: spill:16                        */

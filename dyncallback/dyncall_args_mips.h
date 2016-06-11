@@ -33,13 +33,15 @@ struct DCArgs
 {
 	/* Don't change order! */
 #if defined(DC__ABI_MIPS_O32)
-	int freg_count;
+	DCint freg_count;
 #else
-#  define DCARGS_MIPS_PARAM_REGS 8
-	struct { int i; float f; } reg_data[DCARGS_MIPS_PARAM_REGS];
-	struct { int i; int   f; } reg_count;
+#  define DCARGS_MIPS_NUM_IREGS 8
+#  define DCARGS_MIPS_NUM_FREGS 8
+	DCint   ireg_data[DCARGS_MIPS_NUM_IREGS];
+	DCfloat freg_data[DCARGS_MIPS_NUM_FREGS];
+	struct { DCshort i; DCshort f; } reg_count;
 #endif
-	unsigned char* stackptr;
+	unsigned DCchar* stackptr;
 };
 
 #endif /* DYNCALLBACK_ARGS_MIPS_H */

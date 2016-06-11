@@ -3,7 +3,7 @@
  Package: dyncall
  Library: dyncallback
  File: dyncallback/dyncall_args_mips.c
- Description: Callback's Arguments VM - Implementation for MIPS
+ Description: Callback's Arguments VM - Implementation for MIPS o32
  License:
 
    Copyright (c) 2013-2015 Daniel Adler <dadler@uni-goettingen.de>,

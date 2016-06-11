@@ -89,7 +89,7 @@ dcCall_mips_eabi:
 	lw	$10,24($13)
 	lw	$11,28($13)
 
-	/* load single-precise floating pointer parameter registers */
+	/* load single-precision floating pointer parameter registers */
 
 	lwc1	$f12, 32($13)
 	lwc1	$f13, 36($13)
