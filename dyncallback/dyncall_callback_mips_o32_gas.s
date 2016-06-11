@@ -41,7 +41,6 @@
 /* pointer to called function in $25 ($t9, required for PIC)              */
 dcCallbackThunkEntry:
 	.set    noreorder
-	.set    nomacro
 
 	/* Prolog. Just store the minimum, return address, spill area.     */
 	/* Frame size of 48b comes from following areas (each 8b aligned); */
@@ -95,7 +94,6 @@ dcCallbackThunkEntry:
 	j     $ra           /* return */
 	nop                 /* branch delay nop */
 
-	.set    macro
 	.set    reorder
 	.end    dcCallbackThunkEntry
 	.ident  "handwritten"
