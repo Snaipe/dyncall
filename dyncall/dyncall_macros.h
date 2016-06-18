@@ -237,10 +237,10 @@
 #if defined(DC__Arch_MIPS) || defined(DC__Arch_MIPS64)
 # if defined(_ABIO32) || defined(_MIPS_ARCH_MIPS1) || defined(_MIPS_ARCH_MIPS2)
 #  define DC__ABI_MIPS_O32
+# elif defined(_ABI64) || defined(_mips_n64)
+#  define DC__ABI_MIPS_N64
 # elif defined(_ABIN32)
 #  define DC__ABI_MIPS_N32
-# elif defined(_ABI64)
-#  define DC__ABI_MIPS_N64
 # else
 #  define DC__ABI_MIPS_EABI
 # endif
@@ -252,7 +252,7 @@
 # else
 #  define DC__ABI_PPC64_ELF_V 0 /* 0 means not explicitly set, otherwise this is 1 (big endian) and 2 (little endian) */
 # endif
-#endif /* MIPS */
+#endif /* PPC64 */
 
 
 /* Endian detection. */
