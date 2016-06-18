@@ -37,7 +37,7 @@
 
 dcCall_mips_eabi:
 	/* $4 target function */
- 	/* $5 register data */
+	/* $5 register data */
 	/* $6 stack size */
 	/* $7 stack data */
 	addiu	$sp,$sp,-16
@@ -46,7 +46,7 @@ dcCall_mips_eabi:
 	sw	$fp,0($sp)
 
 	move	$fp,$sp
-	
+
 	move	$2, $0
 	add	$2, 8
 	neg	$2
@@ -57,9 +57,9 @@ dcCall_mips_eabi:
 	move	$12,$4		/* target function */
 	move	$13,$5		/* register data   */
 	move    $16,$6		/* stack size      */
-	
+
 	sub	$sp,$sp,$16	/* allocate stack frame */
-	
+
 	/* copy stack data */
 
 .next:
@@ -73,8 +73,8 @@ dcCall_mips_eabi:
 	addiu	$sp,$sp, 4
 	j	.next
 	nop
-	
-.skip:	
+
+.skip:
 
 	sub	$sp,$sp,$16
 
@@ -91,14 +91,14 @@ dcCall_mips_eabi:
 
 	/* load single-precision floating pointer parameter registers */
 
-	lwc1	$f12, 32($13)
-	lwc1	$f13, 36($13)
-	lwc1	$f14, 40($13)
-	lwc1	$f15, 44($13)
-	lwc1	$f16, 48($13)
-	lwc1	$f17, 52($13)
-	lwc1	$f18, 56($13)
-	lwc1	$f19, 60($13)	
+	l.s	$f12, 32($13)
+	l.s	$f13, 36($13)
+	l.s	$f14, 40($13)
+	l.s	$f15, 44($13)
+	l.s	$f16, 48($13)
+	l.s	$f17, 52($13)
+	l.s	$f18, 56($13)
+	l.s	$f19, 60($13)
 
 	jal	$12
 	nop

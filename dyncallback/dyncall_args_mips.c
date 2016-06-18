@@ -42,13 +42,14 @@ DCuint dcbArgUInt(DCArgs* p) { return (DCuint)dcbArgInt(p); }
 DCulonglong dcbArgULongLong(DCArgs* p)
 {
   DCulonglong value;
-  p->reg_count.i += (p->reg_count.i & 1); // Skip one reg if not aligned.
+  p->reg_count.i += (p->reg_count.i & 1);         /* Skip one reg if not aligned. */
+  p->stackptr += ((DCulong)p->stackptr & 4) & -4; /* 64bit values are also always aligned on stack */
 #if defined(DC__Endian_LITTLE)
-  value  = ((DCulonglong)dcbArgUInt(p)) << 32;
-  value |= dcbArgUInt(p);
-#else
   value  = dcbArgUInt(p);
   value |= ((DCulonglong)dcbArgUInt(p)) << 32;
+#else
+  value  = ((DCulonglong)dcbArgUInt(p)) << 32;
+  value |= dcbArgUInt(p);
 #endif
   return value;
 }
@@ -67,7 +68,7 @@ DCfloat dcbArgFloat(DCArgs* p)
 {
   DCfloat result;
   if(p->reg_count.f < DCARGS_MIPS_NUM_FREGS)
-    result = (DCfloat)p->freg_data[p->reg_count.f++];
+    result = p->freg_data[p->reg_count.f++];
   else {
     result = *((DCfloat*)p->stackptr);
     p->stackptr += sizeof(DCfloat);
@@ -78,16 +79,9 @@ DCdouble dcbArgDouble(DCArgs* p)
 {
   union {
     DCdouble result;
-    DCfloat  f[2];
+    DCulonglong i;
   } d;
-  p->reg_count.f += (p->reg_count.f & 1); // Skip one reg if not aligned.
-#if defined(DC__Endian_LITTLE)
-  d.f[0] = dcbArgFloat(p);
-  d.f[1] = dcbArgFloat(p);
-#else
-  d.f[1] = dcbArgFloat(p);
-  d.f[0] = dcbArgFloat(p);
-#endif
+  d.i = dcbArgULongLong(p); /* those are passed via int regs */
   return d.result;
 }
 

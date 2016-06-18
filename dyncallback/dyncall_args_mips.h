@@ -41,7 +41,7 @@ struct DCArgs
 	DCfloat freg_data[DCARGS_MIPS_NUM_FREGS];
 	struct { DCshort i; DCshort f; } reg_count;
 #endif
-	unsigned DCchar* stackptr;
+	DCuchar* stackptr;
 };
 
 #endif /* DYNCALLBACK_ARGS_MIPS_H */

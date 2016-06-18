@@ -35,7 +35,6 @@
   be used to test dycnall bindings
 - pkg-config support?
 - quadmath support (long double)
-- MIPS softfloat support? (-msoft-float)
 
 portasm:
 --------
@@ -43,6 +42,7 @@ portasm:
 
 dyncall:
 --------
+- where is dyncall_callvm_mips_n32.h? (included by dyncall_callvm_mips_n32.c)
 - support for return values: aggregate return values
 - support for argument values: structures, half-precision, vector types, long double
 - varargs for mips (might exist, but test all ABIs)
@@ -53,6 +53,7 @@ dyncall:
   * bsd
   * linux
 - other syscalls
+- MIPS32 softfloat support (-msoft-float)
 
 dynload:
 --------
@@ -71,8 +72,10 @@ dyncallback:
 - callback_plain's return value not correct anymore on NDS (maybe just broken testcode?),
   see above under 1.0 items
   * check other platforms also, if asm stub initializes retval space, correctly
-- add MIPS callbacks for eabi, n32, n64
+- add MIPS callbacks for n32, n64
 - finish PPC32 callbacks (see bugs section, below, BSD not working)
+- MIPS32 softfloat support (-msoft-float)
+- test MIPS o32 big endian
 
 bindings:
 ---------
