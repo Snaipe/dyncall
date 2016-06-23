@@ -75,7 +75,8 @@ dyncallback:
 - add MIPS callbacks for n32, n64
 - finish PPC32 callbacks (see bugs section, below, BSD not working)
 - MIPS32 softfloat support (-msoft-float)
-- test MIPS o32 big endian
+- test MIPS o32 big endian (current port works on netbsd/pmax, which is little endian, and gcc -EB doesn't work on there)
+- test MIPS n64 little endian (current port works on openbsd/octeon, which is big endian)
 
 bindings:
 ---------

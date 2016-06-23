@@ -2,8 +2,8 @@
 
  Package: dyncall
  Library: dyncallback
- File: dyncallback/dyncall_callback_mips_n64_gas.s
- Description: Callback Thunk - Implementation for mips64 n64
+ File: dyncallback/dyncall_thunk_mips64.h
+ Description: Thunk - Header for MIPS64
  License:
 
    Copyright (c) 2016 Tassilo Philipp <tphilipp@potion-studios.com>
@@ -22,14 +22,19 @@
 
 */
 
-	.section .mdebug.abi64
-	.previous
-	.abicalls
-	.text
-	.align  2
-	.globl dcCallbackThunkEntry
-	.ent   dcCallbackThunkEntry
-dcCallbackThunkEntry:
 
-	.end dcCallbackThunkEntry
+#ifndef DYNCALL_THUNK_MIPS64_H
+#define DYNCALL_THUNK_MIPS64_H
+
+struct DCThunk_
+{
+  union {
+    unsigned short s[26];
+    unsigned int   i[13];
+  } text;
+};
+
+#define DCTHUNK_MIPS64_SIZE	52
+
+#endif /* DYNCALL_THUNK_MIPS64_H */
 

@@ -22,12 +22,14 @@
 
 */
 
-    .section .mdebug.abiN32
-    .previous
-    .abicalls
-    .text
-    .align  2
+	.section .mdebug.abiN32
+	.previous
+	.abicalls
+	.text
+	.align  2
 	.globl dcCallbackThunkEntry
-    .ent   dcCallbackThunkEntry
+	.ent   dcCallbackThunkEntry
 dcCallbackThunkEntry:
+
+	.end dcCallbackThunkEntry
 
