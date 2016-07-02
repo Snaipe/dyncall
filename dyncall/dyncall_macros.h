@@ -265,8 +265,6 @@
 DC__Arch_ARM
 DC__Arch_ARM64
 DC__Arch_Itanium
-DC__Arch_MIPS
-DC__Arch_MIPS64
 DC__Arch_PPC32
 DC__Arch_PPC64
 DC__Arch_Sparcv9

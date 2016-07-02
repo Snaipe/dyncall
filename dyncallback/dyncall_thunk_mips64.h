@@ -30,7 +30,7 @@ struct DCThunk_
 {
   union {
     unsigned short s[26];
-    unsigned int   i[13];
+    unsigned int   i[13]; /* don't change from 'int', must be 32bit wide */
   } text;
 };
 
