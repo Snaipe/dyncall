@@ -21,11 +21,89 @@
 
 \paragraph{Overview}
 
-@@@\\
+There are two main ABIs in use for MIPS64 chips, \emph{N64}\cite{MIPSn32/n64} and \emph{N32}\cite{MIPSn32/n64}. Both are
+basically the same, except that N32 uses 32-bit pointers and long integers, instead of 64. All registers of a MIPS64 chip are considered
+to be 64-bit wide, even for the N32 calling convention.\\
+The word size is defined to be 32 bits, a dword 64 bits. Note that this is due to historical reasons (terminology didn't change from MIPS32).\\
+Other than that there are 64-bit versions of the other ABIs found for MIPS32, e.g. the EABI\cite{MIPSeabi} and O64\cite{MIPSo64}.
 
 \paragraph{\product{dyncall} support}
 
-Our test machine is a Loongson-CPU 2F subnotebook with OpenBSD.
+For MIPS 64-bit machines, dyncall supports the N32 and N64 calling conventions for calls and callbacks.
+Our test machine is a Loongson-CPU 2F subnotebook, as well as an EdgeRouter Lite, both running OpenBSD.
 
+\subsubsection{MIPS N64 Calling Convention}
 
+\paragraph{Register usage}
+
+\begin{table}[h]
+\begin{tabular*}{0.95\textwidth}{lll}
+Name                                   & Alias                & Brief description\\
+\hline
+{\bf \$0}                              & {\bf \$zero}         & Hardware zero \\
+{\bf \$1}                              & {\bf \$at}           & Assembler temporary \\
+{\bf \$2-\$3}                          & {\bf \$v0-\$v1}      & Integer results \\
+{\bf \$4-\$11}                         & {\bf \$a0-\$a7}      & Integer arguments, or double precision float arguments\\
+{\bf \$12-\$15,\$24}                   & {\bf \$t4-\$t7,\$t8} & Integer temporaries \\
+{\bf \$25}                             & {\bf \$t9}           & Integer temporary, hold the address of the called function for all PIC calls (by convention) \\
+{\bf \$16-\$23}                        & {\bf \$s0-\$s7}      & Preserved \\
+{\bf \$26,\$27}                        & {\bf \$kt0,\$kt1}    & Reserved for kernel \\
+{\bf \$28}                             & {\bf \$gp}           & Global pointer, preserve \\
+{\bf \$29}                             & {\bf \$sp}           & Stack pointer, preserve \\
+{\bf \$30}                             & {\bf \$s8}           & Frame pointer, preserve \\
+{\bf \$31}                             & {\bf \$ra}           & Return address, preserve \\
+{\bf hi, lo}                           &                      & Multiply/divide special registers \\
+{\bf \$f0,\$f2}                        &                      & Float results \\
+{\bf \$f1,\$f3,\$f4-\$f11,\$f20-\$f23} &                      & Float temporaries \\
+{\bf \$f12-\$f19}                      &                      & Float arguments \\
+{\bf \$f24-\$f31}                      &                      & Preserved \\%@@@on N32, this changes
+\end{tabular*}
+\caption{Register usage on MIPS N64 calling convention}
+\end{table}
+
+\paragraph{Parameter passing}
+
+\begin{itemize}
+\item Stack grows down
+\item Stack parameter order: right-to-left
+\item Caller cleans up the stack
+\item first 8 integers (<= 64-bit)are passed in registers \$a0-\$a7
+\item first 8 floating point arguments (single or double precision) are passed in registers \$f12-\$f19
+\item if either integer or float registers are used up, the stack is used
+\item all stack entries are 64-bit aligned
+\item results are returned in \$v0, and for a second one \$v1 is used
+\item float arguments passed in the variable part of a vararg call are passed like integers
+\end{itemize}
+
+\paragraph{Stack layout}
+
+Stack directly after function prolog:\\
+
+\begin{figure}[h]
+\begin{tabular}{5|3|1 1}
+\hhline{~-~~}
+                                & \vdots       &                                &                              \\
+\hhline{~=~~}                            
+register save area              & \hspace{4cm} &                                & \mrrbrace{5}{caller's frame} \\
+\hhline{~-~~}                            
+local data                      &              &                                &                              \\
+\hhline{~-~~}                            
+\mrlbrace{3}{parameter area}    & \ldots       & \mrrbrace{3}{stack parameters} &                              \\
+                                & \ldots       &                                &                              \\
+                                & \ldots       &                                &                              \\
+\hhline{~=~~}
+register save area              & padding? @@@ &                                & \mrrbrace{7}{current frame}  \\
+                                & \$ra         &                                &                              \\
+                                & \$s8         &                                &                              \\
+                                & \$gp         &                                &                              \\
+\hhline{~-~~}
+local data                      &              &                                &                              \\
+\hhline{~-~~}
+parameter area                  &              &                                &                              \\
+\hhline{~-~~}
+                                & \vdots       &                                &                              \\
+\hhline{~-~~}
+\end{tabular}
+\caption{Stack layout on mips64 n64 calling convention}
+\end{figure}
 

@@ -35,6 +35,8 @@
   be used to test dycnall bindings
 - pkg-config support?
 - quadmath support (long double)
+- add tests using alloca(), as this might depend on the frame pointer being correctly
+  set; we don't check for this, currently, at all
 
 portasm:
 --------
@@ -101,6 +103,8 @@ manual:
 - provide more examples on how to use dyncall, dynload and dyncallback
   * e.g. enhance manual with a couple of examples (e.g. calling MessageBoxA on windows, etc.)
 - manuals for bindings (as stated in bindings-section, above)
+- under "dyncall support", in each calling convention appendix, list crucial details of e.g. big/little endian support, etc.
+- specify integer models in use, use common ILP32, LLP64, etc. terms
 
 regressions:
 ------------

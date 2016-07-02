@@ -17,14 +17,13 @@
 %
 %//////////////////////////////////////////////////////////////////////////////
 
-\subsection{MIPS Calling Convention}
+\subsection{MIPS32 Calling Convention}
 
 \paragraph{Overview}
 
-The MIPS family of processors is based on the MIPS processor architecture.
 Multiple revisions of the MIPS Instruction set exist, namely MIPS I, MIPS II, MIPS III, MIPS IV, MIPS32 and MIPS64.
-Today, MIPS32 and MIPS64 for 32-bit and 64-bit respectively.\\
-Several add-on extensions exist for the MIPS family: 
+Nowadays, MIPS32 and MIPS64 are the main ones used for 32-bit and 64-bit instruction sets, respectively.\\
+Given MIPS processor are often used for embedded devices, several add-on extensions exist for the MIPS family, for example: 
 
 \begin{description}
 \item [MIPS-3D] simple floating-point SIMD instructions dedicated to common 3D tasks.
@@ -33,13 +32,13 @@ Several add-on extensions exist for the MIPS family:
 \item [MIPS MT] multithreading additions to the system similar to HyperThreading.
 \end{description}
 
-Unfortunately, there is actually no such thing as "The MIPS Calling Convention".  Many possible conventions are used
-by many different environments such as \emph{O32}\cite{MIPSo32}, \emph{O64}, \emph{N32}, \emph{N64} and \emph{EABI}.\\
+Unfortunately, there is actually no such thing as "The MIPS Calling Convention". Many possible conventions are used
+by many different environments such as \emph{O32}\cite{MIPSo32}, \emph{O64}\cite{MIPSo64}, \emph{N32}\cite{MIPSn32/n64}, \emph{N64}\cite{MIPSn32/n64}, \emph{EABI}\cite{MIPSeabi} and \emph{NUBI}\cite{MIPSnubi}.\\
 
 \paragraph{\product{dyncall} support}
 
-Currently, dyncall supports for MIPS 32-bit architectures the O32 calling convention, as well as EABI (which is used on the Homebrew SDK for
-the Playstation Portable). For MIPS 64-bit machines, dyncall supports the N32 and N64 calling conventions.
+Currently, dyncall supports for MIPS 32-bit architectures the widely-used O32 calling convention, as well as EABI (which is used on the Homebrew SDK for
+the Playstation Portable). \product{dyncall} currently does not support MIPS16e (contrary to the like-minded ARM-THUMB, which is supported). Both, calls and callbacks are supported.
 
 \subsubsection{MIPS EABI 32-bit Calling Convention}
 
@@ -64,7 +63,7 @@ Name                                   & Alias                & Brief descriptio
 {\bf hi, lo}                           &                      & Multiply/divide special registers \\
 {\bf \$f0,\$f2}                        &                      & Float results \\
 {\bf \$f1,\$f3,\$f4-\$f11,\$f20-\$f23} &                      & Float temporaries \\
-{\bf \$f12-\$f19}                      &                      & Single precisition float arguments \\
+{\bf \$f12-\$f19}                      &                      & Single precision float arguments \\
 \end{tabular*}
 \caption{Register usage on MIPS32 EABI calling convention}
 \end{table}
@@ -95,7 +94,7 @@ Stack directly after function prolog:\\
 \hhline{~=~~}                            
 register save area                       & \hspace{4cm} &                                & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}                            
-local data                               &              &                                &   \\
+local data                               &              &                                &                              \\
 \hhline{~-~~}                            
 \mrlbrace{3}{parameter area}             & \ldots       & \mrrbrace{3}{stack parameters} &                              \\
                                          & \ldots       &                                &                              \\
@@ -131,7 +130,7 @@ Name                         & Alias                & Brief description\\
 {\bf \$25}                   & {\bf \$t9}           & temporary, hold the address of the called function for all PIC calls (by convention) \\
 {\bf \$16-\$23}              & {\bf \$s0-\$s7}      & preserved \\
 {\bf \$26,\$27}              & {\bf \$k0,\$k1}      & reserved for kernel \\
-{\bf \$28}                   & {\bf \$gp}           & global pointer, preserve \\
+{\bf \$28}                   & {\bf \$gp}           & global pointer, preserved by caller \\
 {\bf \$29}                   & {\bf \$sp}           & stack pointer, preserve \\
 {\bf \$30}                   & {\bf \$fp}           & frame pointer, preserve \\
 {\bf \$31}                   & {\bf \$ra}           & return address, preserve \\
@@ -168,29 +167,29 @@ Stack directly after function prolog:\\
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
-                                         & \vdots         &                                &                              \\
+                                         & \vdots         &                                &                               \\
 \hhline{~=~~}                            
 local data                               & \hspace{4cm}   &                                & \mrrbrace{12}{caller's frame} \\
 \hhline{~-~~}                            
-register save area                       & return address &                                &   \\
-                                         & s7             &                                &   \\
-                                         & \vdots         &                                &   \\
-                                         & s0             &                                &   \\
+register save area                       & return address &                                &                               \\
+                                         & s7             &                                &                               \\
+                                         & \vdots         &                                &                               \\
+                                         & s0             &                                &                               \\
 \hhline{~-~~}                                             
-\mrlbrace{7}{parameter area}             & \ldots         & \mrrbrace{3}{stack parameters} &                              \\
-                                         & \ldots         &                                &                              \\
-                                         & \ldots         &                                &                              \\
-                                         & a3             & \mrrbrace{4}{spill area}       &                              \\
-                                         & a2             &                                &                              \\
-                                         & a1             &                                &                              \\
-                                         & a0             &                                &                              \\
+\mrlbrace{7}{parameter area}             & \ldots         & \mrrbrace{3}{stack parameters} &                               \\
+                                         & \ldots         &                                &                               \\
+                                         & \ldots         &                                &                               \\
+                                         & a3             & \mrrbrace{4}{spill area}       &                               \\
+                                         & a2             &                                &                               \\
+                                         & a1             &                                &                               \\
+                                         & a0             &                                &                               \\
 \hhline{~=~~}                                             
-local data                               &                &                                & \mrrbrace{5}{current frame}  \\
+local data                               &                &                                & \mrrbrace{5}{current frame}   \\
 \hhline{~-~~}                                             
-register save area (with return address) &                &                                &                              \\
+register save area (with return address) &                &                                &                               \\
 \hhline{~-~~}                                             
-parameter area                           &                &                                &                              \\
-                                         & \vdots         &                                &                              \\
+parameter area                           &                &                                &                               \\
+                                         & \vdots         &                                &                               \\
 \hhline{~-~~}
 \end{tabular}
 \caption{Stack layout on MIPS O32 calling convention}

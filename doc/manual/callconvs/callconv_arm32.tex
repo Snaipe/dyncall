@@ -1,5 +1,5 @@
 %
-% Copyright (c) 2007,2010 Daniel Adler <dadler@uni-goettingen.de>, 
+% Copyright (c) 2007,2010 Daniel Adler <dadler@uni-goettingen.de>,
 %                         Tassilo Philipp <tphilipp@potion-studios.com>
 %
 % Permission to use, copy, modify, and distribute this software for any
@@ -22,8 +22,8 @@
 
 \paragraph{Overview}
 
-The ARM32 family of processors is based on 
-the Advanced RISC Machines (ARM) processor architecture (32 bit RISC). 
+The ARM32 family of processors is based on the Advanced RISC Machines (ARM)
+processor architecture (32 bit RISC).
 The word size is 32 bits (and the programming model is LLP64).\\
 Basically, this family of microprocessors can be run in 2 major modes:\\
 \\
@@ -102,20 +102,20 @@ Stack directly after function prolog:\\
 register save area                       & \hspace{4cm} &                                      & \mrrbrace{5}{caller's frame} \\
 \hhline{~-~~}
 local data                               &              &                                      &                              \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 \mrlbrace{7}{parameter area}             & \ldots       & \mrrbrace{3}{stack parameters}       &                              \\
                                          & \ldots       &                                      &                              \\
                                          & \ldots       &                                      &                              \\
-\hhline{~=~~}                                           
+\hhline{~=~~}
                                          & r3           & \mrrbrace{4}{spill area (if needed)} & \mrrbrace{7}{current frame}  \\
                                          & r2           &                                      &                              \\
                                          & r1           &                                      &                              \\
                                          & r0           &                                      &                              \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 register save area (with return address) &              &                                      &                              \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 local data                               &              &                                      &                              \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 parameter area                           & \vdots       &                                      &                              \\
 \hhline{~-~~}
 \end{tabular}
@@ -188,24 +188,24 @@ Stack directly after function prolog:\\
 \begin{tabular}{5|3|1 1}
 \hhline{~-~~}
                                          & \vdots       &                                      &                              \\
-\hhline{~=~~}                                           
+\hhline{~=~~}
 register save area                       & \hspace{4cm} &                                      & \mrrbrace{5}{caller's frame} \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 local data                               &              &                                      &                              \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 \mrlbrace{7}{parameter area}             & \ldots       & \mrrbrace{3}{stack parameters}       &                              \\
                                          & \ldots       &                                      &                              \\
                                          & \ldots       &                                      &                              \\
-\hhline{~=~~}                                           
+\hhline{~=~~}
                                          & r3           & \mrrbrace{4}{spill area (if needed)} & \mrrbrace{7}{current frame}  \\
                                          & r2           &                                      &                              \\
                                          & r1           &                                      &                              \\
                                          & r0           &                                      &                              \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 register save area (with return address) &              &                                      &                              \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 local data                               &              &                                      &                              \\
-\hhline{~-~~}                                           
+\hhline{~-~~}
 parameter area                           & \vdots       &                                      &                              \\
 \hhline{~-~~}
 \end{tabular}
@@ -350,8 +350,8 @@ Name         & Brief description\\
 \subsubsection{Architectures}
 
 The ARM architecture family contains several revisions with capabilities and
-extensions (such as thumb-interworking, more vector registers, ...) 
-The following table sums up the most important properties of the various 
+extensions (such as thumb-interworking, more vector registers, ...)
+The following table sums up the most important properties of the various
 architecture standards, from a calling convention perspective.
 
 % iPhone 3GS : ARM Cortex-A8
@@ -368,8 +368,8 @@ ARMv4  & & \\
 ARMv4T & ARM 7, ARM 9, Neo FreeRunner (OpenMoko) & \\
 ARMv5  & ARM 9E & BLX instruction available \\
 ARMv6  & & No vector registers available in thumb \\
-ARMv7  & iPod touch, iPhone 3GS/4, Raspberry Pi 2 & VFP throughout available, armhf calling convention on some platforms \\ 
-ARMv8  & iPhone 6 and higher & 64bit support \\ 
+ARMv7  & iPod touch, iPhone 3GS/4, Raspberry Pi 2 & VFP throughout available, armhf calling convention on some platforms \\
+ARMv8  & iPhone 6 and higher & 64bit support \\
 \end{tabular*}
 \caption{Overview of ARM Architecture, Platforms and Details}
 \end{table}
