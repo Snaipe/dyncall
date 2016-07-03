@@ -31,15 +31,21 @@
 
 struct DCArgs
 {
-	/* Don't change order! */
-#if defined(DC__ABI_MIPS_O32)
+	/* Don't change order or types, laid out for asm code to fill in! */
+#if defined(DC__Arch_MIPS) && defined(DC__ABI_MIPS_O32)
 	DCint freg_count;
 #else
 #  define DCARGS_MIPS_NUM_IREGS 8
 #  define DCARGS_MIPS_NUM_FREGS 8
+#  if defined(DC__Arch_MIPS)
 	DCint   ireg_data[DCARGS_MIPS_NUM_IREGS];
 	DCfloat freg_data[DCARGS_MIPS_NUM_FREGS];
 	struct { DCshort i; DCshort f; } reg_count;
+#  elif defined(DC__Arch_MIPS64)
+	DClonglong ireg_data[DCARGS_MIPS_NUM_IREGS];
+	DCdouble   freg_data[DCARGS_MIPS_NUM_FREGS];
+	DClonglong reg_count;
+#  endif
 #endif
 	DCuchar* stackptr;
 };
