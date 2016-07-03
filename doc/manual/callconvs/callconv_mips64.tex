@@ -67,10 +67,11 @@ Name                                   & Alias                & Brief descriptio
 \item Stack grows down
 \item Stack parameter order: right-to-left
 \item Caller cleans up the stack
-\item first 8 integers (<= 64-bit)are passed in registers \$a0-\$a7
-\item first 8 floating point arguments (single or double precision) are passed in registers \$f12-\$f19
-\item if either integer or float registers are used up, the stack is used
+\item first 8 params \textgreater=\ 64-bit are passed in registers \$a0-\$a7 for integers and \$f12-\$f19 for floats - with mixed float and int parameters,
+some registers are left out (e.g. first parameter ends up in \$a0 or \$f12, second in \$a1 or \$f13, etc.)
+\item subsequent arguments are pushed onto the stack
 \item all stack entries are 64-bit aligned
+\item all stack regions are 16-byte aligned
 \item results are returned in \$v0, and for a second one \$v1 is used
 \item float arguments passed in the variable part of a vararg call are passed like integers
 \end{itemize}
@@ -78,6 +79,7 @@ Name                                   & Alias                & Brief descriptio
 \paragraph{Stack layout}
 
 Stack directly after function prolog:\\
+@@@ WIP, might be wrong
 
 \begin{figure}[h]
 \begin{tabular}{5|3|1 1}
@@ -92,7 +94,7 @@ local data                      &              &                                
                                 & \ldots       &                                &                              \\
                                 & \ldots       &                                &                              \\
 \hhline{~=~~}
-register save area              & padding? @@@ &                                & \mrrbrace{7}{current frame}  \\
+register save area              & padding      &                                & \mrrbrace{7}{current frame}  \\
                                 & \$ra         &                                &                              \\
                                 & \$s8         &                                &                              \\
                                 & \$gp         &                                &                              \\
