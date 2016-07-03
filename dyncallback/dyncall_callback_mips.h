@@ -32,11 +32,11 @@
 #include "dyncall_thunk.h"
 #include "dyncall_args_mips.h"
 
-struct DCCallback
+struct DCCallback /* might want to make use of __packed__ or so @@@ */
 {
-  DCThunk            thunk;    /* offset/size: mips32(0/20), mips64(0/52) */
-  DCCallbackHandler* handler;  /* offset/size: mips32(20/4), mips64(52/8) */
-  void*              userdata; /* offset/size: mips32(24/4), mips64(60/8) */
+  DCThunk            thunk;    /* offset/size: mips32(0/20), mips64(0/56) */
+  DCCallbackHandler* handler;  /* offset/size: mips32(20/4), mips64(56/8) */
+  void*              userdata; /* offset/size: mips32(24/4), mips64(64/8) */
 };
 
 #endif /* DYNCALL_CALLBACK_MIPS_H */

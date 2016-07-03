@@ -32,9 +32,10 @@ struct DCThunk_
     unsigned short s[26];
     unsigned int   i[13]; /* don't change from 'int', must be 32bit wide */
   } text;
+  unsigned int padding; /* 4 bytes, to get struct size to multiple of 8 */
 };
 
-#define DCTHUNK_MIPS64_SIZE	52
+#define DCTHUNK_MIPS64_SIZE	56
 
 #endif /* DYNCALL_THUNK_MIPS64_H */
 
