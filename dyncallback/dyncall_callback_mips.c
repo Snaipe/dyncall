@@ -27,28 +27,27 @@
 #include "dyncall_callback.h"
 #include "dyncall_callback_mips.h"
 
+extern void dcCallbackThunkEntry();
+
 void dcbInitCallback(DCCallback* pcb, const char* signature, DCCallbackHandler* handler, void* userdata)
 {
-  const char* ptr;
-  char ch;
-
   pcb->handler  = handler;
   pcb->userdata = userdata;
 }
 
-extern void dcCallbackThunkEntry();
 
 DCCallback* dcbNewCallback(const char* signature, DCCallbackHandler* handler, void* userdata)
 {
+  int err;
   DCCallback* pcb;
-  int err = dcAllocWX(sizeof(DCCallback), (void**)&pcb);
-  if (err != 0) return 0;
-
+  err = dcAllocWX(sizeof(DCCallback), (void**)&pcb);
+  if(err || !pcb)
+    return 0;
   dcbInitThunk(&pcb->thunk, dcCallbackThunkEntry);
   dcbInitCallback(pcb, signature, handler, userdata);
-
   return pcb;
 }
+
 
 void dcbFreeCallback(DCCallback* pcb)
 {
@@ -59,4 +58,3 @@ void* dcbGetUserData(DCCallback* pcb)
 {
   return pcb->userdata;
 }
-

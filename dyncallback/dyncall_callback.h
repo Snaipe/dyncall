@@ -32,8 +32,7 @@
 
 typedef struct DCCallback DCCallback;
 
-// TODO: return value is the type encoded as a signature char (character of the set [vBcCsSiIjJlLfd]).
-
+// return value is the type encoded as a signature char (character of the set [vBcCsSiIjJlLfd]).
 typedef char (DCCallbackHandler)(DCCallback* pcb, DCArgs* args, DCValue* result, void* userdata);
 
 #ifdef __cplusplus
