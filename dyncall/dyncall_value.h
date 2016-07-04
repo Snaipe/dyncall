@@ -48,7 +48,7 @@ typedef union DCValue_ DCValue;
 
 union DCValue_
 {
-#if defined (DC__Arch_PPC32) && defined(DC__Endian_BIG)
+#if (defined(DC__Arch_PPC32) || defined(DC__Arch_MIPS)) && defined(DC__Endian_BIG)
   DCbool        B;
   struct { DCchar  c_pad[3]; DCchar  c; };
   struct { DCuchar C_pad[3]; DCuchar C; };
@@ -56,7 +56,7 @@ union DCValue_
   struct { DCshort S_pad;    DCshort S; };
   DCint         i;
   DCuint        I;
-#elif defined (DC__Arch_PPC64) && defined(DC__Endian_BIG)
+#elif (defined(DC__Arch_PPC64) || defined(DC__Arch_MIPS64)) && defined(DC__Endian_BIG)
   struct { DCbool  B_pad;    DCbool  B; };
   struct { DCchar  c_pad[7]; DCchar  c; };
   struct { DCuchar C_pad[7]; DCuchar C; };

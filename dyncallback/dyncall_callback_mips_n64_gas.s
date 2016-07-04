@@ -20,7 +20,6 @@
    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-@@@ NOT FULLY WORKING, YET
 */
 
 	/* input:
@@ -84,8 +83,7 @@ dcCallbackThunkEntry:
 	nop                 /* branch delay nop */
 
 	/* Copy result in corresponding registers $2-$3 ($v0-$v1) and $f0 */
-	ld     $2, 144($sp)
-	/*ld     $3, 152($sp) @@@ ignoring second possible retval for now*/
+	ld     $2, 144($sp) /* note: ignoring second possible retval in $3, here */
 	l.d   $f0, 144($sp)
 
 	/* Epilog. Tear down frame and return. */
