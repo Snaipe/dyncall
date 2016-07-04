@@ -74,6 +74,7 @@ some registers are left out (e.g. first parameter ends up in \$a0 or \$f12, seco
 \item all stack regions are 16-byte aligned
 \item results are returned in \$v0, and for a second one \$v1 is used
 \item float arguments passed in the variable part of a vararg call are passed like integers
+\item integer parameters \textless\ 64 bit are right-justified (meaning occupy higher-address bytes) in their 8-byte area, requiring extra-care for big-endian targets
 \end{itemize}
 
 \paragraph{Stack layout}
