@@ -89,7 +89,7 @@ as defined for ellipsis calls)
 \item composite parameters with size of 1 or 2 bytes occupy low-order bytes of their 4-byte area. INCONSISTENT with other 32-bit PPC
 binary interfaces. In AIX and OS 9, padding bytes always follow the data structure
 \item composite parameters 3 bytes or larger in size occupy high-order bytes
-\item integer parameters \textless\ 32 bit are right-justified (meaning occupy higher-address bytes) in their 4-byte area, requiring extra-care for big-endian targets
+\item integer parameters \textless\ 32 bit are right-justified (meaning occupy higher-address bytes) in their 4-byte slot on the stack, requiring extra-care for big-endian targets
 \end{itemize}
 
 
