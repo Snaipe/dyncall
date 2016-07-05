@@ -62,13 +62,20 @@ DCdouble dcbArgDouble(DCArgs* p)
   }
   return result;
 }
-DCfloat dcbArgFloat(DCArgs* p) {
-    DCdouble d = dcbArgDouble(p);
-	return ((DCfloat*)&d) // single precision are stored in double slots, but not promoted
+DCfloat dcbArgFloat(DCArgs* p)
+{
+  DCfloat result;
+  if(p->reg_count < DCARGS_MIPS_NUM_FREGS) {
+    result = ((DCfloat*)&p->freg_data[p->reg_count++])
 #if defined(DC__Endian_LITTLE)
       [0];
 #else
-      [1];
+      [1]; /* single precision floats are right-justified in big-endian registers */
 #endif
+  } else {
+    result = *((DCfloat*)p->stackptr); /* single precision floats are left-justified on stack in 64bit slots */
+    p->stackptr += sizeof(DCdouble);
+  }
+  return result;
 }
 

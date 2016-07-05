@@ -48,14 +48,16 @@ typedef union DCValue_ DCValue;
 
 union DCValue_
 {
+/* dyncallback assembly pulls value directly from DCValue structs, without   */
+/* knowledge about types used, so lay it out as needed at compile time, here */
 #if (defined(DC__Arch_PPC32) || defined(DC__Arch_MIPS)) && defined(DC__Endian_BIG)
-  DCbool        B;
+  DCbool      B;
   struct { DCchar  c_pad[3]; DCchar  c; };
   struct { DCuchar C_pad[3]; DCuchar C; };
   struct { DCshort s_pad;    DCshort s; };
   struct { DCshort S_pad;    DCshort S; };
-  DCint         i;
-  DCuint        I;
+  DCint       i;
+  DCuint      I;
 #elif (defined(DC__Arch_PPC64) || defined(DC__Arch_MIPS64)) && defined(DC__Endian_BIG)
   struct { DCbool  B_pad;    DCbool  B; };
   struct { DCchar  c_pad[7]; DCchar  c; };
@@ -65,22 +67,26 @@ union DCValue_
   struct { DCint   i_pad;    DCint   i; };
   struct { DCint   I_pad;    DCuint  I; };
 #else
-  DCbool        B;
-  DCchar        c;
-  DCuchar       C;
-  DCshort       s;
-  DCushort      S;
-  DCint         i;
-  DCuint        I;
+  DCbool      B;
+  DCchar      c;
+  DCuchar     C;
+  DCshort     s;
+  DCushort    S;
+  DCint       i;
+  DCuint      I;
 #endif
-  DClong        j;
-  DCulong       J;
-  DClonglong    l;
-  DCulonglong   L;
-  DCfloat       f;
-  DCdouble      d;
-  DCpointer     p;
-  DCstring      Z;
+  DClong      j;
+  DCulong     J;
+  DClonglong  l;
+  DCulonglong L;
+#if defined(DC__Arch_MIPS64) && defined(DC__Endian_BIG)
+  struct { DCfloat f_pad; DCfloat f; };
+#else
+  DCfloat     f;
+#endif
+  DCdouble    d;
+  DCpointer   p;
+  DCstring    Z;
 };
 
 #ifdef __cplusplus
