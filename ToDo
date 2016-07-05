@@ -56,6 +56,8 @@ dyncall:
   * linux
 - other syscalls
 - MIPS32 softfloat support (-msoft-float)
+- MIPS64 ellipsis not working
+- MIPS64 little-endian needs testing (current port works on openbsd/octeon, which is big endian)
 
 dynload:
 --------
@@ -74,7 +76,7 @@ dyncallback:
 - callback_plain's return value not correct anymore on NDS (maybe just broken testcode?),
   see above under 1.0 items
   * check other platforms also, if asm stub initializes retval space, correctly
-- add MIPS callbacks for n32, n64
+- check if MIPS callbacks are working for n32 (n64 callbacks work, but not sure if this covers n32, implicitly)
 - finish PPC32 callbacks (see bugs section, below, BSD not working)
 - MIPS32 softfloat support (-msoft-float)
 - test MIPS o32 big endian (current port works on netbsd/pmax, which is little endian, and gcc -EB doesn't work on there)
