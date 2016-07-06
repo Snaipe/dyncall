@@ -7,8 +7,10 @@ dyncall:
   o fixed potential buffer overrun on arm64
   o error code handling (dcGetError) changes, flag is now cleared (work still
     underway)
+  o MIPS n64 ellipsis call fixes
 dyncallback:
   o PPC64 single-precision float fixes for more than 13 float args (thanks Masanori!)
+  o MIPS o32, EABI (32 bit) and n64 support
 doc:
   o working html doc generation from TEX sources
 bindings:
@@ -63,7 +65,7 @@ dyncall:
   o fix for ARMv7 Thumb-2 code (tested on iPhone 4 CDMA / iOS 6.0.1)
   o bugfixes for -O2 builds for SPARC-v9 and SPARC-v7
   o new optimized call kernel for SPARC-v9 without conditionals
-  o bigger refactoring and optimization of mips o32
+  o bigger refactoring and optimization of MIPS o32
   o x64 optimizations
 dyncallback:
   o added callback support for plan9
@@ -161,7 +163,7 @@ dynload updates:
   o added support for resolving application images itself
 dyncall updates:
   o new platform support: arm/iphone (armv6), x86/Plan9
-  o new mips calling conventions: oabi, n64 (both endian models)
+  o new MIPS calling conventions: o32, n64 (both endian models)
   o cleanup: unexported functions in MASM files, b/c export not needed (thanks Olivier)
   o interface update: added error reporting facility 'dcGetError'
   o bugfix for ppc32/sysv: ellipsis calls were broken
