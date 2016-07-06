@@ -234,9 +234,9 @@ static void dc_callvm_mode_mips_n64(DCCallVM* in_self, DCint mode)
   switch(mode) {
     case DC_CALL_C_DEFAULT:
     case DC_CALL_C_MIPS64_N64:
+    case DC_CALL_C_ELLIPSIS:
       vt = &gVT_mips_n64;
       break;
-    case DC_CALL_C_ELLIPSIS:
     case DC_CALL_C_ELLIPSIS_VARARGS:
       vt = &gVT_mips_n64_ellipsis;
       break;

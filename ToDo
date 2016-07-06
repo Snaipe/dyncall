@@ -47,7 +47,7 @@ dyncall:
 - where is dyncall_callvm_mips_n32.h? (included by dyncall_callvm_mips_n32.c)
 - support for return values: aggregate return values
 - support for argument values: structures, half-precision, vector types, long double
-- varargs for mips (might exist, but test all ABIs)
+- varargs for mips (might exist, but test all ABIs (mipseb n64 already confirmed))
 - consider automatic type-promotion for arguments passed through DC_CALL_C_ELLIPSIS_VARARGS;
   this would make it easier to just pass arguments instead of having to know about the C
   type promotions (this is partly done, see todo-item above under 1.0)
@@ -56,7 +56,6 @@ dyncall:
   * linux
 - other syscalls
 - MIPS32 softfloat support (-msoft-float)
-- MIPS64 ellipsis not working
 - MIPS64 little-endian needs testing (current port works on openbsd/octeon, which is big endian)
 
 dynload:
