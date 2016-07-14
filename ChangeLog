@@ -10,7 +10,7 @@ dyncall:
   o MIPS n64 ellipsis call fixes
 dyncallback:
   o PPC64 single-precision float fixes for more than 13 float args (thanks Masanori!)
-  o MIPS o32, EABI (32 bit) and n64 support
+  o MIPS o32 (big- and little-endian), EABI (32 bit, little-endian) and n64 (big-endian) support
 doc:
   o working html doc generation from TEX sources
 bindings:

@@ -56,6 +56,7 @@ dyncall:
 - other syscalls
 - MIPS32 softfloat support (-msoft-float)
 - MIPS64 little-endian needs testing (current port works on openbsd/octeon, which is big endian)
+- test MIPS32 eabi big endian (current port works on psp, which is little endian)
 - implement MIPS64 N32 (gcc -mabi=n32); both, little and big-endian (looks like NetNBSD on and
   EdgeRouter lite uses this: https://blog.netbsd.org/tnf/entry/hands_on_experience_with_edgerouter)
 - implement MIPS64 EABI (gcc -mabi=eabi); both, little and big-endian
@@ -79,8 +80,8 @@ dyncallback:
   * check other platforms also, if asm stub initializes retval space, correctly
 - finish PPC32 callbacks (see bugs section, below, BSD not working)
 - MIPS32 softfloat support (-msoft-float)
-- test MIPS o32 big endian (current port works on netbsd/pmax, which is little endian, and gcc -EB doesn't work on there)
-- test MIPS n64 little endian (current port works on openbsd/octeon, which is big endian)
+- test MIPS32 eabi big endian (current port works on psp, which is little endian)
+- test MIPS64 n64 little endian (current port works on openbsd/octeon, which is big endian)
 - implement MIPS64 N32 (gcc -mabi=n32); both, little and big-endian (looks like NetNBSD on and
   EdgeRouter lite uses this: https://blog.netbsd.org/tnf/entry/hands_on_experience_with_edgerouter)
 - implement MIPS64 EABI (gcc -mabi=eabi); both, little and big-endian
