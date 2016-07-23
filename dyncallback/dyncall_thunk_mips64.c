@@ -37,33 +37,33 @@ Thunk Register: $t8 ($24)
 Call Address (sticking to t9 as for PIC calls on mips32): $t9 ($25)
 
 mips64 thunk code:
-        lui $t8, p[48:63]
-        ori $t8, $t8, p[32:47]
-        sll $t8, 16
-        ori $t8, $t8, p[16:31]
-        sll $t8, 16
-        lui $t9, entry[48:63]
-        ori $t9, $t9, entry[32:47]
-        sll $t9, 16
-        ori $t9, $t9, entry[16:31]
-        sll $t9, 16
-        ori $t9, $t9, entry[0:15]
-        jr  $t9
-        ori $t8, $t8, p[0:15]  ; branch delay slot
+        lui  $t8, p[48:63]
+        ori  $t8, $t8, p[32:47]
+        dsll $t8, 16
+        ori  $t8, $t8, p[16:31]
+        dsll $t8, 16
+        lui  $t9, entry[48:63]
+        ori  $t9, $t9, entry[32:47]
+        dsll $t9, 16
+        ori  $t9, $t9, entry[16:31]
+        dsll $t9, 16
+        ori  $t9, $t9, entry[0:15]
+        jr   $t9
+        ori  $t8, $t8, p[0:15]  ; branch delay slot
 
 Disassembly of section .text:
 
 0000000000000000 <thunk>:
    0:   3c180000        lui     t8,0x0
    4:   37180000        ori     t8,t8,0x0
-   8:   0018c400        sll     t8,t8,0x10
+   8:   0018c438        dsll    t8,t8,0x10
    c:   37180000        ori     t8,t8,0x0
-  10:   0018c400        sll     t8,t8,0x10
+  10:   0018c438        dsll    t8,t8,0x10
   14:   3c190000        lui     t9,0x0
   18:   37390000        ori     t9,t9,0x0
-  1c:   0019cc00        sll     t9,t9,0x10
+  1c:   0019cc38        dsll    t9,t9,0x10
   20:   37390000        ori     t9,t9,0x0
-  24:   0019cc00        sll     t9,t9,0x10
+  24:   0019cc38        dsll    t9,t9,0x10
   28:   37390000        ori     t9,t9,0x0
   2c:   03200008        jr      t9
   30:   37180000        ori     t8,t8,0x0
@@ -94,10 +94,10 @@ Disassembly of section .text:
 
 #endif
 
-  p->text.i[ 2] = 0x0018c400; /* sll t8,t8,0x10 */
-  p->text.i[ 4] = 0x0018c400; /* sll t8,t8,0x10 */
-  p->text.i[ 7] = 0x0019cc00; /* sll t9,t9,0x10 */
-  p->text.i[ 9] = 0x0019cc00; /* sll t9,t9,0x10 */
+  p->text.i[ 2] = 0x0018c438; /* dsll t8,t8,0x10 */
+  p->text.i[ 4] = 0x0018c438; /* dsll t8,t8,0x10 */
+  p->text.i[ 7] = 0x0019cc38; /* dsll t9,t9,0x10 */
+  p->text.i[ 9] = 0x0019cc38; /* dsll t9,t9,0x10 */
   p->text.i[11] = 0x03200008; /* jr $t9 */
 }
 
