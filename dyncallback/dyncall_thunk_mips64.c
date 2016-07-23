@@ -24,10 +24,10 @@
 
 #include "dyncall_thunk.h"
 
-static unsigned short b_48_63(x) { return ( (unsigned short) (((unsigned long long)x)>>48UL) ); }
-static unsigned short b_32_47(x) { return ( (unsigned short) (((unsigned long long)x)>>32UL) ); }
-static unsigned short b_16_31(x) { return ( (unsigned short) (((unsigned long long)x)>>16UL) ); }
-static unsigned short b_00_16(x) { return ( (unsigned short)  ((unsigned long long)x)        ); }
+#define b_48_63(x) ((unsigned short)(((unsigned long long)x)>>48UL))
+#define b_32_47(x) ((unsigned short)(((unsigned long long)x)>>32UL))
+#define b_16_31(x) ((unsigned short)(((unsigned long long)x)>>16UL))
+#define b_00_15(x) ((unsigned short) ((unsigned long long)x)       )
 
 void dcbInitThunk(DCThunk* p, void (*entry)())
 {
@@ -78,20 +78,20 @@ Disassembly of section .text:
   p->text.s[10] = 0x3c19; p->text.s[11] = b_48_63(entry); /* lui $t9, entry[48:63] */
   p->text.s[12] = 0x3739; p->text.s[13] = b_32_47(entry); /* ori $t9, $t9, entry[32:47] */
   p->text.s[16] = 0x3739; p->text.s[17] = b_16_31(entry); /* ori $t9, $t9, entry[16:31] */
-  p->text.s[20] = 0x3739; p->text.s[21] = b_00_16(entry); /* ori $t9, $t9, entry[0:15] */
-  p->text.s[24] = 0x3718; p->text.s[25] = b_00_16(p);     /* ori $t8, $t8, p[0:15] - branch delay slot */
+  p->text.s[20] = 0x3739; p->text.s[21] = b_00_15(entry); /* ori $t9, $t9, entry[0:15] */
+  p->text.s[24] = 0x3718; p->text.s[25] = b_00_15(p);     /* ori $t8, $t8, p[0:15] - branch delay slot */
 
 #else /* defined(DC__Endian_LITTLE) */
-  
+
   p->text.s[ 1] = 0x3c18; p->text.s[ 0] = b_48_63(p);     /* lui $t8, p[48:63] */
   p->text.s[ 3] = 0x3718; p->text.s[ 2] = b_32_47(p);     /* ori $t8, $t8, p[32:47] */
   p->text.s[ 7] = 0x3718; p->text.s[ 6] = b_16_31(p);     /* ori $t8, $t8, p[16:31] */
   p->text.s[11] = 0x3c19; p->text.s[10] = b_48_63(entry); /* lui $t9, entry[48:63] */
   p->text.s[13] = 0x3739; p->text.s[12] = b_32_47(entry); /* ori $t9, $t9, entry[32:47] */
   p->text.s[17] = 0x3739; p->text.s[16] = b_16_31(entry); /* ori $t9, $t9, entry[16:31] */
-  p->text.s[21] = 0x3739; p->text.s[20] = b_00_16(entry); /* ori $t9, $t9, entry[0:15] */
-  p->text.s[25] = 0x3718; p->text.s[24] = b_00_16(p);     /* ori $t8, $t8, p[0:15] - branch delay slot */
-  
+  p->text.s[21] = 0x3739; p->text.s[20] = b_00_15(entry); /* ori $t9, $t9, entry[0:15] */
+  p->text.s[25] = 0x3718; p->text.s[24] = b_00_15(p);     /* ori $t8, $t8, p[0:15] - branch delay slot */
+
 #endif
 
   p->text.i[ 2] = 0x0018c400; /* sll t8,t8,0x10 */
