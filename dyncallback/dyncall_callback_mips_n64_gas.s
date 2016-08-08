@@ -41,11 +41,11 @@ dcCallbackThunkEntry:
 	/* Prolog. */
 	/* Frame size of 160b comes from following: */
 	/*   DCargs(fregs:64 + iregs:64 + regcounts:8 + stackptr:8) + retval:8 + ra:8 */
-	subu  $sp, 160       /* open frame */
-	sd    $ra, 152($sp)  /* save link register */
+	daddiu $sp, $sp, -160 /* open frame */
+	sd     $ra, 152($sp)  /* save link register */
 
-	.frame $fp,160,$31   /* specify our frame: fp,size,lr; creates virt $fp */
-	                     /* code below doesn't use $fp though, as n/a with -O1 */
+	.frame $fp,160,$31    /* specify our frame: fp,size,lr; creates virt $fp */
+	                      /* code below doesn't use $fp though, as n/a with -O1 */
 	/* Init return value */
 	sd $zero, 144($sp)
 
@@ -68,29 +68,29 @@ dcCallbackThunkEntry:
 	s.d $f19, 120($sp)
 
 	/* Init DCarg's reg_counts and stackptr. */
-	sd $zero, 128($sp)  /* reg_count */
-	addiu $4, $sp, 160
-	sd    $4, 136($sp)  /* stackptr */
+	sd $zero, 128($sp)    /* reg_count */
+	daddiu $4, $sp, 160
+	sd     $4, 136($sp)   /* stackptr */
 
 	/* Prepare callback handler call. */
-	move  $4, $24       /* Param 0 = DCCallback*, $24 ($t8) holds pointer to thunk */
-	move  $5, $sp       /* Param 1 = DCArgs*, pointer to where pointer to args is stored */
-	addiu $6, $sp, 144  /* Param 2 = results pointer to 8b of local data on stack */
-	ld    $7, 64($24)   /* Param 3 = userdata pointer */
+	move   $4, $24        /* Param 0 = DCCallback*, $24 ($t8) holds pointer to thunk */
+	move   $5, $sp        /* Param 1 = DCArgs*, pointer to where pointer to args is stored */
+	daddiu $6, $sp, 144   /* Param 2 = results pointer to 8b of local data on stack */
+	ld     $7, 64($24)    /* Param 3 = userdata pointer */
 
-	ld    $25, 56($24)  /* store handler entry in $25 ($t9), required for PIC */
-	jalr  $25           /* jump */
-	nop                 /* branch delay nop */
+	ld     $25, 56($24)   /* store handler entry in $25 ($t9), required for PIC */
+	jalr   $25            /* jump */
+	nop                   /* branch delay nop */
 
 	/* Copy result in corresponding registers $2-$3 ($v0-$v1) and $f0 */
-	ld     $2, 144($sp) /* note: ignoring second possible retval in $3, here */
+	ld     $2, 144($sp)   /* note: ignoring second possible retval in $3, here */
 	l.d   $f0, 144($sp)
 
 	/* Epilog. Tear down frame and return. */
-	ld    $ra, 152($sp)  /* restore return address */
-	addiu $sp, $sp, 160  /* close frame */
-	j     $ra            /* return */
-	nop                  /* branch delay nop */
+	ld    $ra, 152($sp)   /* restore return address */
+	daddiu $sp, $sp, 160  /* close frame */
+	j     $ra             /* return */
+	nop                   /* branch delay nop */
 
 	.set    reorder
 	.end    dcCallbackThunkEntry
