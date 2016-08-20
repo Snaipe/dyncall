@@ -24,6 +24,8 @@
 
 
 #include "../portasm/portasm-x86.S"
+#include "../dyncall/dyncall_macros.h"
+
 BEGIN_ASM
 DCThunk_size		= 16
 DCArgs_size		= 20
@@ -85,11 +87,13 @@ BEGIN_PROC(dcCallbackThunkEntry)
 	LEA(DWORD(EBP,frame_DCValue), EDX)
 	MOVL(DWORD(EBP,0), EBP)			/* EBP = parent frame */
 	/* handle return value */
-	
+
+#if !defined(DC__OS_Minix)
 	CMP(LIT(ASCII_f),AL)
 	JE(LOCAL(return_f32))
 	CMP(LIT(ASCII_d),AL)
 	JE(LOCAL(return_f64))
+#endif
 	
 	/* All int cases (+ pointer & string cases) fall in the return_i64 case, here */
 LOCAL(return_i64):

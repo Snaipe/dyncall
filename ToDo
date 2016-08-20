@@ -25,7 +25,6 @@
     - ellipsis (might be test itself, not respecting fixed part of args)
     - callback_plain retval, see above under ARM
     - callf
-- fix Minix/x86 callbacks (see callback_suite)
 - armhf ellipsis: fix weirdness with long long as first ... arg
 - support Solaris11 CFLAGS with -D_FILE_OFFSET_BITS=64
 - make sure selinux works (esp. regarding NX bits, asm might need (or similar): .section .note.GNU-stack,"",@progbits)

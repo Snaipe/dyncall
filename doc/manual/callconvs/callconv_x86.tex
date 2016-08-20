@@ -79,7 +79,7 @@ Name          & Brief description\\
 \begin{itemize}
 \item return values of pointer or integral type (\textless=\ 32 bits) are returned via the eax register
 \item integers \textgreater\ 32 bits are returned via the eax and edx registers
-\item floating point types are returned via the st0 register
+\item floating point types are returned via the st0 register (except on Minix, where they are returned as integers are)
 \end{itemize}
 
 
