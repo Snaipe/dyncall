@@ -24,12 +24,9 @@
 */
 
 
-
 #include "dyncall_callback_arm32_arm.h"
-#include "dyncall_args_arm32_arm.h"
 
 #include "dyncall_alloc_wx.h"
-#include "dyncall_signature.h"
 
 extern void dcCallbackThunkEntry();
 
@@ -62,3 +59,4 @@ void* dcbGetUserData(DCCallback* pcb)
 {
   return pcb->userdata;
 }
+
