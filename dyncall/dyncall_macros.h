@@ -244,6 +244,7 @@
 # else
 #  define DC__ABI_MIPS_EABI
 # endif
+/*@@@implement/support: __mips_hard_float*/
 #endif /* MIPS */
 
 #if defined(DC__Arch_PPC64)
