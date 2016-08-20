@@ -2,11 +2,11 @@
 
  Package: dyncall
  Library: dyncallback
- File: dyncallback/dyncall_thunk_arm32_arm.h
- Description: Thunk - Header for ARM32 (ARM mode)
+ File: dyncallback/dyncall_args_arm32.h
+ Description: Callback's Arguments VM - Header for ARM32 (ARM and THUMB mode)
  License:
 
-   Copyright (c) 2007-2015 Daniel Adler <dadler@uni-goettingen.de>,
+   Copyright (c) 2007-2016 Daniel Adler <dadler@uni-goettingen.de>,
                            Tassilo Philipp <tphilipp@potion-studios.com>
 
    Permission to use, copy, modify, and distribute this software for any
@@ -24,18 +24,23 @@
 */
 
 
-#ifndef DYNCALL_THUNK_ARM32_ARM_H
-#define DYNCALL_THUNK_ARM32_ARM_H
+#ifndef DYNCALLBACK_ARGS_ARM32_H
+#define DYNCALLBACK_ARGS_ARM32_H
 
+#include "dyncall_args.h"
 
-struct DCThunk_
+struct DCArgs
 {
-  unsigned int code[2];
-  void       (*entry)();
+	/* Don't change order! */
+	long  reg_data[4];
+	int   reg_count;
+	long* stack_ptr;
+#if defined(DC__ABI_ARM_HF)
+	DCfloat f[16];
+	int     freg_count;
+	int     dreg_count;
+#endif
 };
 
-#define DCTHUNK_ARM32_ARM_SIZE 12
-
-
-#endif /* DYNCALL_THUNK_ARM32_ARM_H */
+#endif /* DYNCALLBACK_ARGS_ARM32_H */
 

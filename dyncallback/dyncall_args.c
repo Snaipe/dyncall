@@ -37,10 +37,8 @@
 #  endif
 #elif defined(DC__Arch_PPC64)
 #  include "dyncall_args_ppc64.c"
-#elif defined(DC__Arch_ARM_ARM)
-#  include "dyncall_args_arm32_arm.c"
-#elif defined(DC__Arch_ARM_THUMB)
-#  include "dyncall_args_arm32_thumb.c"
+#elif defined(DC__Arch_ARM)
+#  include "dyncall_args_arm32.c"
 #elif defined(DC__Arch_MIPS)
 #  if defined(DC__ABI_MIPS_O32)
 #    include "dyncall_args_mips_o32.c"

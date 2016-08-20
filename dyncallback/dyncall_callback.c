@@ -34,10 +34,8 @@
 #include "dyncall_callback_ppc32.c"
 #elif defined(DC__Arch_PPC64)
 #include "dyncall_callback_ppc64.c"
-#elif defined(DC__Arch_ARM_ARM)
-#include "dyncall_callback_arm32_arm.c"
-#elif defined(DC__Arch_ARM_THUMB)
-#include "dyncall_callback_arm32_thumb.c"
+#elif defined(DC__Arch_ARM)
+#include "dyncall_callback_arm32.c"
 #elif defined(DC__Arch_MIPS) || defined(DC__Arch_MIPS64)
 #include "dyncall_callback_mips.c"
 #elif defined(DC__Arch_Sparc)

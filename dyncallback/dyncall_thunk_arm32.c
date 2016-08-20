@@ -2,8 +2,8 @@
 
  Package: dyncall
  Library: dyncallback
- File: dyncallback/dyncall_args_arm32_thumb.c
- Description: Callback's Arguments VM - Implementation for ARM32 (THUMB mode)
+ File: dyncallback/dyncall_thunk_arm32.c
+ Description: Thunk - Implementation for ARM32 (ARM and THUMB mode)
  License:
 
    Copyright (c) 2007-2015 Daniel Adler <dadler@uni-goettingen.de>,
@@ -24,7 +24,24 @@
 */
 
 
+/* Since we can mix ARM and THUMB assembly, this works for both modes */
 
-#include "dyncall_args_arm32_thumb.h"
-#include "dyncall_args_arm32_arm.c"	/* Uses same code as ARM mode. */
+#include "dyncall_thunk.h"
 
+void dcbInitThunk(DCThunk* p, void (*entry)())
+{
+  /*
+    # ARM32 (ARM mode) thunk code:
+    .code 32
+      sub %r12, %r15, #8
+      ldr %r15, [%r15, #-4]
+  */
+
+  /* This code stores a ptr to DCCallback in r12 (equals ptr to thunk,     */
+  /* which is PC (r15) minus 8, as PC points to current instruction+8.     */
+  /* Then it loads the callback 'entry' into PC. The -4 is needed, also bc */
+  /* of the PC pointing ahead.                                             */
+  p->code[0]  = 0xe24fc008UL;  /* sub %r12, %r15, #8 */
+  p->code[1]  = 0xe51ff004UL;  /* ldr %r15, [%r15, #-4] */
+  p->entry = entry;
+}

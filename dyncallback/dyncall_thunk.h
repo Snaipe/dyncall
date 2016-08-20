@@ -69,10 +69,8 @@ void   dcbInitThunk(DCThunk* p, void (*entry)());
 #include "dyncall_thunk_ppc32.h"
 #elif defined (DC__Arch_PPC64)
 #include "dyncall_thunk_ppc64.h"
-#elif defined (DC__Arch_ARM_ARM)
-#include "dyncall_thunk_arm32_arm.h"
-#elif defined (DC__Arch_ARM_THUMB)
-#include "dyncall_thunk_arm32_thumb.h"
+#elif defined (DC__Arch_ARM)
+#include "dyncall_thunk_arm32.h"
 #elif defined (DC__Arch_MIPS)
 #include "dyncall_thunk_mips.h"
 #elif defined (DC__Arch_MIPS64)
