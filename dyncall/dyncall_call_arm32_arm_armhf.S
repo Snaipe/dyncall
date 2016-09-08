@@ -6,7 +6,7 @@
  Description: Call Kernel for ARM 32-bit ARM Architecture - Hard Float
  License:
 
-   Copyright (c) 2007-2015 Daniel Adler <dadler@uni-goettingen.de>, 
+   Copyright (c) 2007-2016 Daniel Adler <dadler@uni-goettingen.de>,
                            Tassilo Philipp <tphilipp@potion-studios.com>
 
    Permission to use, copy, modify, and distribute this software for any
@@ -61,7 +61,7 @@ ENTRY_C(dcCall_arm32_armhf)
 	/* Load 16 single-precision registers (= 8 double-precision registers). */
 	fldmiad	r3, {d0-d7}
 
-	sub	r2 , r2 , #16	/* skip spill area */
+	/* nope, or varargs will not work: sub	r2 , r2 , #16	/* skip spill area */
 	cmp     r2, #0
 	ble	armhf_call
 

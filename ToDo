@@ -25,7 +25,6 @@
     - ellipsis (might be test itself, not respecting fixed part of args)
     - callback_plain retval, see above under ARM
     - callf
-- armhf ellipsis: fix weirdness with long long as first ... arg
 - support Solaris11 CFLAGS with -D_FILE_OFFSET_BITS=64
 - make sure selinux works (esp. regarding NX bits, asm might need (or similar): .section .note.GNU-stack,"",@progbits)
   Daniel has a patch for it, if needed, implementing allocwx with two memory blocks, one for w^x, mmaped to one for r|x
@@ -36,6 +35,7 @@
 - quadmath support (long double)
 - add tests using alloca(), as this might depend on the frame pointer being correctly
   set; we don't check for this, currently, at all
+- test on OpenBSD 6.0 which comes with W^X by default
 
 portasm:
 --------
@@ -43,6 +43,9 @@ portasm:
 
 dyncall:
 --------
+- find big endian arm box (also hardfloat), e.g. cubietruck: http://blog.netbsd.org/tnf/entry/working_arm_multiprocessor_support
+- test if armhf/thumb is actually working... pulls in arm mode code in dyncall_callvm.c
+- dyncall_call_mips_n32.h and dyncall_call_mips_n64.h are pretty much the same, share code
 - support for return values: aggregate return values
 - support for argument values: structures, half-precision, vector types, long double
 - consider automatic type-promotion for arguments passed through DC_CALL_C_ELLIPSIS_VARARGS;
@@ -58,6 +61,10 @@ dyncall:
   EdgeRouter lite uses this: https://blog.netbsd.org/tnf/entry/hands_on_experience_with_edgerouter)
 - implement MIPS64 EABI (gcc -mabi=eabi); both, little and big-endian
 - support for Minix/arm
+- improve ellipsis test:
+  * test not just with one fixed arg, to also simulate alignment problems
+  * test return values
+  * convert from c++ to c, to have it also on plan9, and more portability
 
 dynload:
 --------
@@ -100,6 +107,7 @@ bindings:
 
 manual:
 -------
+- introduce doc overview tables and common vocab for calling convention specifics, following example of table on page 13 of https://www.linux-mips.org/pub/linux/mips/doc/ABI/MIPS-N32-ABI-Handbook.pdf
 - callconv diagrams:
   * good idea to review it all, anyways, if the calling conventions are actually
     represented correctly (and if they are in sync with the .pdf, we used to have
