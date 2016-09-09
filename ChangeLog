@@ -2,12 +2,13 @@ This file lists bigger/noteworthy changes, only...
 
 Version 1.0 (upcoming)
 dyncall:
-  o better C++ compiler support (for pointer conversions)
   o PPC64 single-precision float fixes for more than 13 float args (thanks Masanori!)
-  o fixed potential buffer overrun on arm64
+  o fixed potential buffer overrun on ARM64
   o error code handling (dcGetError) changes, flag is now cleared (work still
     underway)
   o MIPS n64 ellipsis call fixes
+  o ARM32 armhf ellipsis call fixes
+  o better C++ compiler support (for pointer conversions)
 dyncallback:
   o PPC64 single-precision float fixes for more than 13 float args (thanks Masanori!)
   o MIPS o32 (big- and little-endian), EABI (32 bit, little-endian) and n64 (big-endian) support
@@ -26,7 +27,7 @@ dyncall:
   o introduced dcArgF and dcVArgF for flexible/convenient argument binding (works like dcCallF/dcVCallF but without the function call)
   o using -fPIC by default for FreeBSD
   o PPC32 linux syscall support
-  o fixed return value errors for arm32 on some platforms (e.g. freebsd/arm32, nintendo ds); arm & thumb mode
+  o fixed return value errors for ARM32 on some platforms (e.g. freebsd/arm32, nintendo ds); arm & thumb mode
 dyncallback:
   o ARM64 support (AAPCS64 on Linux, Apple's derived version on iOS)
   o armhf calling convention support for ARM32
