@@ -333,6 +333,7 @@ Name         & Brief description\\
 \item parameters \textless=\ 32 bits are passed as 32 bit words
 \item structures and unions are passed by value, with the first four words of the parameters in r0-r3 @@@?check doc
 \item if return value is a structure, a pointer pointing to the return value's space is passed in r0, the first parameter in r1, etc. (see {\bf return values})
+\item callee spills, caller reserves spill area space, though
 \end{itemize}
 
 \paragraph{Return values}
@@ -344,7 +345,37 @@ Name         & Brief description\\
 \item if return value is a structure, the caller allocates space for the return value on the stack in its frame and passes a pointer to it in r0
 \end{itemize}
 
+\paragraph{Stack layout}
 
+Stack directly after function prolog:\\
+
+\begin{figure}[h]
+\begin{tabular}{5|3|1 1}
+\hhline{~-~~}
+                                         & \vdots       &                                      &                              \\
+\hhline{~=~~}
+register save area                       & \hspace{4cm} &                                      & \mrrbrace{6}{caller's frame} \\
+\hhline{~-~~}
+local data                               &              &                                      &                              \\
+\hhline{~-~~}
+\mrlbrace{7}{parameter area}             & r0-r3        & \mrrbrace{1}{spill area (if needed)} &                              \\
+\hhline{~-~~}
+                                         & \ldots       & \mrrbrace{3}{stack parameters}       &                              \\
+                                         & \ldots       &                                      &                              \\
+                                         & \ldots       &                                      &                              \\
+\hhline{~=~~}
+register save area (with return address) &              &                                      & \mrrbrace{3}{current frame}  \\
+\hhline{~-~~}
+local data                               &              &                                      &                              \\
+\hhline{~-~~}
+parameter area                           & \vdots       &                                      &                              \\
+\hhline{~-~~}
+\end{tabular}
+\caption{Stack layout on arm32 armhf}
+\end{figure}
+
+
+\newpage
 
 
 \subsubsection{Architectures}
