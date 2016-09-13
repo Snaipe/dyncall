@@ -19,7 +19,7 @@
 #
 
 cmake_minimum_required (VERSION 2.6)
-project(DynCall)
+project(DynCall C)
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "dyncall enables dynamic invocation of machine-level function calls")
 set(CPACK_PACKAGE_VENDOR "dyncall project")
@@ -35,6 +35,11 @@ include(CPack)
 # currently we have no use for this, but maybe later..
 #set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/buildsys/cmake/Modules" "${CMAKE_MODULE_PATH}")
 
+option(LANG_CXX "Enable and build C++ tests" ON)
+
+if(LANG_CXX)
+  enable_language(CXX)
+endif()
 
 if(MSVC)
   enable_language(ASM_MASM)
@@ -61,7 +66,7 @@ elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "SunPro")
   set(CMAKE_ASM_COMPILER_ARG1 "${CPPFLAGS} -c")
   enable_language(ASM)
 else()
-  if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
   add_definitions("-fPIC")
   # enable gcc as front-end to assembler for .S files
   set(CMAKE_ASM_COMPILER "${CMAKE_C_COMPILER}")
